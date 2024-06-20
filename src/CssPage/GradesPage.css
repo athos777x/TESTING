@@ -1,0 +1,60 @@
+/* GradesPage.css */
+
+.grades-container {
+  margin: 20px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+}
+
+.grades-title {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.search-filter-container {
+  margin-bottom: 20px;
+}
+
+.student-item {
+  padding: 10px;
+  margin: 10px 0;
+  border-bottom: 1px solid #ddd;
+  cursor: pointer;
+  user-select: none; /* Prevents text selection */
+}
+
+.student-item p {
+  margin: 5px 0;
+}
+
+.grades-details {
+  margin-top: 10px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  background-color: #f1f1f1;
+}
+
+.grades-details table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.grades-details th, .grades-details td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+.grades-details th {
+  background-color: #f2f2f2;
+  font-weight: bold;
+}
+
+.grades-details tr:nth-child(even) {
+  background-color: #f9f9f9;
+}

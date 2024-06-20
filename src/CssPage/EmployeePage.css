@@ -1,0 +1,71 @@
+/* EmployeePage.css */
+
+.employee-container {
+  margin: 20px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+}
+
+.employee-title {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.search-filter-container {
+  margin-bottom: 20px;
+}
+
+.search-filter {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.search-filter input[type="text"],
+.search-filter select {
+  margin: 5px;
+  padding: 5px;
+  font-size: 16px;
+}
+
+.search-filter label {
+  margin: 5px;
+}
+
+.search-filter button {
+  margin: 5px;
+  padding: 6px 12px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.search-filter button:hover {
+  background-color: #0056b3;
+}
+
+.employee-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.employee-table th, .employee-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+.employee-table th {
+  background-color: #f2f2f2;
+  font-weight: bold;
+}
+
+.employee-table tr:nth-child(even) {
+  background-color: #f9f9f9;
+}

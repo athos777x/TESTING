@@ -1,0 +1,44 @@
+/* AttendancePage.css */
+
+.attendance-container {
+  margin: 20px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+}
+
+.attendance-title {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.search-filter-container {
+  margin-bottom: 20px;
+}
+
+.student-item {
+  padding: 10px;
+  margin: 10px 0;
+  border-bottom: 1px solid #ddd;
+  cursor: pointer;
+  user-select: none; /* Prevents text selection */
+}
+
+.student-item p {
+  margin: 5px 0;
+}
+
+.student-details {
+  margin-top: 10px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  background-color: #f1f1f1;
+}
+
+.student-details p {
+  margin: 5px 0;
+}

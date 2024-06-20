@@ -1,0 +1,32 @@
+/* headbar.css */
+.header {
+  display: flex;
+  align-items: center;
+  background-color: #fff; /* White background */
+  color: black; /* Black text */
+  padding: 0;
+  height: 60px; /* Adjust height if needed */
+  position: relative;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Add shadow for depth */
+  border-bottom: 1px solid #ddd; /* Light border at the bottom */
+}
+
+.toggle-btn {
+  background-color: #fff; /* Match header background */
+  color: black;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+  width: 60px; /* Adjust width for better visibility */
+  height: 60px; /* Match height with header */
+  text-align: center;
+  position: absolute;
+  left: 0;
+}
+
+.header h1 {
+  flex-grow: 1;
+  margin: 0;
+  text-align: center;
+  font-size: 24px; /* Adjust font size */
+}

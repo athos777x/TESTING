@@ -1,0 +1,77 @@
+/* StudentDetailPage.css */
+
+.student-detail-container {
+  margin: 20px;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+  position: relative;
+}
+
+.student-detail-title {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.student-name-header {
+  font-size: 28px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.student-detail-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.student-detail-table th, .student-detail-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+.student-detail-table th {
+  background-color: #f2f2f2;
+  font-weight: bold;
+}
+
+.student-detail-table tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.download-button {
+  display: block;
+  margin: 20px auto;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  background-color: #28a745; /* Same color as the Apply Filters button */
+  color: #fff;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.download-button:hover {
+  background-color: #218838; /* Same hover color as the Apply Filters button */
+}
+
+.close-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  padding: 5px 10px;
+  border: none;
+  border-radius: 5px;
+  background-color: #ff4d4d;
+  color: #fff;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.close-button:hover {
+  background-color: #cc0000;
+}

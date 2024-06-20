@@ -1,0 +1,78 @@
+/* StudentsPage.css */
+
+.students-container {
+  margin: 20px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+}
+
+.students-title {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.search-filter-container {
+  margin-bottom: 20px;
+}
+
+.students-list {
+  list-style-type: none;
+  padding: 0;
+}
+
+.student-item-container {
+  display: flex;
+  flex-direction: column;
+  margin: 5px 0;
+  border: 1px solid #ddd;
+}
+
+.student-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+}
+
+.student-item p {
+  margin: 0;
+  cursor: pointer;
+}
+
+.view-button {
+  margin-left: 20px;
+  padding: 5px 10px;
+  border: none;
+  background-color: #28a745; /* Same color as the Apply Filters button */
+  color: white;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.view-button:hover {
+  background-color: #218838; /* Same hover color as the Apply Filters button */
+}
+
+.student-details {
+  margin: 10px 0;
+}
+
+.student-details table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.student-details th, .student-details td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+.student-details th {
+  background-color: #f2f2f2;
+  font-weight: bold;
+}
