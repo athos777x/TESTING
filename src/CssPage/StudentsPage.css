@@ -1,5 +1,3 @@
-/* StudentsPage.css */
-
 .students-container {
   margin: 20px;
   padding: 10px;
@@ -29,32 +27,46 @@
   flex-direction: column;
   margin: 5px 0;
   border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 10px;
+  background-color: #fff;
+  cursor: pointer;
 }
 
 .student-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px;
+  margin: 0;
+  padding: 10px 0;
+  border-bottom: none;
+  margin-bottom: 0 !important; /* Override any bottom margin */
+  margin-top: 0 !important; /* Override any top margin */
+  border-bottom: none !important; /* Override any bottom border */
 }
 
-.student-item p {
+.student-name {
   margin: 0;
-  cursor: pointer;
+}
+
+.student-info {
+  margin-left: auto;
+  text-align: center;
+  flex: 1;
 }
 
 .view-button {
   margin-left: 20px;
   padding: 5px 10px;
   border: none;
-  background-color: #28a745; /* Same color as the Apply Filters button */
+  background-color: #28a745;
   color: white;
   cursor: pointer;
   border-radius: 5px;
 }
 
 .view-button:hover {
-  background-color: #218838; /* Same hover color as the Apply Filters button */
+  background-color: #218838;
 }
 
 .student-details {
@@ -75,4 +87,16 @@
 .student-details th {
   background-color: #f2f2f2;
   font-weight: bold;
+}
+
+.student-item-container::after,
+.student-item-container::before,
+.student-item::after,
+.student-item::before {
+  content: '';
+  display: block;
+  height: 0;
+  border: none;
+  margin: 0;
+  padding: 0;
 }

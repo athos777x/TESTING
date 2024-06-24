@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import SearchFilter from '../Utilities/SearchFilter';
 import axios from 'axios';
-import '../CssPage/StudentsPage.css'; // Ensure this import is correct
+import '../CssPage/StudentsPage.css';
 
 function StudentsPage() {
   const [students, setStudents] = useState([]);
@@ -21,10 +21,10 @@ function StudentsPage() {
   useEffect(() => {
     axios.get('http://localhost:3001/students')
       .then(response => {
-        const sortedStudents = response.data.sort((a, b) => a.name.localeCompare(b.name));
+        const sortedStudents = response.data.sort((a, b) => a.lastname.localeCompare(b.lastname));
         setStudents(sortedStudents);
         setFilteredStudents(sortedStudents);
-        console.log('Fetched students:', sortedStudents); // Add this line
+        console.log('Fetched students:', sortedStudents);
       })
       .catch(error => {
         console.error('There was an error fetching the students!', error);
@@ -53,17 +53,18 @@ function StudentsPage() {
       filtered = filtered.filter(student => String(student.school_year) === updatedFilters.school_year);
     }
     if (updatedFilters.grade) {
-      filtered = filtered.filter(student => student.grade_level === updatedFilters.grade);
+      filtered = filtered.filter(student => student.current_yr_lvl === updatedFilters.grade);
     }
     if (updatedFilters.section) {
       filtered = filtered.filter(student => student.section === updatedFilters.section);
     }
     if (updatedFilters.status) {
-      filtered = filtered.filter(student => student.status === updatedFilters.status);
+      filtered = filtered.filter(student => student.student_status === updatedFilters.status);
     }
     if (updatedFilters.searchTerm) {
       filtered = filtered.filter(student =>
-        student.name.toLowerCase().includes(updatedFilters.searchTerm.toLowerCase())
+        student.lastname.toLowerCase().includes(updatedFilters.searchTerm.toLowerCase()) ||
+        student.firstname.toLowerCase().includes(updatedFilters.searchTerm.toLowerCase())
       );
     }
 
@@ -75,8 +76,13 @@ function StudentsPage() {
     applyFilters(filters);
   };
 
-  const handleViewButtonClick = (studentId) => {
-    navigate(`/students/${studentId}/details`);
+  const toggleStudentDetails = (studentId) => {
+    setSelectedStudentId(selectedStudentId === studentId ? null : studentId);
+  };
+
+  const formatDate = (isoString) => {
+    const date = new Date(isoString);
+    return date.toLocaleDateString();
   };
 
   return (
@@ -91,42 +97,117 @@ function StudentsPage() {
       </div>
       <div className="students-list">
         {filteredStudents.map((student, index) => (
-          <div key={student.student_id} className="student-item-container">
+          <div key={student.student_id} className="student-item-container" onClick={() => toggleStudentDetails(student.student_id)}>
             <div className="student-item">
-              <p onClick={() => setSelectedStudentId(selectedStudentId === student.student_id ? null : student.student_id)}>
-                {index + 1}. {student.name} (Grade {student.grade_level}) - {student.status}
+              <p className="student-name">
+                {index + 1}. {student.firstname} {student.middlename && `${student.middlename[0]}.`} {student.lastname}
               </p>
-              <button className="view-button" onClick={() => handleViewButtonClick(student.student_id)}>
-                View
-              </button>
+              <span className="student-info">(Grade {student.current_yr_lvl} - {student.student_status})</span>
+              <button className="view-button" onClick={() => navigate(`/students/${student.student_id}/details`)}>View</button>
             </div>
             {selectedStudentId === student.student_id && (
               <div className="student-details">
                 <table>
                   <tbody>
                     <tr>
-                      <td><strong>Address:</strong></td>
-                      <td>{student.address}</td>
+                      <td><strong>Last Name:</strong></td>
+                      <td>{student.lastname}</td>
                     </tr>
                     <tr>
-                      <td><strong>Phone Number:</strong></td>
-                      <td>{student.phone_number}</td>
+                      <td><strong>First Name:</strong></td>
+                      <td>{student.firstname}</td>
                     </tr>
                     <tr>
-                      <td><strong>School Year:</strong></td>
-                      <td>{student.school_year}</td>
+                      <td><strong>Middle Name:</strong></td>
+                      <td>{student.middlename}</td>
                     </tr>
                     <tr>
-                      <td><strong>Grade:</strong></td>
-                      <td>Grade {student.grade_level}</td>
+                      <td><strong>Current Year Level:</strong></td>
+                      <td>{student.current_yr_lvl}</td>
                     </tr>
                     <tr>
-                      <td><strong>Section:</strong></td>
-                      <td>{student.section}</td>
+                      <td><strong>Birthdate:</strong></td>
+                      <td>{formatDate(student.birthdate)}</td>
+                    </tr>
+                    <tr>
+                      <td><strong>Gender:</strong></td>
+                      <td>{student.gender}</td>
+                    </tr>
+                    <tr>
+                      <td><strong>Age:</strong></td>
+                      <td>{student.age}</td>
+                    </tr>
+                    <tr>
+                      <td><strong>Home Address:</strong></td>
+                      <td>{student.home_address}</td>
+                    </tr>
+                    <tr>
+                      <td><strong>Barangay:</strong></td>
+                      <td>{student.barangay}</td>
+                    </tr>
+                    <tr>
+                      <td><strong>City/Municipality:</strong></td>
+                      <td>{student.city_municipality}</td>
+                    </tr>
+                    <tr>
+                      <td><strong>Province:</strong></td>
+                      <td>{student.province}</td>
+                    </tr>
+                    <tr>
+                      <td><strong>Contact Number:</strong></td>
+                      <td>{student.contact_number}</td>
+                    </tr>
+                    <tr>
+                      <td><strong>Email Address:</strong></td>
+                      <td>{student.email_address}</td>
+                    </tr>
+                    <tr>
+                      <td><strong>Mother's Name:</strong></td>
+                      <td>{student.mother_name}</td>
+                    </tr>
+                    <tr>
+                      <td><strong>Father's Name:</strong></td>
+                      <td>{student.father_name}</td>
+                    </tr>
+                    <tr>
+                      <td><strong>Parent Address:</strong></td>
+                      <td>{student.parent_address}</td>
+                    </tr>
+                    <tr>
+                      <td><strong>Father's Occupation:</strong></td>
+                      <td>{student.father_occupation}</td>
+                    </tr>
+                    <tr>
+                      <td><strong>Mother's Occupation:</strong></td>
+                      <td>{student.mother_occupation}</td>
+                    </tr>
+                    <tr>
+                      <td><strong>Annual Household Income:</strong></td>
+                      <td>{student.annual_hshld_income}</td>
+                    </tr>
+                    <tr>
+                      <td><strong>Number of Siblings:</strong></td>
+                      <td>{student.number_of_siblings}</td>
+                    </tr>
+                    <tr>
+                      <td><strong>Father's Education Level:</strong></td>
+                      <td>{student.father_educ_lvl}</td>
+                    </tr>
+                    <tr>
+                      <td><strong>Mother's Education Level:</strong></td>
+                      <td>{student.mother_educ_lvl}</td>
+                    </tr>
+                    <tr>
+                      <td><strong>Father's Contact Number:</strong></td>
+                      <td>{student.father_contact_number}</td>
+                    </tr>
+                    <tr>
+                      <td><strong>Mother's Contact Number:</strong></td>
+                      <td>{student.mother_contact_number}</td>
                     </tr>
                     <tr>
                       <td><strong>Status:</strong></td>
-                      <td>{student.status}</td>
+                      <td>{student.student_status}</td>
                     </tr>
                   </tbody>
                 </table>
