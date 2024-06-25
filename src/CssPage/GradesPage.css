@@ -28,7 +28,7 @@
   margin: 5px 0;
   border: 1px solid #ddd;
   border-radius: 5px;
-  padding: 10px;
+  padding: 10px; /* Adjusted padding to reduce height */
   background-color: #fff;
   cursor: pointer;
 }
@@ -38,7 +38,7 @@
   justify-content: space-between;
   align-items: center;
   margin: 0;
-  padding: 10px 0;
+  padding: 10px; /* Remove padding from the student item */
   border-bottom: none;
   margin-bottom: 0 !important; /* Override any bottom margin */
   margin-top: 0 !important; /* Override any top margin */
@@ -50,13 +50,14 @@
 }
 
 .grades-student-name {
-  margin: 0;
+  margin: 5px 0px;
 }
 
 .grades-student-info {
   margin-left: auto;
   text-align: center;
   flex: 1;
+  margin: 0;
 }
 
 .grades-view-button {

@@ -97,7 +97,6 @@ function GradesPage() {
             </div>
             {selectedStudentId === student.student_id && (
               <div className="grades-student-details">
-                <h2>Grades</h2>
                 <table>
                   <thead>
                     <tr>
