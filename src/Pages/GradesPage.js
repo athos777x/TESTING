@@ -43,7 +43,7 @@ function GradesPage() {
       filtered = filtered.filter(student => student.current_yr_lvl === filters.grade);
     }
     if (filters.section) {
-      filtered = filtered.filter(student => student.section === filters.section);
+      filtered = filtered.filter(student => student.section_id === parseInt(filters.section));
     }
     if (filters.school_year) {
       filtered = filtered.filter(student => student.school_year === filters.school_year);

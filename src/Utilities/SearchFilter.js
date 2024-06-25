@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import '../CssFiles/searchfilter.css';
 import axios from 'axios';
 
-// Search and Filter Component
 function SearchFilter({ handleSearch, handleFilter, handleApplyFilters }) {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedSchoolYear, setSelectedSchoolYear] = useState('');
@@ -14,16 +13,22 @@ function SearchFilter({ handleSearch, handleFilter, handleApplyFilters }) {
   const [sections, setSections] = useState([]);
 
   useEffect(() => {
-    // Fetch school years, grades, and sections from the server
     axios.get('http://localhost:3001/filters')
       .then(response => {
-        console.log(response.data); // Verify the received data
         setSchoolYears(response.data.schoolYears);
         setGrades(response.data.grades);
         setSections(response.data.sections);
       })
       .catch(error => {
         console.error('There was an error fetching the filter options!', error);
+      });
+
+    axios.get('http://localhost:3001/api/sections')
+      .then(response => {
+        setSections(response.data);
+      })
+      .catch(error => {
+        console.error('There was an error fetching the sections!', error);
       });
   }, []);
 
@@ -51,6 +56,10 @@ function SearchFilter({ handleSearch, handleFilter, handleApplyFilters }) {
     handleFilter('section', value);
   };
 
+  const applyFilters = () => {
+    handleApplyFilters({ searchTerm, selectedSchoolYear, selectedGrade, selectedSection });
+  };
+
   return (
     <div className="search-filter">
       <input
@@ -75,10 +84,10 @@ function SearchFilter({ handleSearch, handleFilter, handleApplyFilters }) {
       <select id="section" value={selectedSection} onChange={handleSectionChange} className="filter-select">
         <option value="">Select Section</option>
         {sections.map(section => (
-          <option key={section} value={section}>{section}</option>
+          <option key={section.section_id} value={section.section_id}>{section.section_name}</option>
         ))}
       </select>
-      <button onClick={handleApplyFilters} className="filter-button">Apply Filters</button>
+      <button onClick={applyFilters} className="filter-button">Apply Filters</button>
     </div>
   );
 }

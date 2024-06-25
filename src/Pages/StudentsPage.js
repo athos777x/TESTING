@@ -56,7 +56,7 @@ function StudentsPage() {
       filtered = filtered.filter(student => student.current_yr_lvl === updatedFilters.grade);
     }
     if (updatedFilters.section) {
-      filtered = filtered.filter(student => student.section === updatedFilters.section);
+      filtered = filtered.filter(student => student.section_id == updatedFilters.section);
     }
     if (updatedFilters.status) {
       filtered = filtered.filter(student => student.student_status === updatedFilters.status);

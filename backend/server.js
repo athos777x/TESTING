@@ -49,9 +49,29 @@ app.post('/login', (req, res) => {
 
 // Endpoint to fetch all students
 app.get('/students', (req, res) => {
-  const query = `SELECT student_id, lastname, firstname, middlename, current_yr_lvl, birthdate, gender, age, home_address, barangay, city_municipality, province, contact_number, email_address, mother_name, father_name, parent_address, father_occupation, mother_occupation, annual_hshld_income, number_of_siblings, father_educ_lvl, mother_educ_lvl, father_contact_number, mother_contact_number, student_status
-                 FROM student`;
-  db.query(query, (err, results) => {
+  const { searchTerm, grade, section, school_year } = req.query;
+  let query = `SELECT student_id, lastname, firstname, middlename, current_yr_lvl, birthdate, gender, age, home_address, barangay, city_municipality, province, contact_number, email_address, mother_name, father_name, parent_address, father_occupation, mother_occupation, annual_hshld_income, number_of_siblings, father_educ_lvl, mother_educ_lvl, father_contact_number, mother_contact_number, student_status, section_id
+               FROM student WHERE 1=1`;
+
+  const queryParams = [];
+  if (searchTerm) {
+    query += ` AND (firstname LIKE ? OR lastname LIKE ?)`;
+    queryParams.push(`%${searchTerm}%`, `%${searchTerm}%`);
+  }
+  if (grade) {
+    query += ` AND current_yr_lvl = ?`;
+    queryParams.push(grade);
+  }
+  if (section) {
+    query += ` AND section_id = ?`;
+    queryParams.push(section);
+  }
+  if (school_year) {
+    query += ` AND school_year = ?`;
+    queryParams.push(school_year);
+  }
+
+  db.query(query, queryParams, (err, results) => {
     if (err) throw err;
     res.json(results);
   });
@@ -69,6 +89,44 @@ app.get('/students/:student_id/grades', (req, res) => {
   db.query(query, [student_id], (err, results) => {
     if (err) throw err;
     res.json(results);
+  });
+});
+
+// Endpoint to fetch sections
+app.get('/api/sections', (req, res) => {
+  const query = 'SELECT section_id, section_name FROM section';
+  db.query(query, (err, results) => {
+    if (err) throw err;
+    res.json(results);
+  });
+});
+
+// Fetch filter options for school year and grades
+app.get('/filters', (req, res) => {
+  const filters = {
+    schoolYears: [],
+    grades: ['7', '8', '9', '10', '11', '12'],
+    sections: []
+  };
+
+  const sqlSchoolYears = 'SELECT DISTINCT current_yr_lvl AS year FROM student ORDER BY current_yr_lvl';
+
+  db.query(sqlSchoolYears, (err, result) => {
+    if (err) {
+      res.status(500).send(err);
+    } else {
+      filters.schoolYears = result;
+
+      const sqlSections = 'SELECT * FROM section';
+      db.query(sqlSections, (err, result) => {
+        if (err) {
+          res.status(500).send(err);
+        } else {
+          filters.sections = result;
+          res.send(filters);
+        }
+      });
+    }
   });
 });
 
