@@ -105,7 +105,7 @@ app.get('/api/sections', (req, res) => {
 app.get('/filters', (req, res) => {
   const filters = {
     schoolYears: [],
-    grades: ['7', '8', '9', '10', '11', '12'],
+    grades: ['7', '8', '9', '10'],
     sections: []
   };
 
