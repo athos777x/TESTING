@@ -86,6 +86,10 @@
   font-size: 16px;
 }
 
+.password-icon {
+  color: #7a7a7a; /* Greyish color */
+}
+
 .login-btn {
   width: 80%; /* Adjusted width */
   padding: 12px;

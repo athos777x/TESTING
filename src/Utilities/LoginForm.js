@@ -56,7 +56,7 @@ function LoginForm({ onLogin }) {
               onClick={() => setShowPassword(!showPassword)}
               className="show-password-btn"
             >
-              {showPassword ? <FiEyeOff /> : <FiEye />}
+              {showPassword ? <FiEyeOff className="password-icon" /> : <FiEye className="password-icon" />}
             </button>
           </div>
         </div>
