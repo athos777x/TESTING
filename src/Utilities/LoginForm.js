@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { FiEye, FiEyeOff } from 'react-icons/fi';
 import '../CssPage/LoginForm.css'; // Import the CSS file
 
 function LoginForm({ onLogin }) {
@@ -55,7 +56,7 @@ function LoginForm({ onLogin }) {
               onClick={() => setShowPassword(!showPassword)}
               className="show-password-btn"
             >
-              {showPassword ? '🙈' : '👁️'}
+              {showPassword ? <FiEyeOff /> : <FiEye />}
             </button>
           </div>
         </div>
