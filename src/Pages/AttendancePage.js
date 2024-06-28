@@ -1,4 +1,3 @@
-// AttendancePage.js
 import React, { useState, useEffect } from 'react';
 import SearchFilter from '../Utilities/SearchFilter';
 import axios from 'axios';
@@ -9,19 +8,18 @@ function AttendancePage() {
   const [filteredStudents, setFilteredStudents] = useState([]);
   const [selectedStudentId, setSelectedStudentId] = useState(null);
   const [filters, setFilters] = useState({
-    year: '',
+    searchTerm: '',
     grade: '',
     section: '',
-    searchTerm: ''
+    school_year: ''
   });
 
   useEffect(() => {
     axios.get('http://localhost:3001/students')
       .then(response => {
-        const sortedStudents = response.data.sort((a, b) => a.name.localeCompare(b.name));
+        const sortedStudents = response.data.sort((a, b) => a.lastname.localeCompare(b.lastname));
         setStudents(sortedStudents);
         setFilteredStudents(sortedStudents);
-        console.log('Fetched students:', sortedStudents);
       })
       .catch(error => {
         console.error('There was an error fetching the students!', error);
@@ -39,23 +37,22 @@ function AttendancePage() {
   const handleApplyFilters = () => {
     let filtered = students;
 
-    if (filters.year) {
-      filtered = filtered.filter(student => String(student.year) === filters.year);
-    }
     if (filters.grade) {
-      filtered = filtered.filter(student => student.grade === filters.grade);
+      filtered = filtered.filter(student => student.current_yr_lvl === filters.grade);
     }
     if (filters.section) {
-      filtered = filtered.filter(student => student.section === filters.section);
+      filtered = filtered.filter(student => student.section_id === parseInt(filters.section));
+    }
+    if (filters.school_year) {
+      filtered = filtered.filter(student => student.school_year === filters.school_year);
     }
     if (filters.searchTerm) {
       filtered = filtered.filter(student =>
-        student.name.toLowerCase().includes(filters.searchTerm.toLowerCase())
+        `${student.firstname} ${student.lastname}`.toLowerCase().includes(filters.searchTerm.toLowerCase())
       );
     }
 
     setFilteredStudents(filtered);
-    console.log('Filtered students:', filtered);
   };
 
   const handleStudentClick = (studentId) => {
@@ -65,37 +62,26 @@ function AttendancePage() {
   return (
     <div className="attendance-container">
       <h1 className="attendance-title">Attendance</h1>
-      <div className="search-filter-container">
+      <div className="attendance-search-filter-container">
         <SearchFilter
           handleSearch={handleSearch}
           handleFilter={handleFilterChange}
           handleApplyFilters={handleApplyFilters}
         />
       </div>
-      <div>
+      <ul className="attendance-list">
         {filteredStudents.map((student, index) => (
-          <div 
-            key={student.id} 
-            className="student-item" 
-            onClick={() => handleStudentClick(student.id)}
-          >
-            <p>{index + 1}. {student.name}</p>
-            {selectedStudentId === student.id && (
-              <div className="student-details">
-                <p><strong>Name:</strong> {student.name}</p>
-                <p><strong>Address:</strong> {student.address}</p>
-                <p><strong>Phone Number:</strong> {student.phone_number}</p>
-                <p><strong>Year:</strong> {student.year}</p>
-                <p><strong>Grade:</strong> {student.grade}</p>
-                <p><strong>Section:</strong> {student.section}</p>
-              </div>
-            )}
-          </div>
+          <li key={student.student_id} className="attendance-student-item-container" onClick={() => handleStudentClick(student.student_id)}>
+            <div className="attendance-student-item">
+              <p className="attendance-student-name">{index + 1}. {student.firstname} {student.middlename} {student.lastname}</p>
+              <p className="attendance-student-info">Grade {student.current_yr_lvl} - {student.student_status}</p>
+              <button className="attendance-view-button">View</button>
+            </div>
+          </li>
         ))}
-      </div>
+      </ul>
     </div>
   );
 }
 
 export default AttendancePage;
-

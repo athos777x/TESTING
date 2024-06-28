@@ -1,3 +1,4 @@
+/* StudentsPage.css */
 .students-container {
   margin: 20px;
   padding: 10px;
@@ -13,7 +14,7 @@
   text-align: center;
 }
 
-.search-filter-container {
+.students-search-filter-container {
   margin-bottom: 20px;
 }
 
@@ -22,7 +23,7 @@
   padding: 0;
 }
 
-.student-item-container {
+.students-student-item-container {
   display: flex;
   flex-direction: column;
   margin: 5px 0;
@@ -33,29 +34,34 @@
   cursor: pointer;
 }
 
-.student-item {
+.students-student-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin: 0;
-  padding: 10px 0;
+  padding: 10px;
   border-bottom: none;
-  margin-bottom: 0 !important; /* Override any bottom margin */
-  margin-top: 0 !important; /* Override any top margin */
-  border-bottom: none !important; /* Override any bottom border */
+  margin-bottom: 0 !important;
+  margin-top: 0 !important;
+  border-bottom: none !important;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 
-.student-name {
-  margin: 0;
+.students-student-name {
+  margin: 5px 0;
 }
 
-.student-info {
+.students-student-info {
   margin-left: auto;
   text-align: center;
   flex: 1;
+  margin: 0;
 }
 
-.view-button {
+.students-view-button {
   margin-left: 20px;
   padding: 5px 10px;
   border: none;
@@ -65,34 +71,35 @@
   border-radius: 5px;
 }
 
-.view-button:hover {
+.students-view-button:hover {
   background-color: #218838;
 }
 
-.student-details {
+.students-student-details {
   margin: 10px 0;
 }
 
-.student-details table {
+.students-student-details table {
   width: 100%;
   border-collapse: collapse;
 }
 
-.student-details th, .student-details td {
+.students-student-details table th, 
+.students-student-details table td {
   border: 1px solid #ddd;
   padding: 8px;
   text-align: left;
 }
 
-.student-details th {
-  background-color: #f2f2f2;
+.students-student-details table th {
+  background-color: #f2f2f2 !important; /* Grey background color for row headers with higher specificity */
   font-weight: bold;
 }
 
-.student-item-container::after,
-.student-item-container::before,
-.student-item::after,
-.student-item::before {
+.students-student-item-container::after,
+.students-student-item-container::before,
+.students-student-item::after,
+.students-student-item::before {
   content: '';
   display: block;
   height: 0;

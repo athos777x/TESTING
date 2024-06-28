@@ -88,7 +88,7 @@ function StudentsPage() {
   return (
     <div className="students-container">
       <h1 className="students-title">Students</h1>
-      <div className="search-filter-container">
+      <div className="students-search-filter-container">
         <SearchFilter
           handleSearch={handleSearch}
           handleFilter={handleFilterChange}
@@ -97,116 +97,116 @@ function StudentsPage() {
       </div>
       <div className="students-list">
         {filteredStudents.map((student, index) => (
-          <div key={student.student_id} className="student-item-container" onClick={() => toggleStudentDetails(student.student_id)}>
-            <div className="student-item">
-              <p className="student-name">
+          <div key={student.student_id} className="students-student-item-container" onClick={() => toggleStudentDetails(student.student_id)}>
+            <div className="students-student-item">
+              <p className="students-student-name">
                 {index + 1}. {student.firstname} {student.middlename && `${student.middlename[0]}.`} {student.lastname}
               </p>
-              <span className="student-info">Grade {student.current_yr_lvl} - {student.student_status}</span>
-              <button className="view-button" onClick={() => navigate(`/students/${student.student_id}/details`)}>View</button>
+              <span className="students-student-info">Grade {student.current_yr_lvl} - {student.student_status}</span>
+              <button className="students-view-button" onClick={() => navigate(`/students/${student.student_id}/details`)}>View</button>
             </div>
             {selectedStudentId === student.student_id && (
-              <div className="student-details">
+              <div className="students-student-details">
                 <table>
                   <tbody>
                     <tr>
-                      <td><strong>Last Name:</strong></td>
+                      <th>Last Name:</th>
                       <td>{student.lastname}</td>
                     </tr>
                     <tr>
-                      <td><strong>First Name:</strong></td>
+                      <th>First Name:</th>
                       <td>{student.firstname}</td>
                     </tr>
                     <tr>
-                      <td><strong>Middle Name:</strong></td>
+                      <th>Middle Name:</th>
                       <td>{student.middlename}</td>
                     </tr>
                     <tr>
-                      <td><strong>Current Year Level:</strong></td>
+                      <th>Current Year Level:</th>
                       <td>{student.current_yr_lvl}</td>
                     </tr>
                     <tr>
-                      <td><strong>Birthdate:</strong></td>
+                      <th>Birthdate:</th>
                       <td>{formatDate(student.birthdate)}</td>
                     </tr>
                     <tr>
-                      <td><strong>Gender:</strong></td>
+                      <th>Gender:</th>
                       <td>{student.gender}</td>
                     </tr>
                     <tr>
-                      <td><strong>Age:</strong></td>
+                      <th>Age:</th>
                       <td>{student.age}</td>
                     </tr>
                     <tr>
-                      <td><strong>Home Address:</strong></td>
+                      <th>Home Address:</th>
                       <td>{student.home_address}</td>
                     </tr>
                     <tr>
-                      <td><strong>Barangay:</strong></td>
+                      <th>Barangay:</th>
                       <td>{student.barangay}</td>
                     </tr>
                     <tr>
-                      <td><strong>City/Municipality:</strong></td>
+                      <th>City/Municipality:</th>
                       <td>{student.city_municipality}</td>
                     </tr>
                     <tr>
-                      <td><strong>Province:</strong></td>
+                      <th>Province:</th>
                       <td>{student.province}</td>
                     </tr>
                     <tr>
-                      <td><strong>Contact Number:</strong></td>
+                      <th>Contact Number:</th>
                       <td>{student.contact_number}</td>
                     </tr>
                     <tr>
-                      <td><strong>Email Address:</strong></td>
+                      <th>Email Address:</th>
                       <td>{student.email_address}</td>
                     </tr>
                     <tr>
-                      <td><strong>Mother's Name:</strong></td>
+                      <th>Mother's Name:</th>
                       <td>{student.mother_name}</td>
                     </tr>
                     <tr>
-                      <td><strong>Father's Name:</strong></td>
+                      <th>Father's Name:</th>
                       <td>{student.father_name}</td>
                     </tr>
                     <tr>
-                      <td><strong>Parent Address:</strong></td>
+                      <th>Parent Address:</th>
                       <td>{student.parent_address}</td>
                     </tr>
                     <tr>
-                      <td><strong>Father's Occupation:</strong></td>
+                      <th>Father's Occupation:</th>
                       <td>{student.father_occupation}</td>
                     </tr>
                     <tr>
-                      <td><strong>Mother's Occupation:</strong></td>
+                      <th>Mother's Occupation:</th>
                       <td>{student.mother_occupation}</td>
                     </tr>
                     <tr>
-                      <td><strong>Annual Household Income:</strong></td>
+                      <th>Annual Household Income:</th>
                       <td>{student.annual_hshld_income}</td>
                     </tr>
                     <tr>
-                      <td><strong>Number of Siblings:</strong></td>
+                      <th>Number of Siblings:</th>
                       <td>{student.number_of_siblings}</td>
                     </tr>
                     <tr>
-                      <td><strong>Father's Education Level:</strong></td>
+                      <th>Father's Education Level:</th>
                       <td>{student.father_educ_lvl}</td>
                     </tr>
                     <tr>
-                      <td><strong>Mother's Education Level:</strong></td>
+                      <th>Mother's Education Level:</th>
                       <td>{student.mother_educ_lvl}</td>
                     </tr>
                     <tr>
-                      <td><strong>Father's Contact Number:</strong></td>
+                      <th>Father's Contact Number:</th>
                       <td>{student.father_contact_number}</td>
                     </tr>
                     <tr>
-                      <td><strong>Mother's Contact Number:</strong></td>
+                      <th>Mother's Contact Number:</th>
                       <td>{student.mother_contact_number}</td>
                     </tr>
                     <tr>
-                      <td><strong>Status:</strong></td>
+                      <th>Status:</th>
                       <td>{student.student_status}</td>
                     </tr>
                   </tbody>
