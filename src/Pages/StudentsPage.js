@@ -108,7 +108,7 @@ function StudentsPage() {
               <p className="students-student-name">
                 {index + 1}. {student.firstname} {student.middlename && `${student.middlename[0]}.`} {student.lastname}
               </p>
-              <span className="students-student-info">Grade {student.current_yr_lvl} - {student.student_status}</span>
+              <span className="students-student-info">Grade {student.current_yr_lvl} - {student.active_status === 'active' ? 'active' : 'inactive'}</span>
               <button className="students-view-button" onClick={() => navigate(`/students/${student.student_id}/details`)}>View</button>
             </div>
             {selectedStudentId === student.student_id && (

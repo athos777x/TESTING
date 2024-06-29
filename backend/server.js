@@ -52,31 +52,39 @@ app.get('/students', (req, res) => {
   const { searchTerm, grade, section, school_year } = req.query;
   console.log('Received params:', { searchTerm, grade, section, school_year });
 
+  const latestSchoolYear = '2023-2024'; // Define the latest school year
+
   let query = `
     SELECT s.student_id, s.lastname, s.firstname, s.middlename, s.current_yr_lvl, s.birthdate, s.gender, s.age, 
            s.home_address, s.barangay, s.city_municipality, s.province, s.contact_number, s.email_address, 
            s.mother_name, s.father_name, s.parent_address, s.father_occupation, s.mother_occupation, s.annual_hshld_income, 
-           s.number_of_siblings, s.father_educ_lvl, s.mother_educ_lvl, s.father_contact_number, s.mother_contact_number
+           s.number_of_siblings, s.father_educ_lvl, s.mother_educ_lvl, s.father_contact_number, s.mother_contact_number,
+           (SELECT ss.status FROM student_school_year ss
+            JOIN school_year sy ON ss.school_year_id = sy.school_year_id
+            WHERE ss.student_id = s.student_id AND sy.school_year = '${latestSchoolYear}') as active_status
     FROM student s
   `;
   const queryParams = [];
-
   const conditions = [];
 
   if (school_year) {
-    conditions.push(`sy.school_year = ?`);
-    queryParams.push(school_year);
     query = `
       SELECT s.student_id, s.lastname, s.firstname, s.middlename, s.current_yr_lvl, s.birthdate, s.gender, s.age, 
              s.home_address, s.barangay, s.city_municipality, s.province, s.contact_number, s.email_address, 
              s.mother_name, s.father_name, s.parent_address, s.father_occupation, s.mother_occupation, s.annual_hshld_income, 
              s.number_of_siblings, s.father_educ_lvl, s.mother_educ_lvl, s.father_contact_number, s.mother_contact_number, 
-             ss.status, sy.school_year
+             ss.status, sy.school_year,
+             (CASE WHEN sy.school_year = '${latestSchoolYear}' THEN ss.status ELSE 'inactive' END) as active_status
       FROM student s
       JOIN student_school_year ss ON s.student_id = ss.student_id
       JOIN school_year sy ON ss.school_year_id = sy.school_year_id
+      WHERE sy.school_year = ?
     `;
-    conditions.push(`ss.status = 'active'`);
+    queryParams.push(school_year);
+
+    if (school_year === latestSchoolYear) {
+      conditions.push(`ss.status = 'active'`);
+    }
   }
 
   if (searchTerm) {
@@ -93,7 +101,7 @@ app.get('/students', (req, res) => {
   }
 
   if (conditions.length > 0) {
-    query += ` WHERE ` + conditions.join(' AND ');
+    query += (school_year ? ' AND ' : ' WHERE ') + conditions.join(' AND ');
   }
 
   console.log('Final query:', query);
