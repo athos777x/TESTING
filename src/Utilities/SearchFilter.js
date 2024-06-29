@@ -71,14 +71,14 @@ function SearchFilter({ handleSearch, handleFilter, handleApplyFilters }) {
       />
       <select id="schoolYear" value={selectedSchoolYear} onChange={handleSchoolYearChange} className="filter-select">
         <option value="">Select School Year</option>
-        {schoolYears.map(schoolYear => (
-          <option key={schoolYear.school_year_id} value={schoolYear.year}>{schoolYear.year}</option>
+        {schoolYears.map((schoolYear, index) => (
+          <option key={index} value={schoolYear.year}>{schoolYear.year}</option>
         ))}
       </select>
       <select id="grade" value={selectedGrade} onChange={handleGradeChange} className="filter-select">
         <option value="">Select Grade</option>
-        {grades.map(grade => (
-          <option key={grade} value={grade}>{grade}</option>
+        {grades.map((grade, index) => (
+          <option key={index} value={grade}>{grade}</option>
         ))}
       </select>
       <select id="section" value={selectedSection} onChange={handleSectionChange} className="filter-select">

@@ -72,7 +72,11 @@ app.get('/students', (req, res) => {
   }
 
   db.query(query, queryParams, (err, results) => {
-    if (err) throw err;
+    if (err) {
+      console.error('Error fetching students:', err);
+      res.status(500).json({ error: 'Internal server error' });
+      return;
+    }
     res.json(results);
   });
 });
@@ -87,7 +91,11 @@ app.get('/students/:student_id/grades', (req, res) => {
                  JOIN enrollment e ON g.enrollment_id = e.enrollment_id
                  WHERE e.student_id = ?`;
   db.query(query, [student_id], (err, results) => {
-    if (err) throw err;
+    if (err) {
+      console.error('Error fetching grades:', err);
+      res.status(500).json({ error: 'Internal server error' });
+      return;
+    }
     res.json(results);
   });
 });
@@ -96,7 +104,11 @@ app.get('/students/:student_id/grades', (req, res) => {
 app.get('/api/sections', (req, res) => {
   const query = 'SELECT section_id, section_name FROM section';
   db.query(query, (err, results) => {
-    if (err) throw err;
+    if (err) {
+      console.error('Error fetching sections:', err);
+      res.status(500).json({ error: 'Internal server error' });
+      return;
+    }
     res.json(results);
   });
 });
@@ -113,20 +125,58 @@ app.get('/filters', (req, res) => {
 
   db.query(sqlSchoolYears, (err, result) => {
     if (err) {
+      console.error('Error fetching school years:', err);
       res.status(500).send(err);
+      return;
     } else {
       filters.schoolYears = result;
 
       const sqlSections = 'SELECT * FROM section';
       db.query(sqlSections, (err, result) => {
         if (err) {
+          console.error('Error fetching sections:', err);
           res.status(500).send(err);
+          return;
         } else {
           filters.sections = result;
           res.send(filters);
         }
       });
     }
+  });
+});
+
+// Endpoint to fetch attendance data for a specific student
+app.get('/attendance/:studentId', (req, res) => {
+  const studentId = req.params.studentId;
+  const query = `
+    SELECT a.status, COUNT(*) as count
+    FROM attendance a
+    JOIN enrollment e ON a.enrollment_id = e.enrollment_id
+    WHERE e.student_id = ?
+    GROUP BY a.status
+  `;
+
+  db.query(query, [studentId], (err, results) => {
+    if (err) {
+      console.error('Error fetching attendance data:', err);
+      res.status(500).send('Error fetching attendance data');
+      return;
+    }
+    if (results.length === 0) {
+      res.status(404).send('Attendance data not found');
+      return;
+    }
+
+    const attendanceData = {
+      total_school_days: results.reduce((acc, curr) => acc + curr.count, 0),
+      days_present: results.find(r => r.status === 'P')?.count || 0,
+      days_absent: results.find(r => r.status === 'A')?.count || 0,
+      days_late: results.find(r => r.status === 'L')?.count || 0,
+      brigada_attendance: results.find(r => r.status === 'B')?.count || 0
+    };
+
+    res.json(attendanceData);
   });
 });
 
