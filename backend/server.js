@@ -9,8 +9,8 @@ app.use(cors());
 
 const db = mysql.createConnection({
   host: 'localhost',
-  user: 'root', // Your MySQL username
-  password: 'root', // Your MySQL password
+  user: 'root',
+  password: 'root',
   database: 'lnhsportal'
 });
 
@@ -50,26 +50,54 @@ app.post('/login', (req, res) => {
 // Endpoint to fetch all students
 app.get('/students', (req, res) => {
   const { searchTerm, grade, section, school_year } = req.query;
-  let query = `SELECT student_id, lastname, firstname, middlename, current_yr_lvl, birthdate, gender, age, home_address, barangay, city_municipality, province, contact_number, email_address, mother_name, father_name, parent_address, father_occupation, mother_occupation, annual_hshld_income, number_of_siblings, father_educ_lvl, mother_educ_lvl, father_contact_number, mother_contact_number, student_status, section_id
-               FROM student WHERE 1=1`;
+  console.log('Received params:', { searchTerm, grade, section, school_year });
 
+  let query = `
+    SELECT s.student_id, s.lastname, s.firstname, s.middlename, s.current_yr_lvl, s.birthdate, s.gender, s.age, 
+           s.home_address, s.barangay, s.city_municipality, s.province, s.contact_number, s.email_address, 
+           s.mother_name, s.father_name, s.parent_address, s.father_occupation, s.mother_occupation, s.annual_hshld_income, 
+           s.number_of_siblings, s.father_educ_lvl, s.mother_educ_lvl, s.father_contact_number, s.mother_contact_number
+    FROM student s
+  `;
   const queryParams = [];
+
+  const conditions = [];
+
+  if (school_year) {
+    conditions.push(`sy.school_year = ?`);
+    queryParams.push(school_year);
+    query = `
+      SELECT s.student_id, s.lastname, s.firstname, s.middlename, s.current_yr_lvl, s.birthdate, s.gender, s.age, 
+             s.home_address, s.barangay, s.city_municipality, s.province, s.contact_number, s.email_address, 
+             s.mother_name, s.father_name, s.parent_address, s.father_occupation, s.mother_occupation, s.annual_hshld_income, 
+             s.number_of_siblings, s.father_educ_lvl, s.mother_educ_lvl, s.father_contact_number, s.mother_contact_number, 
+             ss.status, sy.school_year
+      FROM student s
+      JOIN student_school_year ss ON s.student_id = ss.student_id
+      JOIN school_year sy ON ss.school_year_id = sy.school_year_id
+    `;
+    conditions.push(`ss.status = 'active'`);
+  }
+
   if (searchTerm) {
-    query += ` AND (firstname LIKE ? OR lastname LIKE ?)`;
+    conditions.push(`(s.firstname LIKE ? OR s.lastname LIKE ?)`);
     queryParams.push(`%${searchTerm}%`, `%${searchTerm}%`);
   }
   if (grade) {
-    query += ` AND current_yr_lvl = ?`;
+    conditions.push(`s.current_yr_lvl = ?`);
     queryParams.push(grade);
   }
   if (section) {
-    query += ` AND section_id = ?`;
+    conditions.push(`s.section_id = ?`);
     queryParams.push(section);
   }
-  if (school_year) {
-    query += ` AND school_year = ?`;
-    queryParams.push(school_year);
+
+  if (conditions.length > 0) {
+    query += ` WHERE ` + conditions.join(' AND ');
   }
+
+  console.log('Final query:', query);
+  console.log('With parameters:', queryParams);
 
   db.query(query, queryParams, (err, results) => {
     if (err) {
@@ -77,6 +105,7 @@ app.get('/students', (req, res) => {
       res.status(500).json({ error: 'Internal server error' });
       return;
     }
+    console.log('Query results:', results);
     res.json(results);
   });
 });
@@ -177,6 +206,19 @@ app.get('/attendance/:studentId', (req, res) => {
     };
 
     res.json(attendanceData);
+  });
+});
+
+// Fetch school years
+app.get('/api/school_years', (req, res) => {
+  const query = 'SELECT school_year FROM school_year ORDER BY school_year DESC';
+  db.query(query, (err, results) => {
+    if (err) {
+      console.error('Error fetching school years:', err);
+      res.status(500).send('Error fetching school years');
+      return;
+    }
+    res.json(results);
   });
 });
 

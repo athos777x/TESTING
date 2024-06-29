@@ -19,9 +19,11 @@ function AttendancePage() {
     fetchStudents();
   }, []);
 
-  const fetchStudents = async () => {
+  const fetchStudents = async (appliedFilters = {}) => {
     try {
-      const response = await axios.get('http://localhost:3001/students');
+      const response = await axios.get('http://localhost:3001/students', {
+        params: appliedFilters
+      });
       const sortedStudents = response.data.sort((a, b) => a.lastname.localeCompare(b.lastname));
       setStudents(sortedStudents);
       setFilteredStudents(sortedStudents);
@@ -45,32 +47,46 @@ function AttendancePage() {
   };
 
   const handleSearch = (searchTerm) => {
-    setFilters(prevFilters => ({ ...prevFilters, searchTerm }));
+    setFilters(prevFilters => {
+      const updatedFilters = { ...prevFilters, searchTerm };
+      applyFilters(updatedFilters);
+      return updatedFilters;
+    });
   };
 
   const handleFilterChange = (type, value) => {
-    setFilters(prevFilters => ({ ...prevFilters, [type]: value }));
+    setFilters(prevFilters => {
+      const updatedFilters = { ...prevFilters, [type]: value };
+      return updatedFilters;
+    });
   };
 
-  const handleApplyFilters = () => {
+  const applyFilters = (updatedFilters) => {
     let filtered = students;
 
-    if (filters.grade) {
-      filtered = filtered.filter(student => student.current_yr_lvl === filters.grade);
+    if (updatedFilters.school_year) {
+      filtered = filtered.filter(student => String(student.school_year) === updatedFilters.school_year);
     }
-    if (filters.section) {
-      filtered = filtered.filter(student => student.section_id === parseInt(filters.section));
+    if (updatedFilters.grade) {
+      filtered = filtered.filter(student => student.current_yr_lvl === updatedFilters.grade);
     }
-    if (filters.school_year) {
-      filtered = filtered.filter(student => student.school_year === filters.school_year);
+    if (updatedFilters.section) {
+      filtered = filtered.filter(student => student.section_id == updatedFilters.section);
     }
-    if (filters.searchTerm) {
+    if (updatedFilters.searchTerm) {
       filtered = filtered.filter(student =>
-        `${student.firstname} ${student.lastname}`.toLowerCase().includes(filters.searchTerm.toLowerCase())
+        student.lastname.toLowerCase().includes(updatedFilters.searchTerm.toLowerCase()) ||
+        student.firstname.toLowerCase().includes(updatedFilters.searchTerm.toLowerCase())
       );
     }
 
     setFilteredStudents(filtered);
+    console.log('Filtered students:', filtered);
+  };
+
+  const handleApplyFilters = () => {
+    console.log('Applying filters:', filters);
+    fetchStudents(filters);
   };
 
   const handleStudentClick = async (studentId) => {

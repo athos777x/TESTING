@@ -19,17 +19,22 @@ function StudentsPage() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    axios.get('http://localhost:3001/students')
-      .then(response => {
-        const sortedStudents = response.data.sort((a, b) => a.lastname.localeCompare(b.lastname));
-        setStudents(sortedStudents);
-        setFilteredStudents(sortedStudents);
-        console.log('Fetched students:', sortedStudents);
-      })
-      .catch(error => {
-        console.error('There was an error fetching the students!', error);
-      });
+    fetchStudents();
   }, []);
+
+  const fetchStudents = async (appliedFilters = {}) => {
+    try {
+      const response = await axios.get('http://localhost:3001/students', {
+        params: appliedFilters
+      });
+      const sortedStudents = response.data.sort((a, b) => a.lastname.localeCompare(b.lastname));
+      setStudents(sortedStudents);
+      setFilteredStudents(sortedStudents);
+      console.log('Fetched students:', sortedStudents);
+    } catch (error) {
+      console.error('Error fetching students:', error);
+    }
+  };
 
   const handleSearch = (searchTerm) => {
     setFilters(prevFilters => {
@@ -73,7 +78,8 @@ function StudentsPage() {
   };
 
   const handleApplyFilters = () => {
-    applyFilters(filters);
+    console.log('Applying filters:', filters);
+    fetchStudents(filters);
   };
 
   const toggleStudentDetails = (studentId) => {

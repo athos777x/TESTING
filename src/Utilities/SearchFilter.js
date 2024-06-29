@@ -9,18 +9,16 @@ function SearchFilter({ handleSearch, handleFilter, handleApplyFilters }) {
   const [selectedSection, setSelectedSection] = useState('');
 
   const [schoolYears, setSchoolYears] = useState([]);
-  const [grades, setGrades] = useState([]);
+  const [grades, setGrades] = useState(['7', '8', '9', '10']); // Example grades
   const [sections, setSections] = useState([]);
 
   useEffect(() => {
-    axios.get('http://localhost:3001/filters')
+    axios.get('http://localhost:3001/api/school_years')
       .then(response => {
-        setSchoolYears(response.data.schoolYears);
-        setGrades(response.data.grades);
-        setSections(response.data.sections);
+        setSchoolYears(response.data);
       })
       .catch(error => {
-        console.error('There was an error fetching the filter options!', error);
+        console.error('There was an error fetching the school years!', error);
       });
 
     axios.get('http://localhost:3001/api/sections')
@@ -57,7 +55,14 @@ function SearchFilter({ handleSearch, handleFilter, handleApplyFilters }) {
   };
 
   const applyFilters = () => {
-    handleApplyFilters({ searchTerm, selectedSchoolYear, selectedGrade, selectedSection });
+    const filters = {
+      searchTerm,
+      school_year: selectedSchoolYear,
+      grade: selectedGrade,
+      section: selectedSection
+    };
+    console.log('Applying filters:', filters);
+    handleApplyFilters(filters);
   };
 
   return (
@@ -72,7 +77,7 @@ function SearchFilter({ handleSearch, handleFilter, handleApplyFilters }) {
       <select id="schoolYear" value={selectedSchoolYear} onChange={handleSchoolYearChange} className="filter-select">
         <option value="">Select School Year</option>
         {schoolYears.map((schoolYear, index) => (
-          <option key={index} value={schoolYear.year}>{schoolYear.year}</option>
+          <option key={index} value={schoolYear.school_year}>{schoolYear.school_year}</option>
         ))}
       </select>
       <select id="grade" value={selectedGrade} onChange={handleGradeChange} className="filter-select">
