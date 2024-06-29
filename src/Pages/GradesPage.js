@@ -111,7 +111,7 @@ function GradesPage() {
           <li key={student.student_id} className="grades-student-item-container" onClick={() => handleStudentClick(student.student_id)}>
             <div className="grades-student-item">
               <p className="grades-student-name">{index + 1}. {student.firstname} {student.middlename} {student.lastname}</p>
-              <p className="grades-student-info">Grade {student.current_yr_lvl} - {student.student_status}</p>
+              <p className="grades-student-info">Grade {student.current_yr_lvl} - {student.active_status}</p>
               <button className="grades-view-button">View</button>
             </div>
             {selectedStudentId === student.student_id && (

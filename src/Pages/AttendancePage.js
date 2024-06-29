@@ -112,7 +112,7 @@ function AttendancePage() {
           <li key={student.student_id} className="attendance-student-item-container" onClick={() => handleStudentClick(student.student_id)}>
             <div className="attendance-student-item">
               <p className="attendance-student-name">{index + 1}. {student.firstname} {student.middlename} {student.lastname}</p>
-              <p className="attendance-student-info">Grade {student.current_yr_lvl} - {student.student_status}</p>
+              <p className="attendance-student-info">Grade {student.current_yr_lvl} - {student.active_status}</p>
               <button className="attendance-view-button">View</button>
             </div>
             {selectedStudentId === student.student_id && attendanceData[student.student_id] && (
