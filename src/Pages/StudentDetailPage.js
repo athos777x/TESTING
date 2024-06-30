@@ -1,120 +1,120 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import jsPDF from 'jspdf';
-import html2canvas from 'html2canvas';
-import '../CssPage/StudentDetailPage.css'; // Import the CSS file
+import { useParams, useNavigate } from 'react-router-dom';
+import { jsPDF } from 'jspdf';
+import '../CssPage/StudentDetailPage.css';
 
-function StudentDetailPage() {
+const StudentDetailPage = () => {
   const { id } = useParams();
-  const [student, setStudent] = useState(null);
   const navigate = useNavigate();
+  const [studentDetails, setStudentDetails] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    axios.get(`http://localhost:3001/students/${id}/details`)
-      .then(response => {
-        console.log('Student details fetched:', response.data); // Log the student details
-        setStudent(response.data);
-      })
-      .catch(error => {
-        console.error('There was an error fetching the student details!', error);
-      });
+    const fetchStudentDetails = async () => {
+      try {
+        const response = await axios.get(`http://localhost:3001/students/${id}/details`);
+        setStudentDetails(response.data[0]);
+        console.log("Student Details Keys:", Object.keys(response.data[0])); // Debugging line
+      } catch (error) {
+        setError('There was an error fetching the student details!');
+        console.error(error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchStudentDetails();
   }, [id]);
 
-  const downloadPDF = () => {
-    const input = document.getElementById('student-detail-content');
-    html2canvas(input)
-      .then((canvas) => {
-        const imgData = canvas.toDataURL('image/png');
-        const pdf = new jsPDF('p', 'mm', 'a4');
-        const pdfWidth = pdf.internal.pageSize.getWidth();
-        const pdfHeight = pdf.internal.pageSize.getHeight();
-        const imgWidth = pdfWidth - 20; // 10mm margin on each side
-        const imgHeight = (canvas.height * imgWidth) / canvas.width;
-        const margin = 10;
+  const handleDownload = () => {
+    if (!studentDetails) return;
 
-        pdf.addImage(imgData, 'PNG', margin, margin, imgWidth, imgHeight);
-        pdf.save(`${student.name}_details.pdf`);
-      });
+    const doc = new jsPDF();
+    let yOffset = 10;
+
+    const addLine = (label, value) => {
+      doc.text(`${label}: ${value || ''}`, 10, yOffset);
+      yOffset += 10;
+    };
+
+    Object.entries(studentDetails).forEach(([key, value]) => {
+      addLine(transformKey(key), value);
+    });
+
+    doc.save(`${studentDetails.firstname}_${studentDetails.lastname}_Details.pdf`);
   };
 
   const handleClose = () => {
-    navigate('/students'); // Change this to the desired path
+    navigate(-1);
   };
 
-  if (!student) {
+  const headerMapping = {
+    studentId: "Student ID",
+    lastname: "Last Name",
+    firstname: "First Name",
+    middlename: "Middle Name",
+    currentYearLevel: "Current Year Level",
+    birthdate: "Birthdate",
+    gender: "Gender",
+    age: "Age",
+    homeAddress: "Home Address",
+    barangay: "Barangay",
+    cityMunicipality: "City/Municipality",
+    province: "Province",
+    contactNumber: "Contact Number",
+    emailAddress: "Email Address",
+    motherName: "Mother's Name",
+    fatherName: "Father's Name",
+    parentAddress: "Parent Address",
+    fatherOccupation: "Father's Occupation",
+    motherOccupation: "Mother's Occupation",
+    annualHouseholdIncome: "Annual Household Income",
+    numberOfSiblings: "Number of Siblings",
+    fatherEducationLevel: "Father's Education Level",
+    motherEducationLevel: "Mother's Education Level",
+    fatherContactNumber: "Father's Contact Number",
+    motherContactNumber: "Mother's Contact Number",
+    status: "Status",
+    schoolYear: "School Year"
+  };
+
+  const transformKey = (key) => {
+    console.log("Transforming Key:", key, "to", headerMapping[key] || key); // Debugging line
+    return headerMapping[key] || key;
+  };
+
+  if (loading) {
     return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>{error}</div>;
+  }
+
+  if (!studentDetails) {
+    return <div>No details available for this student.</div>;
   }
 
   return (
     <div className="student-detail-container">
-      <button onClick={handleClose} className="close-button">Close</button>
-      <div id="student-detail-content">
-        <h1 className="student-name-header">{student.name}</h1>
-        <h2 className="student-detail-title">Student Details</h2>
-        <table className="student-detail-table">
-          <tbody>
-            <tr>
-              <th>Name</th>
-              <td>{student.name}</td>
+      <h1 className="student-detail-title">Student Details</h1>
+      <p className="student-name-header">{`${studentDetails.firstname} ${studentDetails.lastname}`}</p>
+      <table className="student-detail-table">
+        <tbody>
+          {Object.entries(studentDetails).map(([key, value]) => (
+            <tr key={key}>
+              <th>{transformKey(key)}</th>
+              <td>{value}</td>
             </tr>
-            <tr>
-              <th>Address</th>
-              <td>{student.address}</td>
-            </tr>
-            <tr>
-              <th>Phone Number</th>
-              <td>{student.phone_number}</td>
-            </tr>
-            <tr>
-              <th>School Year</th>
-              <td>{student.school_year}</td>
-            </tr>
-            <tr>
-              <th>Grade</th>
-              <td>Grade {student.grade_level}</td>
-            </tr>
-            <tr>
-              <th>Section</th>
-              <td>{student.section}</td>
-            </tr>
-            <tr>
-              <th>Status</th>
-              <td>{student.status}</td>
-            </tr>
-          </tbody>
-        </table>
-        <h2 className="student-detail-title">Grades</h2>
-        {student.grades.length > 0 ? (
-          <table className="student-detail-table">
-            <thead>
-              <tr>
-                <th>Subject</th>
-                <th>Q1</th>
-                <th>Q2</th>
-                <th>Q3</th>
-                <th>Q4</th>
-              </tr>
-            </thead>
-            <tbody>
-              {student.grades.map((grade, index) => (
-                <tr key={index}>
-                  <td>{grade.subject_name}</td>
-                  <td>{grade.q1_grade !== null ? grade.q1_grade : '-'}</td>
-                  <td>{grade.q2_grade !== null ? grade.q2_grade : '-'}</td>
-                  <td>{grade.q3_grade !== null ? grade.q3_grade : '-'}</td>
-                  <td>{grade.q4_grade !== null ? grade.q4_grade : '-'}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        ) : (
-          <p>No grades available.</p>
-        )}
-      </div>
-      <button onClick={downloadPDF} className="download-button">Download PDF</button>
+          ))}
+        </tbody>
+      </table>
+      <button className="download-button" onClick={handleDownload}>Download PDF</button>
+      <button className="close-button" onClick={handleClose}>Close</button>
     </div>
   );
-}
+};
 
 export default StudentDetailPage;

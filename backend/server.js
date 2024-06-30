@@ -230,6 +230,64 @@ app.get('/api/school_years', (req, res) => {
   });
 });
 
+// Endpoint to fetch student details
+app.get('/students/:id/details', (req, res) => {
+  const studentId = req.params.id;
+
+  const query = `
+    SELECT s.student_id, s.lastname, s.firstname, s.middlename, s.current_yr_lvl, s.birthdate, s.gender, s.age,
+           s.home_address, s.barangay, s.city_municipality, s.province, s.contact_number, s.email_address,
+           s.mother_name, s.father_name, s.parent_address, s.father_occupation, s.mother_occupation, s.annual_hshld_income,
+           s.number_of_siblings, s.father_educ_lvl, s.mother_educ_lvl, s.father_contact_number, s.mother_contact_number,
+           ss.status, sy.school_year
+    FROM student s
+    LEFT JOIN student_school_year ss ON s.student_id = ss.student_id
+    LEFT JOIN school_year sy ON ss.school_year_id = sy.school_year_id
+    WHERE s.student_id = ?
+    ORDER BY sy.school_year DESC
+  `;
+
+  db.query(query, [studentId], (err, results) => {
+    if (err) {
+      console.error('Error fetching student details:', err);
+      res.status(500).json({ error: 'Internal server error' });
+      return;
+    }
+
+    const studentDetails = results.map(result => ({
+      studentId: result.student_id,
+      lastname: result.lastname,
+      firstname: result.firstname,
+      middlename: result.middlename,
+      currentYearLevel: result.current_yr_lvl,
+      birthdate: result.birthdate,
+      gender: result.gender,
+      age: result.age,
+      homeAddress: result.home_address,
+      barangay: result.barangay,
+      cityMunicipality: result.city_municipality,
+      province: result.province,
+      contactNumber: result.contact_number,
+      emailAddress: result.email_address,
+      motherName: result.mother_name,
+      fatherName: result.father_name,
+      parentAddress: result.parent_address,
+      fatherOccupation: result.father_occupation,
+      motherOccupation: result.mother_occupation,
+      annualHouseholdIncome: result.annual_hshld_income,
+      numberOfSiblings: result.number_of_siblings,
+      fatherEducationLevel: result.father_educ_lvl,
+      motherEducationLevel: result.mother_educ_lvl,
+      fatherContactNumber: result.father_contact_number,
+      motherContactNumber: result.mother_contact_number,
+      status: result.status,
+      schoolYear: result.school_year
+    }));
+
+    res.json(studentDetails);
+  });
+});
+
 app.listen(3001, () => {
   console.log('Server running on port 3001');
 });

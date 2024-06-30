@@ -213,7 +213,7 @@ function StudentsPage() {
                     </tr>
                     <tr>
                       <th>Status:</th>
-                      <td>{student.student_status}</td>
+                      <td>{student.active_status === 'active' ? 'active' : 'inactive'}</td>
                     </tr>
                   </tbody>
                 </table>
