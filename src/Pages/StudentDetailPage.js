@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams, useNavigate } from 'react-router-dom';
-import { jsPDF } from 'jspdf';
+import jsPDF from 'jspdf';
+import 'jspdf-autotable';
 import '../CssPage/StudentDetailPage.css';
 
 const StudentDetailPage = () => {
@@ -15,8 +16,13 @@ const StudentDetailPage = () => {
     const fetchStudentDetails = async () => {
       try {
         const response = await axios.get(`http://localhost:3001/students/${id}/details`);
-        setStudentDetails(response.data[0]);
-        console.log("Student Details Keys:", Object.keys(response.data[0])); // Debugging line
+        const details = response.data[0];
+        if (details.birthdate) {
+          const birthdate = new Date(details.birthdate);
+          details.birthdate = birthdate.toLocaleDateString('en-US', { year: 'numeric', month: '2-digit', day: '2-digit' });
+        }
+        setStudentDetails(details);
+        console.log("Student Details Keys:", Object.keys(details)); // Debugging line
       } catch (error) {
         setError('There was an error fetching the student details!');
         console.error(error);
@@ -32,15 +38,26 @@ const StudentDetailPage = () => {
     if (!studentDetails) return;
 
     const doc = new jsPDF();
-    let yOffset = 10;
-
-    const addLine = (label, value) => {
-      doc.text(`${label}: ${value || ''}`, 10, yOffset);
-      yOffset += 10;
-    };
+    const tableRows = [];
 
     Object.entries(studentDetails).forEach(([key, value]) => {
-      addLine(transformKey(key), value);
+      if (key !== 'firstname' && key !== 'lastname') {
+        const rowData = [transformKey(key), String(value) || ''];
+        tableRows.push(rowData);
+      }
+    });
+
+    doc.setFontSize(18);
+    doc.text(`${studentDetails.firstname} ${studentDetails.lastname}`, 14, 22);
+    doc.autoTable({
+      startY: 30,
+      body: tableRows,
+      theme: 'grid',
+      styles: { cellPadding: 2, fontSize: 10 },
+      columnStyles: {
+        0: { cellWidth: 60 },
+        1: { cellWidth: 'auto' }
+      }
     });
 
     doc.save(`${studentDetails.firstname}_${studentDetails.lastname}_Details.pdf`);
