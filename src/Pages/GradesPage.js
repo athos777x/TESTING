@@ -96,6 +96,11 @@ function GradesPage() {
       });
   };
 
+  const calculateFinalGrade = (grades) => {
+    const total = grades.reduce((sum, grade) => sum + grade, 0);
+    return (total / grades.length).toFixed(2);
+  };
+
   return (
     <div className="grades-container">
       <h1 className="grades-title">Grades</h1>
@@ -116,28 +121,40 @@ function GradesPage() {
             </div>
             {selectedStudentId === student.student_id && (
               <div className="grades-student-details">
-                <table>
-                  <thead>
-                    <tr>
-                      <th>Subject</th>
-                      <th>Q1</th>
-                      <th>Q2</th>
-                      <th>Q3</th>
-                      <th>Q4</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {grades.map((grade, index) => (
-                      <tr key={index}>
-                        <td>{grade.subject_name}</td>
-                        <td>{grade.q1_grade}</td>
-                        <td>{grade.q2_grade}</td>
-                        <td>{grade.q3_grade}</td>
-                        <td>{grade.q4_grade}</td>
+                {grades.length > 0 && (
+                  <table>
+                    <thead>
+                      <tr>
+                        <th colSpan="6" style={{ textAlign: 'left' }}>
+                          <div style={{ display: 'flex', justifyContent: 'space-between', paddingRight: '40px' }}>
+                            <span>Grade Level: {grades[0].grade_level}</span>
+                            <span>School Year: {grades[0].school_year}</span>
+                          </div>
+                        </th>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
+                      <tr>
+                        <th>Subject</th>
+                        <th>Q1</th>
+                        <th>Q2</th>
+                        <th>Q3</th>
+                        <th>Q4</th>
+                        <th>Final Grade</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {grades.map((grade, index) => (
+                        <tr key={index}>
+                          <td>{grade.subject_name}</td>
+                          <td>{grade.q1_grade}</td>
+                          <td>{grade.q2_grade}</td>
+                          <td>{grade.q3_grade}</td>
+                          <td>{grade.q4_grade}</td>
+                          <td>{calculateFinalGrade([grade.q1_grade, grade.q2_grade, grade.q3_grade, grade.q4_grade])}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                )}
               </div>
             )}
           </li>

@@ -118,6 +118,16 @@ function AttendancePage() {
             {selectedStudentId === student.student_id && attendanceData[student.student_id] && (
               <div className="attendance-student-details">
                 <table className="attendance-table">
+                  <thead>
+                    <tr>
+                      <th colSpan="2" style={{ textAlign: 'left' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', paddingRight: '40px' }}>
+                          <span>Grade Level: {attendanceData[student.student_id].grade_level}</span>
+                          <span>School Year: {attendanceData[student.student_id].school_year}</span>
+                        </div>
+                      </th>
+                    </tr>
+                  </thead>
                   <tbody>
                     <tr>
                       <th>Total School Days</th>
