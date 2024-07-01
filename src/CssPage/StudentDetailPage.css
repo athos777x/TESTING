@@ -26,6 +26,7 @@
 .student-detail-table {
   width: 100%;
   border-collapse: collapse;
+  margin-bottom: 20px;
 }
 
 .student-detail-table th, .student-detail-table td {
@@ -43,20 +44,50 @@
   background-color: #f9f9f9;
 }
 
+.grades-section, .attendance-section {
+  margin-bottom: 20px;
+}
+
+.grades-section h2, .attendance-section h2 {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.grades-table, .attendance-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.grades-table th, .grades-table td, .attendance-table th, .attendance-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+.grades-table th, .attendance-table th {
+  background-color: #f2f2f2;
+  font-weight: bold;
+}
+
+.grades-table tr:nth-child(even), .attendance-table tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
 .download-button {
   display: block;
   margin: 20px auto;
   padding: 10px 20px;
   border: none;
   border-radius: 5px;
-  background-color: #28a745; /* Same color as the Apply Filters button */
+  background-color: #28a745;
   color: #fff;
   cursor: pointer;
   font-size: 16px;
 }
 
 .download-button:hover {
-  background-color: #218838; /* Same hover color as the Apply Filters button */
+  background-color: #218838;
 }
 
 .close-button {
