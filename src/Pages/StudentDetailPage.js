@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams, useNavigate } from 'react-router-dom';
+import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
-import 'jspdf-autotable';
 import '../CssPage/StudentDetailPage.css';
 
 const StudentDetailPage = () => {
@@ -55,88 +55,35 @@ const StudentDetailPage = () => {
     fetchStudentAttendance();
   }, [id]);
 
-  const handleDownload = () => {
-    if (!studentDetails) return;
+  const handleDownload = async () => {
+    const doc = new jsPDF('p', 'pt', 'letter');
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const margin = 72; // 1 inch margin
 
-    const doc = new jsPDF();
-    const tableRows = [];
+    const addSectionToPDF = async (elementId, sectionTitle) => {
+      const canvas = await html2canvas(document.getElementById(elementId), { scale: 2 });
+      const imgData = canvas.toDataURL('image/png');
+      const imgProps = doc.getImageProperties(imgData);
+      const imgHeight = (imgProps.height * (pageWidth - margin * 2)) / imgProps.width;
+      
+      doc.addPage();
+      doc.setFontSize(18);
+      doc.text(`${studentDetails.firstname} ${studentDetails.lastname}`, margin, margin);
+      doc.text(sectionTitle, margin, margin + 20);
+      doc.addImage(imgData, 'PNG', margin, margin + 40, pageWidth - margin * 2, imgHeight);
+    };
 
-    Object.entries(studentDetails).forEach(([key, value]) => {
-      if (key !== 'firstname' && key !== 'lastname') {
-        const rowData = [transformKey(key), String(value) || ''];
-        tableRows.push(rowData);
-      }
-    });
+    const detailsCanvas = await html2canvas(document.getElementById('student-details'), { scale: 2 });
+    const detailsImgData = detailsCanvas.toDataURL('image/png');
+    const detailsImgProps = doc.getImageProperties(detailsImgData);
+    const detailsImgHeight = (detailsImgProps.height * (pageWidth - margin * 2)) / detailsImgProps.width;
 
     doc.setFontSize(18);
-    doc.text(`${studentDetails.firstname} ${studentDetails.lastname}`, 14, 22);
-    doc.autoTable({
-      startY: 30,
-      body: tableRows,
-      theme: 'grid',
-      styles: { cellPadding: 2, fontSize: 10, lineWidth: 0.1, lineColor: [0, 0, 0] },
-      columnStyles: {
-        0: { cellWidth: 60 },
-        1: { cellWidth: 'auto' }
-      },
-      headStyles: { fillColor: [255, 255, 255], textColor: [0, 0, 0] }
-    });
+    doc.text(`${studentDetails.firstname} ${studentDetails.lastname}`, margin, margin);
+    doc.addImage(detailsImgData, 'PNG', margin, margin + 20, pageWidth - margin * 2, detailsImgHeight);
 
-    // Add Grades table
-    if (grades.length > 0) {
-      const gradesTableRows = grades.map(grade => [
-        grade.subject_name,
-        grade.q1_grade,
-        grade.q2_grade,
-        grade.q3_grade,
-        grade.q4_grade,
-        calculateFinalGrade([grade.q1_grade, grade.q2_grade, grade.q3_grade, grade.q4_grade])
-      ]);
-
-      doc.addPage();
-      doc.text('Grades', 14, 22);
-      doc.autoTable({
-        startY: 30,
-        head: [
-          [
-            { content: `Grade Level: ${grades[0].grade_level}`, styles: { halign: 'left' } },
-            { content: `School Year: ${grades[0].school_year}`, styles: { halign: 'right' } }
-          ],
-          ['Subject', 'Q1', 'Q2', 'Q3', 'Q4', 'Final Grade']
-        ],
-        body: gradesTableRows,
-        theme: 'grid',
-        styles: { cellPadding: 2, fontSize: 10, lineWidth: 0.1, lineColor: [0, 0, 0] },
-        headStyles: { fillColor: [255, 255, 255], textColor: [0, 0, 0] }
-      });
-    }
-
-    // Add Attendance table
-    if (attendanceData && Object.keys(attendanceData).length > 0) {
-      const attendanceTableRows = [
-        ['Total School Days', attendanceData.total_school_days],
-        ['Total Days Present', attendanceData.days_present],
-        ['Total Days Absent', attendanceData.days_absent],
-        ['Total Days Late', attendanceData.days_late],
-        ['Brigada Attendance', attendanceData.brigada_attendance],
-      ];
-
-      doc.addPage();
-      doc.text('Attendance', 14, 22);
-      doc.autoTable({
-        startY: 30,
-        head: [
-          [
-            { content: `Grade Level: ${grades.length > 0 ? grades[0].grade_level : ''}`, styles: { halign: 'left' } },
-            { content: `School Year: ${grades.length > 0 ? grades[0].school_year : ''}`, styles: { halign: 'right' } }
-          ]
-        ],
-        body: attendanceTableRows,
-        theme: 'grid',
-        styles: { cellPadding: 2, fontSize: 10, lineWidth: 0.1, lineColor: [0, 0, 0] },
-        headStyles: { fillColor: [255, 255, 255], textColor: [0, 0, 0] }
-      });
-    }
+    await addSectionToPDF('student-grades', '');
+    await addSectionToPDF('student-attendance', '');
 
     doc.save(`${studentDetails.firstname}_${studentDetails.lastname}_Details.pdf`);
   };
@@ -200,17 +147,19 @@ const StudentDetailPage = () => {
     <div className="student-detail-container">
       <h1 className="student-detail-title">Student Details</h1>
       <p className="student-name-header">{`${studentDetails.firstname} ${studentDetails.lastname}`}</p>
-      <table className="student-detail-table">
-        <tbody>
-          {Object.entries(studentDetails).map(([key, value]) => (
-            <tr key={key}>
-              <th>{transformKey(key)}</th>
-              <td>{value}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-      <div className="grades-section">
+      <div id="student-details">
+        <table className="student-detail-table">
+          <tbody>
+            {Object.entries(studentDetails).map(([key, value]) => (
+              <tr key={key}>
+                <th>{transformKey(key)}</th>
+                <td>{value}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <div id="student-grades" className="grades-section">
         <h2>Grades</h2>
         {grades.length > 0 ? (
           <table className="grades-table">
@@ -249,7 +198,7 @@ const StudentDetailPage = () => {
           <p>No grades available.</p>
         )}
       </div>
-      <div className="attendance-section">
+      <div id="student-attendance" className="attendance-section">
         <h2>Attendance</h2>
         {attendanceData && Object.keys(attendanceData).length > 0 ? (
           <table className="attendance-table">
