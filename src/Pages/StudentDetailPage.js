@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useParams, useNavigate } from 'react-router-dom';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
+import { FiX } from 'react-icons/fi';
 import '../CssPage/StudentDetailPage.css';
 
 const StudentDetailPage = () => {
@@ -65,7 +66,7 @@ const StudentDetailPage = () => {
       const imgData = canvas.toDataURL('image/png');
       const imgProps = doc.getImageProperties(imgData);
       const imgHeight = (imgProps.height * (pageWidth - margin * 2)) / imgProps.width;
-      
+
       doc.addPage();
       doc.setFontSize(18);
       doc.text(`${studentDetails.firstname} ${studentDetails.lastname}`, margin, margin);
@@ -240,7 +241,7 @@ const StudentDetailPage = () => {
         )}
       </div>
       <button className="download-button" onClick={handleDownload}>Download PDF</button>
-      <button className="close-button" onClick={handleClose}>Close</button>
+      <button className="close-button" onClick={handleClose}><FiX /></button>
     </div>
   );
 };
