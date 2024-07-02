@@ -1,4 +1,3 @@
-// PrincipalSideBar.js
 import React, { useState } from 'react';
 import '../CssFiles/principaldashboard.css';
 import {
@@ -32,24 +31,35 @@ function PrincipalSideBar({ showSidebar, toggleSidebar, handleLogout }) {
   const [showRecordsSubMenu, setShowRecordsSubMenu] = useState(false);
   const [showEnrollmentSubMenu, setShowEnrollmentSubMenu] = useState(false);
   const [showReportsSubMenu, setShowReportsSubMenu] = useState(false);
+  const [showClassesSubMenu, setShowClassesSubMenu] = useState(false);
   const navigate = useNavigate();
 
   const toggleRecordsSubMenu = () => {
     setShowRecordsSubMenu(!showRecordsSubMenu);
     setShowEnrollmentSubMenu(false);
     setShowReportsSubMenu(false);
+    setShowClassesSubMenu(false);
   };
 
   const toggleEnrollmentSubMenu = () => {
     setShowEnrollmentSubMenu(!showEnrollmentSubMenu);
     setShowRecordsSubMenu(false);
     setShowReportsSubMenu(false);
+    setShowClassesSubMenu(false);
   };
 
   const toggleReportsSubMenu = () => {
     setShowReportsSubMenu(!showReportsSubMenu);
     setShowRecordsSubMenu(false);
     setShowEnrollmentSubMenu(false);
+    setShowClassesSubMenu(false);
+  };
+
+  const toggleClassesSubMenu = () => {
+    setShowClassesSubMenu(!showClassesSubMenu);
+    setShowRecordsSubMenu(false);
+    setShowEnrollmentSubMenu(false);
+    setShowReportsSubMenu(false);
   };
 
   const handleNavigate = (path) => {
@@ -92,14 +102,29 @@ function PrincipalSideBar({ showSidebar, toggleSidebar, handleLogout }) {
           </button>
           {showEnrollmentSubMenu && (
             <div className="submenu">
-              <button onClick={() => handleNavigate('/schoolyear')}>
+              <button onClick={() => handleNavigate('/school-year')}>
                 <FiCalendar className="icon" /> School Year
               </button>
               <button onClick={() => handleNavigate('/section')}>
+                <FiBook className="icon" /> Section List
+              </button>
+              <button onClick={() => handleNavigate('/enrolled-students')}>
+                <FiUsers className="icon" /> Enrolled Students
+              </button>
+            </div>
+          )}
+        </div>
+        <div className={`menu-with-submenu ${showClassesSubMenu ? 'active' : ''}`}>
+          <button onClick={toggleClassesSubMenu}>
+            <FiClipboard className="icon" /> Classes
+          </button>
+          {showClassesSubMenu && (
+            <div className="submenu">
+              <button onClick={() => handleNavigate('/section')}>
                 <FiBook className="icon" /> Section
               </button>
-              <button onClick={() => handleNavigate('/enrolledstudents')}>
-                <FiUsers className="icon" /> Enrolled Students
+              <button onClick={() => handleNavigate('/schedule')}>
+                <FiCalendar className="icon" /> Schedule
               </button>
             </div>
           )}
@@ -113,13 +138,13 @@ function PrincipalSideBar({ showSidebar, toggleSidebar, handleLogout }) {
           </button>
           {showReportsSubMenu && (
             <div className="submenu">
-              <button onClick={() => handleNavigate('/studentenrollees')}>
+              <button onClick={() => handleNavigate('/list-of-student-enrollees')}>
                 <FiUsers className="icon" /> List of Student Enrollees
               </button>
-              <button onClick={() => handleNavigate('/summaryreport')}>
+              <button onClick={() => handleNavigate('/summary-report-promotion')}>
                 <FiFileText className="icon" /> Summary Report
               </button>
-              <button onClick={() => handleNavigate('/earlyenrollmentreport')}>
+              <button onClick={() => handleNavigate('/early-enrollment-report')}>
                 <FiFileText className="icon" /> Early Enrollment Report
               </button>
             </div>
