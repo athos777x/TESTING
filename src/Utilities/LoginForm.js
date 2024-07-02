@@ -1,4 +1,3 @@
-// LoginForm.js
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -13,9 +12,18 @@ function LoginForm({ onLogin }) {
 
   const handleLogin = async (event) => {
     event.preventDefault();
+    console.log('Attempting to log in with username:', username);
     try {
       const response = await axios.post('http://localhost:3001/login', { username, password });
+      console.log('Login response:', response.data);
       if (response.data.authenticated) {
+        const userResponse = await axios.get(`http://localhost:3001/users/${response.data.userId}`);
+        console.log('User details response:', userResponse.data);
+        const fullName = `${userResponse.data.firstname} ${userResponse.data.middlename[0]}. ${userResponse.data.lastname}`;
+
+        localStorage.setItem('fullName', fullName);
+        localStorage.setItem('username', username);
+        localStorage.setItem('role', response.data.role);
         onLogin(username, password, navigate, response.data.role);
       } else {
         alert('Incorrect username or password');

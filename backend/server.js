@@ -39,10 +39,37 @@ app.post('/login', (req, res) => {
       const user = results[0];
       const role = roleMap[user.role_id];
       console.log('Login successful:', user);
-      res.json({ authenticated: true, role });
+      res.json({ authenticated: true, userId: user.user_id, role });
     } else {
       console.log('Login failed: invalid username or password');
       res.json({ authenticated: false });
+    }
+  });
+});
+
+// Endpoint to fetch user details by ID
+app.get('/users/:userId', (req, res) => {
+  const userId = req.params.userId;
+  console.log(`Fetching user details for userId: ${userId}`);
+  const query = `
+    SELECT e.firstname, e.lastname, e.middlename, u.username, u.role_id
+    FROM users u 
+    JOIN employee e ON u.user_id = e.user_id 
+    WHERE u.user_id = ?
+  `;
+  
+  db.query(query, [userId], (err, results) => {
+    if (err) {
+      console.error('Database query error:', err);
+      res.status(500).json({ error: 'Database error' });
+      return;
+    }
+    if (results.length > 0) {
+      console.log('User details found:', results[0]);
+      res.json(results[0]);
+    } else {
+      console.log('User not found for userId:', userId);
+      res.status(404).json({ error: 'User not found' });
     }
   });
 });
@@ -88,7 +115,7 @@ app.get('/students', (req, res) => {
   }
 
   if (searchTerm) {
-    conditions.push(`(s.firstname LIKE ? OR s.lastname LIKE ?)`);
+    conditions.push(`(s.firstname LIKE ? OR s.lastname LIKE ?)`); 
     queryParams.push(`%${searchTerm}%`, `%${searchTerm}%`);
   }
   if (grade) {

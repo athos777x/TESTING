@@ -13,6 +13,7 @@ function Layout({ role, handleLogout }) {
   };
 
   const user = {
+    fullName: localStorage.getItem('fullName') || 'Full Name',
     name: localStorage.getItem('username') || 'User',
     role: localStorage.getItem('role') || 'Role'
   };

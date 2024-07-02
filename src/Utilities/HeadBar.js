@@ -21,9 +21,9 @@ function HeaderBar({ showSidebar, toggleSidebar, user }) {
         <img src={profilePic} alt="Profile" className="profile-pic" />
         {dropdownVisible && (
           <div className="dropdown-menu">
-            <p>{user.name}</p>
-            <p>{user.role}</p>
-            <button onClick={() => { /* handle logout */ }}>Logout</button>
+            <p className="dropdown-item">{user.fullName}</p>
+            <p className="dropdown-item">{user.name}</p>
+            <p className="dropdown-item">{user.role}</p>
           </div>
         )}
       </div>
