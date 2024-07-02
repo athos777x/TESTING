@@ -131,6 +131,8 @@ app.get('/students', (req, res) => {
     query += (school_year ? ' AND ' : ' WHERE ') + conditions.join(' AND ');
   }
 
+  query += ' ORDER BY s.firstname'; // Add ORDER BY clause to sort by first name
+
   console.log('Final query:', query);
   console.log('With parameters:', queryParams);
 
@@ -312,6 +314,19 @@ app.get('/students/:id/details', (req, res) => {
     }));
 
     res.json(studentDetails);
+  });
+});
+
+// Endpoint to fetch all employees
+app.get('/employees', (req, res) => {
+  const query = 'SELECT * FROM employee ORDER BY firstname'; // Add ORDER BY clause to sort by first name
+  db.query(query, (err, results) => {
+    if (err) {
+      console.error('Error fetching employees:', err);
+      res.status(500).json({ error: 'Internal server error' });
+      return;
+    }
+    res.json(results);
   });
 });
 

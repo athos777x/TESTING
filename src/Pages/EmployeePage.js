@@ -22,7 +22,7 @@ function EmployeePage() {
         params: appliedFilters
       });
       console.log('API response:', response.data); // Log the API response
-      const sortedEmployees = response.data.sort((a, b) => a.lastname.localeCompare(b.lastname));
+      const sortedEmployees = response.data.sort((a, b) => a.firstname.localeCompare(b.firstname));
       setEmployees(sortedEmployees);
       setFilteredEmployees(sortedEmployees);
       console.log('Sorted employees:', sortedEmployees); // Log the sorted employees
@@ -57,8 +57,8 @@ function EmployeePage() {
     }
     if (updatedFilters.searchTerm) {
       filtered = filtered.filter(employee =>
-        employee.lastname.toLowerCase().includes(updatedFilters.searchTerm.toLowerCase()) ||
-        employee.firstname.toLowerCase().includes(updatedFilters.searchTerm.toLowerCase())
+        employee.firstname.toLowerCase().includes(updatedFilters.searchTerm.toLowerCase()) ||
+        employee.lastname.toLowerCase().includes(updatedFilters.searchTerm.toLowerCase())
       );
     }
 

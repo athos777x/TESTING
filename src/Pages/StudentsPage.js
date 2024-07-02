@@ -27,7 +27,7 @@ function StudentsPage() {
       const response = await axios.get('http://localhost:3001/students', {
         params: appliedFilters
       });
-      const sortedStudents = response.data.sort((a, b) => a.lastname.localeCompare(b.lastname));
+      const sortedStudents = response.data.sort((a, b) => a.firstname.localeCompare(b.firstname));
       setStudents(sortedStudents);
       setFilteredStudents(sortedStudents);
       console.log('Fetched students:', sortedStudents);
@@ -68,8 +68,8 @@ function StudentsPage() {
     }
     if (updatedFilters.searchTerm) {
       filtered = filtered.filter(student =>
-        student.lastname.toLowerCase().includes(updatedFilters.searchTerm.toLowerCase()) ||
-        student.firstname.toLowerCase().includes(updatedFilters.searchTerm.toLowerCase())
+        student.firstname.toLowerCase().includes(updatedFilters.searchTerm.toLowerCase()) ||
+        student.lastname.toLowerCase().includes(updatedFilters.searchTerm.toLowerCase())
       );
     }
 
