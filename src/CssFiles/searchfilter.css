@@ -34,7 +34,7 @@
   background-color: #28a745; /* Changed color when not hovered */
   color: white;
   border: none;
-  border-radius: 8px;
+  border-radius: 28px;
   cursor: pointer;
   font-size: 14px;
   height: 40px; /* Ensure consistent height */

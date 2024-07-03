@@ -61,17 +61,25 @@
   margin: 0;
 }
 
-.employee-view-button {
-  margin-left: 20px;
+.employee-actions {
+  display: flex;
+}
+
+.employee-view-button,
+.employee-edit-button,
+.employee-archive-button {
+  margin-left: 5px; /* Added margin to create space between buttons */
   padding: 5px 10px;
   border: none;
   background-color: #28a745;
   color: white;
   cursor: pointer;
-  border-radius: 5px;
+  border-radius: 13px;
 }
 
-.employee-view-button:hover {
+.employee-view-button:hover,
+.employee-edit-button:hover,
+.employee-archive-button:hover {
   background-color: #218838;
 }
 

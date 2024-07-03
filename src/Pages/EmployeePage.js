@@ -6,10 +6,13 @@ import '../CssPage/EmployeePage.css';
 function EmployeePage() {
   const [employees, setEmployees] = useState([]);
   const [filteredEmployees, setFilteredEmployees] = useState([]);
+  const [selectedEmployeeId, setSelectedEmployeeId] = useState(null);
+  const [employeeDetails, setEmployeeDetails] = useState(null);
   const [filters, setFilters] = useState({
     searchTerm: '',
     position: '',
-    department: ''
+    department: '',
+    status: ''
   });
 
   useEffect(() => {
@@ -21,13 +24,12 @@ function EmployeePage() {
       const response = await axios.get('http://localhost:3001/employees', {
         params: appliedFilters
       });
-      console.log('API response:', response.data); // Log the API response
       const sortedEmployees = response.data.sort((a, b) => a.firstname.localeCompare(b.firstname));
       setEmployees(sortedEmployees);
       setFilteredEmployees(sortedEmployees);
-      console.log('Sorted employees:', sortedEmployees); // Log the sorted employees
+      console.log('Fetched employees:', sortedEmployees);
     } catch (error) {
-      console.error('There was an error fetching the employees!', error);
+      console.error('Error fetching employees:', error);
     }
   };
 
@@ -50,10 +52,13 @@ function EmployeePage() {
     let filtered = employees;
 
     if (updatedFilters.position) {
-      filtered = filtered.filter(employee => employee.position === updatedFilters.position);
+      filtered = filtered.filter(employee => employee.role_name === updatedFilters.position);
     }
     if (updatedFilters.department) {
       filtered = filtered.filter(employee => employee.department === updatedFilters.department);
+    }
+    if (updatedFilters.status) {
+      filtered = filtered.filter(employee => employee.status === updatedFilters.status);
     }
     if (updatedFilters.searchTerm) {
       filtered = filtered.filter(employee =>
@@ -63,12 +68,20 @@ function EmployeePage() {
     }
 
     setFilteredEmployees(filtered);
-    console.log('Filtered employees:', filtered); // Log the filtered employees
+    console.log('Filtered employees:', filtered);
   };
 
   const handleApplyFilters = () => {
     console.log('Applying filters:', filters);
     fetchEmployees(filters);
+  };
+
+  const toggleEmployeeDetails = (employeeId) => {
+    setSelectedEmployeeId(selectedEmployeeId === employeeId ? null : employeeId);
+  };
+
+  const formatRoleName = (roleName) => {
+    return roleName.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
   };
 
   return (
@@ -83,13 +96,56 @@ function EmployeePage() {
       </div>
       <div className="employee-list">
         {filteredEmployees.map((employee, index) => (
-          <div key={employee.employee_id} className="employee-item-container">
+          <div key={employee.employee_id} className="employee-item-container" onClick={() => toggleEmployeeDetails(employee.employee_id)}>
             <div className="employee-item">
               <p className="employee-name">
                 {index + 1}. {employee.firstname} {employee.middlename && `${employee.middlename[0]}.`} {employee.lastname}
               </p>
-              <span className="employee-info">{employee.role_name} - {employee.contact_number}</span>
+              <span className="employee-info">{formatRoleName(employee.role_name)} - {employee.status.charAt(0).toUpperCase() + employee.status.slice(1)}</span>
+              <button className="employee-view-button">View</button>
+              <button className="employee-edit-button">Edit</button>
+              <button className="employee-archive-button">Archive</button>
             </div>
+            {selectedEmployeeId === employee.employee_id && (
+              <div className="employee-details">
+                <table>
+                  <tbody>
+                    <tr>
+                      <th>First Name:</th>
+                      <td>{employee.firstname}</td>
+                    </tr>
+                    <tr>
+                      <th>Middle Name:</th>
+                      <td>{employee.middlename}</td>
+                    </tr>
+                    <tr>
+                      <th>Last Name:</th>
+                      <td>{employee.lastname}</td>
+                    </tr>
+                    <tr>
+                      <th>Contact Number:</th>
+                      <td>{employee.contact_number}</td>
+                    </tr>
+                    <tr>
+                      <th>Address:</th>
+                      <td>{employee.address}</td>
+                    </tr>
+                    <tr>
+                      <th>Year Started:</th>
+                      <td>{employee.year_started}</td>
+                    </tr>
+                    <tr>
+                      <th>Role Name:</th>
+                      <td>{formatRoleName(employee.role_name)}</td>
+                    </tr>
+                    <tr>
+                      <th>Status:</th>
+                      <td>{employee.status.charAt(0).toUpperCase() + employee.status.slice(1)}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            )}
           </div>
         ))}
       </div>

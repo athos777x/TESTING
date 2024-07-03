@@ -330,6 +330,24 @@ app.get('/employees', (req, res) => {
   });
 });
 
+// Endpoint to fetch employee details by ID
+app.get('/employees/:employeeId', (req, res) => {
+  const { employeeId } = req.params;
+  const query = 'SELECT * FROM employee WHERE employee_id = ?';
+  db.query(query, [employeeId], (err, results) => {
+    if (err) {
+      console.error('Error fetching employee details:', err);
+      res.status(500).json({ error: 'Internal server error' });
+      return;
+    }
+    if (results.length > 0) {
+      res.json(results[0]);
+    } else {
+      res.status(404).json({ error: 'Employee not found' });
+    }
+  });
+});
+
 app.listen(3001, () => {
   console.log('Server running on port 3001');
 });
