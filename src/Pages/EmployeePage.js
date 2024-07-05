@@ -14,7 +14,7 @@ function EmployeePage() {
     searchTerm: '',
     position: '',
     department: '',
-    status: ''
+    status: 'active' // Default to show only active employees
   });
 
   useEffect(() => {
@@ -126,6 +126,17 @@ function EmployeePage() {
     }
   };
 
+  const archiveEmployee = async (employeeId) => {
+    try {
+      await axios.put(`http://localhost:3001/employees/${employeeId}/archive`);
+      // Filter out the archived employee from the local state
+      setEmployees(prevEmployees => prevEmployees.filter(emp => emp.employee_id !== employeeId));
+      setFilteredEmployees(prevFilteredEmployees => prevFilteredEmployees.filter(emp => emp.employee_id !== employeeId));
+    } catch (error) {
+      console.error('Error archiving employee:', error);
+    }
+  };
+
   const cancelEditing = () => {
     setIsEditing(false);
     const employee = employees.find(emp => emp.employee_id === selectedEmployeeId);
@@ -157,7 +168,7 @@ function EmployeePage() {
               <div className="employee-actions">
                 <button className="employee-view-button" onClick={() => toggleEmployeeDetails(employee.employee_id)}>View</button>
                 <button className="employee-edit-button" onClick={() => startEditing(employee.employee_id)}>Edit</button>
-                <button className="employee-archive-button">Archive</button>
+                <button className="employee-archive-button" onClick={() => archiveEmployee(employee.employee_id)}>Archive</button>
               </div>
             </div>
             {selectedEmployeeId === employee.employee_id && (
@@ -276,12 +287,14 @@ function EmployeePage() {
                       <th>Status:</th>
                       <td>
                         {isEditing ? (
-                          <input
-                            type="text"
+                          <select
                             name="status"
                             value={editFormData.status}
                             onChange={handleEditChange}
-                          />
+                          >
+                            <option value="active">Active</option>
+                            <option value="inactive">Inactive</option>
+                          </select>
                         ) : (
                           employee.status.charAt(0).toUpperCase() + employee.status.slice(1)
                         )}

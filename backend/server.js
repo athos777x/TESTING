@@ -319,8 +319,9 @@ app.get('/students/:id/details', (req, res) => {
 
 // Endpoint to fetch all employees
 app.get('/employees', (req, res) => {
-  const query = 'SELECT * FROM employee ORDER BY firstname'; // Add ORDER BY clause to sort by first name
-  db.query(query, (err, results) => {
+  const { status = 'active' } = req.query; // Default to 'active' employees
+  const query = 'SELECT * FROM employee WHERE status = ? ORDER BY firstname'; // Add ORDER BY clause to sort by first name
+  db.query(query, [status], (err, results) => {
     if (err) {
       console.error('Error fetching employees:', err);
       res.status(500).json({ error: 'Internal server error' });
@@ -386,6 +387,24 @@ app.put('/employees/:employeeId', (req, res) => {
     } else {
       console.error('Role not found:', updatedEmployee.role_name);
       res.status(404).json({ error: 'Role not found' });
+    }
+  });
+});
+
+// Endpoint to archive an employee
+app.put('/employees/:employeeId/archive', (req, res) => {
+  const { employeeId } = req.params;
+  const query = 'UPDATE employee SET status = ? WHERE employee_id = ?';
+  db.query(query, ['inactive', employeeId], (err, results) => {
+    if (err) {
+      console.error('Error archiving employee:', err);
+      res.status(500).json({ error: 'Internal server error' });
+      return;
+    }
+    if (results.affectedRows > 0) {
+      res.json({ message: 'Employee archived successfully' });
+    } else {
+      res.status(404).json({ error: 'Employee not found' });
     }
   });
 });
