@@ -348,6 +348,61 @@ app.get('/employees/:employeeId', (req, res) => {
   });
 });
 
+// Endpoint to update employee details by ID
+app.put('/employees/:employeeId', (req, res) => {
+  const { employeeId } = req.params;
+  const updatedEmployee = req.body;
+
+  console.log(`Updating employee with ID: ${employeeId}`, updatedEmployee);
+
+  // Fetch the role_id based on the role_name
+  const roleQuery = 'SELECT role_id FROM roles WHERE role_name = ?';
+  db.query(roleQuery, [updatedEmployee.role_name], (err, roleResults) => {
+    if (err) {
+      console.error('Error fetching role ID:', err);
+      res.status(500).json({ error: 'Internal server error' });
+      return;
+    }
+
+    if (roleResults.length > 0) {
+      const roleId = roleResults[0].role_id;
+      updatedEmployee.role_id = roleId;
+
+      console.log('Role ID fetched:', roleId);
+
+      const query = 'UPDATE employee SET ? WHERE employee_id = ?';
+      db.query(query, [updatedEmployee, employeeId], (err, results) => {
+        if (err) {
+          console.error('Error updating employee details:', err);
+          res.status(500).json({ error: 'Internal server error' });
+          return;
+        }
+        if (results.affectedRows > 0) {
+          res.json({ message: 'Employee updated successfully' });
+        } else {
+          res.status(404).json({ error: 'Employee not found' });
+        }
+      });
+    } else {
+      console.error('Role not found:', updatedEmployee.role_name);
+      res.status(404).json({ error: 'Role not found' });
+    }
+  });
+});
+
+// Endpoint to fetch roles
+app.get('/roles', (req, res) => {
+  const query = 'SELECT role_name FROM roles';
+  db.query(query, (err, results) => {
+    if (err) {
+      console.error('Error fetching roles:', err);
+      res.status(500).json({ error: 'Internal server error' });
+      return;
+    }
+    res.json(results.map(role => role.role_name));
+  });
+});
+
 app.listen(3001, () => {
   console.log('Server running on port 3001');
 });
