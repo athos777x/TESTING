@@ -458,7 +458,7 @@ app.put('/employees/:employeeId', (req, res) => {
 // Endpoint to archive an employee
 app.put('/employees/:employeeId/archive', (req, res) => {
   const { employeeId } = req.params;
-  const query = 'UPDATE employee SET archive_status = "archive" WHERE employee_id = ?';
+  const query = 'UPDATE employee SET archive_status = "archive", status = "inactive" WHERE employee_id = ?';
   db.query(query, [employeeId], (err, results) => {
     if (err) {
       console.error('Error archiving employee:', err);
@@ -466,7 +466,7 @@ app.put('/employees/:employeeId/archive', (req, res) => {
       return;
     }
     if (results.affectedRows > 0) {
-      res.json({ message: 'Employee archived successfully' });
+      res.json({ message: 'Employee archived and set to inactive successfully' });
     } else {
       res.status(404).json({ error: 'Employee not found' });
     }
@@ -476,7 +476,7 @@ app.put('/employees/:employeeId/archive', (req, res) => {
 // Endpoint to unarchive an employee
 app.put('/employees/:employeeId/unarchive', (req, res) => {
   const { employeeId } = req.params;
-  const query = 'UPDATE employee SET archive_status = "unarchive" WHERE employee_id = ?';
+  const query = 'UPDATE employee SET archive_status = "unarchive", status = "active" WHERE employee_id = ?';
   db.query(query, [employeeId], (err, results) => {
     if (err) {
       console.error('Error unarchiving employee:', err);
@@ -484,7 +484,7 @@ app.put('/employees/:employeeId/unarchive', (req, res) => {
       return;
     }
     if (results.affectedRows > 0) {
-      res.json({ message: 'Employee unarchived successfully' });
+      res.json({ message: 'Employee unarchived and set to active successfully' });
     } else {
       res.status(404).json({ error: 'Employee not found' });
     }
