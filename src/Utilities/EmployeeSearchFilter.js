@@ -12,7 +12,12 @@ function EmployeeSearchFilter({ handleSearch, handleFilter, handleApplyFilters }
   useEffect(() => {
     axios.get('http://localhost:3001/api/positions')
       .then(response => {
-        setPositions(response.data);
+        const formattedPositions = response.data.map(position => 
+          position.replace(/_/g, ' ').split(' ').map(word => 
+            word.charAt(0).toUpperCase() + word.slice(1)
+          ).join(' ')
+        );
+        setPositions(formattedPositions);
       })
       .catch(error => {
         console.error('There was an error fetching the positions!', error);

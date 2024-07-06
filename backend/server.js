@@ -365,8 +365,9 @@ app.get('/employees', (req, res) => {
   }
 
   if (position) {
+    const formattedPosition = position.replace(/\s/g, '_').toLowerCase();
     query += ' AND role_name = ?';
-    queryParams.push(position);
+    queryParams.push(formattedPosition);
   }
 
   if (department) {

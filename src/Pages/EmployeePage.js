@@ -97,21 +97,13 @@ function EmployeePage() {
     }
   };
 
-  const archiveEmployee = async (employeeId) => {
+  const toggleArchiveStatus = async (employeeId, currentStatus) => {
     try {
-      await axios.put(`http://localhost:3001/employees/${employeeId}/archive`);
-      fetchEmployees();  // Refresh the employee list after archiving
+      const newStatus = currentStatus === 'archive' ? 'unarchive' : 'archive';
+      await axios.put(`http://localhost:3001/employees/${employeeId}/${newStatus}`);
+      fetchEmployees();  // Refresh the employee list after changing archive status
     } catch (error) {
-      console.error('Error archiving employee:', error);
-    }
-  };
-
-  const unarchiveEmployee = async (employeeId) => {
-    try {
-      await axios.put(`http://localhost:3001/employees/${employeeId}/unarchive`);
-      fetchEmployees();  // Refresh the employee list after unarchiving
-    } catch (error) {
-      console.error('Error unarchiving employee:', error);
+      console.error(`Error ${currentStatus === 'archive' ? 'unarchiving' : 'archiving'} employee:`, error);
     }
   };
 
@@ -122,7 +114,7 @@ function EmployeePage() {
   };
 
   const formatRoleName = (roleName) => {
-    return roleName.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+    return roleName.replace(/_/g, ' ').split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
   };
 
   return (
@@ -146,8 +138,12 @@ function EmployeePage() {
               <div className="employee-actions">
                 <button className="employee-view-button" onClick={() => toggleEmployeeDetails(employee.employee_id)}>View</button>
                 <button className="employee-edit-button" onClick={() => startEditing(employee.employee_id)}>Edit</button>
-                <button className="employee-archive-button" onClick={() => archiveEmployee(employee.employee_id)}>Archive</button>
-                <button className="employee-unarchive-button" onClick={() => unarchiveEmployee(employee.employee_id)}>Unarchive</button>
+                <button
+                  className="employee-archive-button"
+                  onClick={() => toggleArchiveStatus(employee.employee_id, employee.archive_status)}
+                >
+                  {employee.archive_status === 'archive' ? 'Unarchive' : 'Archive'}
+                </button>
               </div>
             </div>
             {selectedEmployeeId === employee.employee_id && (
