@@ -179,6 +179,32 @@ app.get('/api/sections', (req, res) => {
   });
 });
 
+// Endpoint to fetch positions
+app.get('/api/positions', (req, res) => {
+  const query = 'SELECT DISTINCT role_name FROM employee';
+  db.query(query, (err, results) => {
+    if (err) {
+      console.error('Error fetching positions:', err);
+      res.status(500).json({ error: 'Internal server error' });
+      return;
+    }
+    res.json(results.map(role => role.role_name));
+  });
+});
+
+// Endpoint to fetch departments
+app.get('/api/departments', (req, res) => {
+  const query = 'SELECT DISTINCT department FROM employee';
+  db.query(query, (err, results) => {
+    if (err) {
+      console.error('Error fetching departments:', err);
+      res.status(500).json({ error: 'Internal server error' });
+      return;
+    }
+    res.json(results.map(department => department.department));
+  });
+});
+
 // Fetch filter options for school year and grades
 app.get('/filters', (req, res) => {
   const filters = {
@@ -319,9 +345,46 @@ app.get('/students/:id/details', (req, res) => {
 
 // Endpoint to fetch all employees
 app.get('/employees', (req, res) => {
-  const { status = 'active' } = req.query; // Default to 'active' employees
-  const query = 'SELECT * FROM employee WHERE status = ? ORDER BY firstname'; // Add ORDER BY clause to sort by first name
-  db.query(query, [status], (err, results) => {
+  const { status, position, department, searchTerm, showArchive } = req.query;
+
+  let query = 'SELECT * FROM employee WHERE 1=1';
+  const queryParams = [];
+
+  if (status === 'showAll') {
+    // Show all employees, including archived ones
+  } else if (status) {
+    // Filter by status and exclude archived employees
+    query += ' AND status = ?';
+    queryParams.push(status);
+  }
+
+  if (showArchive === 'archive') {
+    query += ' AND archive_status = "archive"';
+  } else if (showArchive === 'unarchive') {
+    query += ' AND archive_status = "unarchive"';
+  }
+
+  if (position) {
+    query += ' AND role_name = ?';
+    queryParams.push(position);
+  }
+
+  if (department) {
+    query += ' AND department = ?';
+    queryParams.push(department);
+  }
+
+  if (searchTerm) {
+    query += ' AND (firstname LIKE ? OR lastname LIKE ?)';
+    queryParams.push(`%${searchTerm}%`, `%${searchTerm}%`);
+  }
+
+  query += ' ORDER BY firstname';
+
+  console.log('Final query:', query);
+  console.log('With parameters:', queryParams);
+
+  db.query(query, queryParams, (err, results) => {
     if (err) {
       console.error('Error fetching employees:', err);
       res.status(500).json({ error: 'Internal server error' });
@@ -394,8 +457,8 @@ app.put('/employees/:employeeId', (req, res) => {
 // Endpoint to archive an employee
 app.put('/employees/:employeeId/archive', (req, res) => {
   const { employeeId } = req.params;
-  const query = 'UPDATE employee SET status = ? WHERE employee_id = ?';
-  db.query(query, ['inactive', employeeId], (err, results) => {
+  const query = 'UPDATE employee SET archive_status = "archive" WHERE employee_id = ?';
+  db.query(query, [employeeId], (err, results) => {
     if (err) {
       console.error('Error archiving employee:', err);
       res.status(500).json({ error: 'Internal server error' });
@@ -403,6 +466,24 @@ app.put('/employees/:employeeId/archive', (req, res) => {
     }
     if (results.affectedRows > 0) {
       res.json({ message: 'Employee archived successfully' });
+    } else {
+      res.status(404).json({ error: 'Employee not found' });
+    }
+  });
+});
+
+// Endpoint to unarchive an employee
+app.put('/employees/:employeeId/unarchive', (req, res) => {
+  const { employeeId } = req.params;
+  const query = 'UPDATE employee SET archive_status = "unarchive" WHERE employee_id = ?';
+  db.query(query, [employeeId], (err, results) => {
+    if (err) {
+      console.error('Error unarchiving employee:', err);
+      res.status(500).json({ error: 'Internal server error' });
+      return;
+    }
+    if (results.affectedRows > 0) {
+      res.json({ message: 'Employee unarchived successfully' });
     } else {
       res.status(404).json({ error: 'Employee not found' });
     }

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import SearchFilter from '../Utilities/SearchFilter';
+import EmployeeSearchFilter from '../Utilities/EmployeeSearchFilter';
 import '../CssPage/EmployeePage.css';
 
 function EmployeePage() {
@@ -13,24 +13,23 @@ function EmployeePage() {
   const [filters, setFilters] = useState({
     searchTerm: '',
     position: '',
-    department: '',
-    status: 'active' // Default to show only active employees
+    showArchive: 'unarchive',
+    status: ''
   });
 
   useEffect(() => {
     fetchEmployees();
     fetchRoles();
-  }, []);
+  }, [filters]);
 
-  const fetchEmployees = async (appliedFilters = {}) => {
+  const fetchEmployees = async () => {
     try {
       const response = await axios.get('http://localhost:3001/employees', {
-        params: appliedFilters
+        params: filters
       });
       const sortedEmployees = response.data.sort((a, b) => a.firstname.localeCompare(b.firstname));
       setEmployees(sortedEmployees);
       setFilteredEmployees(sortedEmployees);
-      console.log('Fetched employees:', sortedEmployees);
     } catch (error) {
       console.error('Error fetching employees:', error);
     }
@@ -40,53 +39,25 @@ function EmployeePage() {
     try {
       const response = await axios.get('http://localhost:3001/roles');
       setRoles(response.data);
-      console.log('Fetched roles:', response.data);
     } catch (error) {
       console.error('Error fetching roles:', error);
     }
   };
 
   const handleSearch = (searchTerm) => {
-    setFilters(prevFilters => {
-      const updatedFilters = { ...prevFilters, searchTerm };
-      applyFilters(updatedFilters);
-      return updatedFilters;
-    });
+    setFilters(prevFilters => ({ ...prevFilters, searchTerm }));
   };
 
   const handleFilterChange = (type, value) => {
-    setFilters(prevFilters => {
-      const updatedFilters = { ...prevFilters, [type]: value };
-      return updatedFilters;
-    });
+    setFilters(prevFilters => ({ ...prevFilters, [type]: value }));
   };
 
-  const applyFilters = (updatedFilters) => {
-    let filtered = employees;
-
-    if (updatedFilters.position) {
-      filtered = filtered.filter(employee => employee.role_name === updatedFilters.position);
-    }
-    if (updatedFilters.department) {
-      filtered = filtered.filter(employee => employee.department === updatedFilters.department);
-    }
-    if (updatedFilters.status) {
-      filtered = filtered.filter(employee => employee.status === updatedFilters.status);
-    }
-    if (updatedFilters.searchTerm) {
-      filtered = filtered.filter(employee =>
-        employee.firstname.toLowerCase().includes(updatedFilters.searchTerm.toLowerCase()) ||
-        employee.lastname.toLowerCase().includes(updatedFilters.searchTerm.toLowerCase())
-      );
-    }
-
-    setFilteredEmployees(filtered);
-    console.log('Filtered employees:', filtered);
+  const applyFilters = () => {
+    fetchEmployees();
   };
 
-  const handleApplyFilters = () => {
-    console.log('Applying filters:', filters);
-    fetchEmployees(filters);
+  const handleApplyFilters = (newFilters) => {
+    setFilters(newFilters);
   };
 
   const toggleEmployeeDetails = (employeeId) => {
@@ -129,11 +100,18 @@ function EmployeePage() {
   const archiveEmployee = async (employeeId) => {
     try {
       await axios.put(`http://localhost:3001/employees/${employeeId}/archive`);
-      // Filter out the archived employee from the local state
-      setEmployees(prevEmployees => prevEmployees.filter(emp => emp.employee_id !== employeeId));
-      setFilteredEmployees(prevFilteredEmployees => prevFilteredEmployees.filter(emp => emp.employee_id !== employeeId));
+      fetchEmployees();  // Refresh the employee list after archiving
     } catch (error) {
       console.error('Error archiving employee:', error);
+    }
+  };
+
+  const unarchiveEmployee = async (employeeId) => {
+    try {
+      await axios.put(`http://localhost:3001/employees/${employeeId}/unarchive`);
+      fetchEmployees();  // Refresh the employee list after unarchiving
+    } catch (error) {
+      console.error('Error unarchiving employee:', error);
     }
   };
 
@@ -151,7 +129,7 @@ function EmployeePage() {
     <div className="employee-container">
       <h1 className="employee-title">Employees</h1>
       <div className="employee-search-filter-container">
-        <SearchFilter
+        <EmployeeSearchFilter
           handleSearch={handleSearch}
           handleFilter={handleFilterChange}
           handleApplyFilters={handleApplyFilters}
@@ -169,6 +147,7 @@ function EmployeePage() {
                 <button className="employee-view-button" onClick={() => toggleEmployeeDetails(employee.employee_id)}>View</button>
                 <button className="employee-edit-button" onClick={() => startEditing(employee.employee_id)}>Edit</button>
                 <button className="employee-archive-button" onClick={() => archiveEmployee(employee.employee_id)}>Archive</button>
+                <button className="employee-unarchive-button" onClick={() => unarchiveEmployee(employee.employee_id)}>Unarchive</button>
               </div>
             </div>
             {selectedEmployeeId === employee.employee_id && (
