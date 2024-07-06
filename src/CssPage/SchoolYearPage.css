@@ -1,0 +1,90 @@
+.school-year-container {
+  margin: 20px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+}
+
+.school-year-title {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.school-year-search-filter-container {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.school-year-filter-input {
+  width: 70%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+.school-year-apply-button {
+  padding: 10px 20px;
+  border: none;
+  background-color: #28a745;
+  color: white;
+  cursor: pointer;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+.school-year-apply-button:hover {
+  background-color: #218838;
+}
+
+.school-year-list {
+  list-style-type: none;
+  padding: 0;
+}
+
+.school-year-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 5px 0;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 10px;
+  background-color: #fff;
+  cursor: pointer;
+}
+
+.school-year-item.current {
+  font-weight: bold;
+  background-color: #dff0d8;
+}
+
+.school-year-number {
+  font-weight: bold;
+}
+
+.school-year-name {
+  flex-grow: 1;
+}
+
+.school-year-status {
+  color: #5cb85c;
+  font-weight: bold;
+}
+
+.school-year-view-button {
+  padding: 5px 10px;
+  border: none;
+  background-color: #28a745;
+  color: white;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.school-year-view-button:hover {
+  background-color: #218838;
+}

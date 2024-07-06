@@ -285,6 +285,16 @@ app.get('/api/school_years', (req, res) => {
   });
 });
 
+// Endpoint to fetch the current school year
+app.get('/current-school-year', (req, res) => {
+  try {
+    const currentSchoolYear = '2023-2024'; // Replace with actual logic to fetch from database
+    res.json({ schoolYear: currentSchoolYear });
+  } catch (error) {
+    res.status(500).send('Error fetching current school year');
+  }
+});
+
 // Endpoint to fetch student details
 app.get('/students/:id/details', (req, res) => {
   const studentId = req.params.id;
@@ -501,6 +511,48 @@ app.get('/roles', (req, res) => {
       return;
     }
     res.json(results.map(role => role.role_name));
+  });
+});
+
+// Fetch all school years
+app.get('/school-years', (req, res) => {
+  const { searchTerm, status } = req.query;
+
+  let query = 'SELECT * FROM school_years';
+  let queryParams = [];
+
+  if (searchTerm || status) {
+    query += ' WHERE';
+    if (searchTerm) {
+      query += ' year LIKE ?';
+      queryParams.push(`%${searchTerm}%`);
+    }
+    if (status) {
+      if (searchTerm) query += ' AND';
+      query += ' status = ?';
+      queryParams.push(status);
+    }
+  }
+
+  db.query(query, queryParams, (err, result) => {
+    if (err) {
+      res.status(500).send(err);
+    } else {
+      res.send(result);
+    }
+  });
+});
+
+// Fetch specific school year details
+app.get('/school-years/:id', (req, res) => {
+  const { id } = req.params;
+  const query = 'SELECT * FROM school_years WHERE id = ?';
+  db.query(query, [id], (err, result) => {
+    if (err) {
+      res.status(500).send(err);
+    } else {
+      res.send(result);
+    }
   });
 });
 
