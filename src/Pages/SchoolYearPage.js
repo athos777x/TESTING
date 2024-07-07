@@ -9,7 +9,7 @@ function SchoolYearPage() {
   const [selectedSchoolYearId, setSelectedSchoolYearId] = useState(null);
   const [filters, setFilters] = useState({
     searchTerm: '',
-    status: ''
+    status: 'active' // Default filter to show only active school years
   });
 
   useEffect(() => {
@@ -50,6 +50,11 @@ function SchoolYearPage() {
     setSelectedSchoolYearId(selectedSchoolYearId === schoolYearId ? null : schoolYearId);
   };
 
+  const formatDate = (dateString) => {
+    const options = { year: 'numeric', month: 'long', day: 'numeric' };
+    return new Date(dateString).toLocaleDateString(undefined, options);
+  };
+
   return (
     <div className="school-year-container">
       <h1 className="school-year-title">School Year Management</h1>
@@ -84,11 +89,19 @@ function SchoolYearPage() {
                     </tr>
                     <tr>
                       <th>Start Date:</th>
-                      <td>{schoolYear.school_year_start}</td>
+                      <td>{formatDate(schoolYear.school_year_start)}</td>
                     </tr>
                     <tr>
                       <th>End Date:</th>
-                      <td>{schoolYear.school_year_end}</td>
+                      <td>{formatDate(schoolYear.school_year_end)}</td>
+                    </tr>
+                    <tr>
+                      <th>Enrollment Start:</th>
+                      <td>{formatDate(schoolYear.enrollment_start)}</td>
+                    </tr>
+                    <tr>
+                      <th>Enrollment End:</th>
+                      <td>{formatDate(schoolYear.enrollment_end)}</td>
                     </tr>
                   </tbody>
                 </table>
