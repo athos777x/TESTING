@@ -21,7 +21,8 @@ function SchoolYearPage() {
       const response = await axios.get('http://localhost:3001/school-years', {
         params: filters
       });
-      const sortedSchoolYears = response.data.sort((a, b) => a.year.localeCompare(b.year));
+      console.log('School years fetched:', response.data); // Log fetched data
+      const sortedSchoolYears = response.data.sort((a, b) => a.school_year.localeCompare(b.school_year));
       setSchoolYears(sortedSchoolYears);
       setFilteredSchoolYears(sortedSchoolYears);
     } catch (error) {
@@ -61,21 +62,21 @@ function SchoolYearPage() {
       </div>
       <div className="school-year-list">
         {filteredSchoolYears.map((schoolYear, index) => (
-          <div key={schoolYear.id} className="school-year-item-container" onClick={() => toggleSchoolYearDetails(schoolYear.id)}>
+          <div key={schoolYear.school_year_id} className="school-year-item-container" onClick={() => toggleSchoolYearDetails(schoolYear.school_year_id)}>
             <div className="school-year-item">
               <p className="school-year-name">
-                {index + 1}. {schoolYear.year}
+                {index + 1}. {schoolYear.school_year}
               </p>
-              <span className="school-year-status">{schoolYear.status}</span>
+              <span className="school-year-info">{schoolYear.status}</span>
               <button className="school-year-view-button">View</button>
             </div>
-            {selectedSchoolYearId === schoolYear.id && (
+            {selectedSchoolYearId === schoolYear.school_year_id && (
               <div className="school-year-details">
                 <table>
                   <tbody>
                     <tr>
                       <th>Year:</th>
-                      <td>{schoolYear.year}</td>
+                      <td>{schoolYear.school_year}</td>
                     </tr>
                     <tr>
                       <th>Status:</th>
@@ -83,11 +84,11 @@ function SchoolYearPage() {
                     </tr>
                     <tr>
                       <th>Start Date:</th>
-                      <td>{schoolYear.startDate}</td>
+                      <td>{schoolYear.school_year_start}</td>
                     </tr>
                     <tr>
                       <th>End Date:</th>
-                      <td>{schoolYear.endDate}</td>
+                      <td>{schoolYear.school_year_end}</td>
                     </tr>
                   </tbody>
                 </table>

@@ -518,13 +518,13 @@ app.get('/roles', (req, res) => {
 app.get('/school-years', (req, res) => {
   const { searchTerm, status } = req.query;
 
-  let query = 'SELECT * FROM school_years';
+  let query = 'SELECT * FROM school_year';
   let queryParams = [];
 
   if (searchTerm || status) {
     query += ' WHERE';
     if (searchTerm) {
-      query += ' year LIKE ?';
+      query += ' school_year LIKE ?';
       queryParams.push(`%${searchTerm}%`);
     }
     if (status) {
@@ -534,10 +534,15 @@ app.get('/school-years', (req, res) => {
     }
   }
 
+  console.log('Query:', query);
+  console.log('QueryParams:', queryParams);
+
   db.query(query, queryParams, (err, result) => {
     if (err) {
-      res.status(500).send(err);
+      console.error('Error fetching school years:', err); // Detailed error logging
+      res.status(500).send({ error: 'Error fetching school years', details: err.message });
     } else {
+      console.log('Result:', result);
       res.send(result);
     }
   });
@@ -546,10 +551,11 @@ app.get('/school-years', (req, res) => {
 // Fetch specific school year details
 app.get('/school-years/:id', (req, res) => {
   const { id } = req.params;
-  const query = 'SELECT * FROM school_years WHERE id = ?';
+  const query = 'SELECT * FROM school_year WHERE school_year_id = ?';
   db.query(query, [id], (err, result) => {
     if (err) {
-      res.status(500).send(err);
+      console.error('Error fetching school year details:', err); // Detailed error logging
+      res.status(500).send({ error: 'Error fetching school year details', details: err.message });
     } else {
       res.send(result);
     }
