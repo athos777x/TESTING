@@ -516,21 +516,21 @@ app.get('/roles', (req, res) => {
 
 // Fetch all school years
 app.get('/school-years', (req, res) => {
-  const { searchTerm, status } = req.query;
+  const { searchTerm, school_year } = req.query;
 
   let query = 'SELECT * FROM school_year';
   let queryParams = [];
 
-  if (searchTerm || status) {
+  if (searchTerm || school_year) {
     query += ' WHERE';
     if (searchTerm) {
       query += ' school_year LIKE ?';
       queryParams.push(`%${searchTerm}%`);
     }
-    if (status) {
+    if (school_year) {
       if (searchTerm) query += ' AND';
-      query += ' status = ?';
-      queryParams.push(status);
+      query += ' school_year = ?';
+      queryParams.push(school_year);
     }
   } else {
     query += ' WHERE status = "active"'; // Default filter to show only active school years

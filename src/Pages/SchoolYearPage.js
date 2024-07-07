@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import SearchFilter from '../Utilities/SearchFilter';
+import SchoolYearSearchFilter from '../Utilities/SchoolYearSearchFilter';
 import '../CssPage/SchoolYearPage.css';
 
 function SchoolYearPage() {
@@ -9,17 +9,17 @@ function SchoolYearPage() {
   const [selectedSchoolYearId, setSelectedSchoolYearId] = useState(null);
   const [filters, setFilters] = useState({
     searchTerm: '',
-    status: 'active' // Default filter to show only active school years
+    school_year: '' // Default filter to show all school years
   });
 
   useEffect(() => {
     fetchSchoolYears();
   }, [filters]);
 
-  const fetchSchoolYears = async () => {
+  const fetchSchoolYears = async (appliedFilters = filters) => {
     try {
       const response = await axios.get('http://localhost:3001/school-years', {
-        params: filters
+        params: appliedFilters
       });
       console.log('School years fetched:', response.data); // Log fetched data
       const sortedSchoolYears = response.data.sort((a, b) => a.school_year.localeCompare(b.school_year));
@@ -31,19 +31,20 @@ function SchoolYearPage() {
   };
 
   const handleSearch = (searchTerm) => {
-    setFilters(prevFilters => ({ ...prevFilters, searchTerm }));
+    const newFilters = { ...filters, searchTerm };
+    setFilters(newFilters);
+    fetchSchoolYears(newFilters);
   };
 
   const handleFilterChange = (type, value) => {
-    setFilters(prevFilters => ({ ...prevFilters, [type]: value }));
-  };
-
-  const applyFilters = () => {
-    fetchSchoolYears();
+    const newFilters = { ...filters, [type]: value };
+    setFilters(newFilters);
+    fetchSchoolYears(newFilters);
   };
 
   const handleApplyFilters = (newFilters) => {
     setFilters(newFilters);
+    fetchSchoolYears(newFilters);
   };
 
   const toggleSchoolYearDetails = (schoolYearId) => {
@@ -59,7 +60,7 @@ function SchoolYearPage() {
     <div className="school-year-container">
       <h1 className="school-year-title">School Year Management</h1>
       <div className="school-year-search-filter-container">
-        <SearchFilter
+        <SchoolYearSearchFilter
           handleSearch={handleSearch}
           handleFilter={handleFilterChange}
           handleApplyFilters={handleApplyFilters}
