@@ -49,10 +49,10 @@ function SchoolYearPage() {
       const schoolYear = schoolYears.find(sy => sy.school_year_id === schoolYearId);
       setEditFormData({
         ...schoolYear,
-        school_year_start: schoolYear.school_year_start.split('T')[0],
-        school_year_end: schoolYear.school_year_end.split('T')[0],
-        enrollment_start: schoolYear.enrollment_start.split('T')[0],
-        enrollment_end: schoolYear.enrollment_end.split('T')[0],
+        school_year_start: formatDateForInput(schoolYear.school_year_start),
+        school_year_end: formatDateForInput(schoolYear.school_year_end),
+        enrollment_start: formatDateForInput(schoolYear.enrollment_start),
+        enrollment_end: formatDateForInput(schoolYear.enrollment_end),
       });
     }
   };
@@ -63,10 +63,10 @@ function SchoolYearPage() {
     const schoolYear = schoolYears.find(sy => sy.school_year_id === schoolYearId);
     setEditFormData({
       ...schoolYear,
-      school_year_start: schoolYear.school_year_start.split('T')[0],
-      school_year_end: schoolYear.school_year_end.split('T')[0],
-      enrollment_start: schoolYear.enrollment_start.split('T')[0],
-      enrollment_end: schoolYear.enrollment_end.split('T')[0],
+      school_year_start: formatDateForInput(schoolYear.school_year_start),
+      school_year_end: formatDateForInput(schoolYear.school_year_end),
+      enrollment_start: formatDateForInput(schoolYear.enrollment_start),
+      enrollment_end: formatDateForInput(schoolYear.enrollment_end),
     });
   };
 
@@ -82,10 +82,10 @@ function SchoolYearPage() {
     try {
       const updatedData = {
         ...editFormData,
-        school_year_start: editFormData.school_year_start,
-        school_year_end: editFormData.school_year_end,
-        enrollment_start: editFormData.enrollment_start,
-        enrollment_end: editFormData.enrollment_end
+        school_year_start: formatDateForBackend(editFormData.school_year_start),
+        school_year_end: formatDateForBackend(editFormData.school_year_end),
+        enrollment_start: formatDateForBackend(editFormData.enrollment_start),
+        enrollment_end: formatDateForBackend(editFormData.enrollment_end)
       };
       await axios.put(`http://localhost:3001/school-years/${selectedSchoolYearId}`, updatedData);
       fetchSchoolYears();  // Refresh the school year list after saving
@@ -101,16 +101,28 @@ function SchoolYearPage() {
     const schoolYear = schoolYears.find(sy => sy.school_year_id === selectedSchoolYearId);
     setEditFormData({
       ...schoolYear,
-      school_year_start: schoolYear.school_year_start.split('T')[0],
-      school_year_end: schoolYear.school_year_end.split('T')[0],
-      enrollment_start: schoolYear.enrollment_start.split('T')[0],
-      enrollment_end: schoolYear.enrollment_end.split('T')[0],
+      school_year_start: formatDateForInput(schoolYear.school_year_start),
+      school_year_end: formatDateForInput(schoolYear.school_year_end),
+      enrollment_start: formatDateForInput(schoolYear.enrollment_start),
+      enrollment_end: formatDateForInput(schoolYear.enrollment_end),
     });
   };
 
   const formatDate = (dateString) => {
     const options = { year: 'numeric', month: 'long', day: 'numeric' };
     return new Date(dateString).toLocaleDateString(undefined, options);
+  };
+
+  const formatDateForInput = (dateString) => {
+    const date = new Date(dateString);
+    const offset = date.getTimezoneOffset();
+    const localDate = new Date(date.getTime() - (offset * 60 * 1000));
+    return localDate.toISOString().split('T')[0];
+  };
+
+  const formatDateForBackend = (dateString) => {
+    const date = new Date(dateString);
+    return date.toISOString();
   };
 
   return (
