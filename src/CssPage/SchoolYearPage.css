@@ -65,7 +65,8 @@
   display: flex;
 }
 
-.school-year-view-button {
+.school-year-view-button,
+.school-year-edit-button {
   margin-left: 5px; /* Added margin to create space between buttons */
   padding: 5px 10px;
   border: none;
@@ -75,7 +76,8 @@
   border-radius: 13px;
 }
 
-.school-year-view-button:hover {
+.school-year-view-button:hover,
+.school-year-edit-button:hover {
   background-color: #218838;
 }
 
@@ -98,6 +100,52 @@
 .school-year-details table th {
   background-color: #f2f2f2 !important; /* Grey background color for row headers with higher specificity */
   font-weight: bold;
+}
+
+/* Styles for editable inputs */
+.school-year-details input[type="text"],
+.school-year-details select,
+.school-year-details input[type="date"] {
+  width: 100%;
+  padding: 8px;
+  margin: 0;
+  box-sizing: border-box;
+  border: 1px solid #ddd;
+  border-radius: 0;
+  background-color: #fff;
+  font-size: 14px;
+  text-align: left;
+}
+
+/* Styles for save and cancel buttons */
+.school-year-edit-buttons {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 10px;
+}
+
+.school-year-save-button,
+.school-year-cancel-button {
+  margin-left: 5px;
+  padding: 5px 10px;
+  border: none;
+  background-color: #28a745;
+  color: white;
+  cursor: pointer;
+  border-radius: 13px;
+}
+
+.school-year-save-button:hover {
+  background-color: #218838;
+}
+
+.school-year-cancel-button {
+  background-color: #dc3545;
+  color: white;
+}
+
+.school-year-cancel-button:hover {
+  background-color: #c82333;
 }
 
 .school-year-item-container::after,

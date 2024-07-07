@@ -111,175 +111,175 @@ function EmployeePage() {
 
   return (
     <div className="employee-container">
-      <h1 className="employee-title">Employees</h1>
-      <div className="employee-search-filter-container">
-        <EmployeeSearchFilter
-          handleSearch={handleSearch}
-          handleApplyFilters={handleApplyFilters}
-        />
-      </div>
-      <div className="employee-list">
-        {filteredEmployees.map((employee, index) => (
-          <div key={employee.employee_id} className="employee-item-container">
-            <div className="employee-item">
-              <p className="employee-name">
-                {index + 1}. {employee.firstname} {employee.middlename && `${employee.middlename[0]}.`} {employee.lastname}
-              </p>
-              <span className="employee-info">{formatRoleName(employee.role_name)} - {employee.status.charAt(0).toUpperCase() + employee.status.slice(1)}</span>
-              <div className="employee-actions">
-                <button className="employee-view-button" onClick={() => toggleEmployeeDetails(employee.employee_id)}>View</button>
-                <button className="employee-edit-button" onClick={() => startEditing(employee.employee_id)}>Edit</button>
-                <button
-                  className="employee-archive-button"
-                  onClick={() => toggleArchiveStatus(employee.employee_id, employee.archive_status)}
-                >
-                  {employee.archive_status === 'archive' ? 'Unarchive' : 'Archive'}
-                </button>
-              </div>
-            </div>
-            {selectedEmployeeId === employee.employee_id && (
-              <div className="employee-details">
-                <table>
-                  <tbody>
-                    <tr>
-                      <th>First Name:</th>
-                      <td>
-                        {isEditing ? (
-                          <input
-                            type="text"
-                            name="firstname"
-                            value={editFormData.firstname}
-                            onChange={handleEditChange}
-                          />
-                        ) : (
-                          employee.firstname
-                        )}
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>Middle Name:</th>
-                      <td>
-                        {isEditing ? (
-                          <input
-                            type="text"
-                            name="middlename"
-                            value={editFormData.middlename}
-                            onChange={handleEditChange}
-                          />
-                        ) : (
-                          employee.middlename
-                        )}
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>Last Name:</th>
-                      <td>
-                        {isEditing ? (
-                          <input
-                            type="text"
-                            name="lastname"
-                            value={editFormData.lastname}
-                            onChange={handleEditChange}
-                          />
-                        ) : (
-                          employee.lastname
-                        )}
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>Contact Number:</th>
-                      <td>
-                        {isEditing ? (
-                          <input
-                            type="text"
-                            name="contact_number"
-                            value={editFormData.contact_number}
-                            onChange={handleEditChange}
-                          />
-                        ) : (
-                          employee.contact_number
-                        )}
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>Address:</th>
-                      <td>
-                        {isEditing ? (
-                          <input
-                            type="text"
-                            name="address"
-                            value={editFormData.address}
-                            onChange={handleEditChange}
-                          />
-                        ) : (
-                          employee.address
-                        )}
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>Year Started:</th>
-                      <td>
-                        {isEditing ? (
-                          <input
-                            type="text"
-                            name="year_started"
-                            value={editFormData.year_started}
-                            onChange={handleEditChange}
-                          />
-                        ) : (
-                          employee.year_started
-                        )}
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>Role Name:</th>
-                      <td>
-                        {isEditing ? (
-                          <select
-                            name="role_name"
-                            value={editFormData.role_name}
-                            onChange={handleEditChange}
-                          >
-                            {roles.map((role, index) => (
-                              <option key={index} value={role}>{role}</option>
-                            ))}
-                          </select>
-                        ) : (
-                          formatRoleName(employee.role_name)
-                        )}
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>Status:</th>
-                      <td>
-                        {isEditing ? (
-                          <select
-                            name="status"
-                            value={editFormData.status}
-                            onChange={handleEditChange}
-                          >
-                            <option value="active">Active</option>
-                            <option value="inactive">Inactive</option>
-                          </select>
-                        ) : (
-                          employee.status.charAt(0).toUpperCase() + employee.status.slice(1)
-                        )}
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-                {isEditing && (
-                  <div className="edit-buttons">
-                    <button className="save-button" onClick={saveChanges}>Save</button>
-                    <button className="cancel-button" onClick={cancelEditing}>Cancel</button>
-                  </div>
-                )}
+  <h1 className="employee-title">Employees</h1>
+  <div className="employee-search-filter-container">
+    <EmployeeSearchFilter
+      handleSearch={handleSearch}
+      handleApplyFilters={handleApplyFilters}
+    />
+  </div>
+  <div className="employee-list">
+    {filteredEmployees.map((employee, index) => (
+      <div key={employee.employee_id} className="employee-item-container">
+        <div className="employee-item">
+          <p className="employee-name">
+            {index + 1}. {employee.firstname} {employee.middlename && `${employee.middlename[0]}.`} {employee.lastname}
+          </p>
+          <span className="employee-info">{formatRoleName(employee.role_name)} - {employee.status.charAt(0).toUpperCase() + employee.status.slice(1)}</span>
+          <div className="employee-actions">
+            <button className="employee-view-button" onClick={() => toggleEmployeeDetails(employee.employee_id)}>View</button>
+            <button className="employee-edit-button" onClick={() => startEditing(employee.employee_id)}>Edit</button>
+            <button
+              className="employee-archive-button"
+              onClick={() => toggleArchiveStatus(employee.employee_id, employee.archive_status)}
+            >
+              {employee.archive_status === 'archive' ? 'Unarchive' : 'Archive'}
+            </button>
+          </div>
+        </div>
+        {selectedEmployeeId === employee.employee_id && (
+          <div className="employee-details">
+            <table>
+              <tbody>
+                <tr>
+                  <th>First Name:</th>
+                  <td>
+                    {isEditing ? (
+                      <input
+                        type="text"
+                        name="firstname"
+                        value={editFormData.firstname}
+                        onChange={handleEditChange}
+                      />
+                    ) : (
+                      employee.firstname
+                    )}
+                  </td>
+                </tr>
+                <tr>
+                  <th>Middle Name:</th>
+                  <td>
+                    {isEditing ? (
+                      <input
+                        type="text"
+                        name="middlename"
+                        value={editFormData.middlename}
+                        onChange={handleEditChange}
+                      />
+                    ) : (
+                      employee.middlename
+                    )}
+                  </td>
+                </tr>
+                <tr>
+                  <th>Last Name:</th>
+                  <td>
+                    {isEditing ? (
+                      <input
+                        type="text"
+                        name="lastname"
+                        value={editFormData.lastname}
+                        onChange={handleEditChange}
+                      />
+                    ) : (
+                      employee.lastname
+                    )}
+                  </td>
+                </tr>
+                <tr>
+                  <th>Contact Number:</th>
+                  <td>
+                    {isEditing ? (
+                      <input
+                        type="text"
+                        name="contact_number"
+                        value={editFormData.contact_number}
+                        onChange={handleEditChange}
+                      />
+                    ) : (
+                      employee.contact_number
+                    )}
+                  </td>
+                </tr>
+                <tr>
+                  <th>Address:</th>
+                  <td>
+                    {isEditing ? (
+                      <input
+                        type="text"
+                        name="address"
+                        value={editFormData.address}
+                        onChange={handleEditChange}
+                      />
+                    ) : (
+                      employee.address
+                    )}
+                  </td>
+                </tr>
+                <tr>
+                  <th>Year Started:</th>
+                  <td>
+                    {isEditing ? (
+                      <input
+                        type="text"
+                        name="year_started"
+                        value={editFormData.year_started}
+                        onChange={handleEditChange}
+                      />
+                    ) : (
+                      employee.year_started
+                    )}
+                  </td>
+                </tr>
+                <tr>
+                  <th>Role Name:</th>
+                  <td>
+                    {isEditing ? (
+                      <select
+                        name="role_name"
+                        value={editFormData.role_name}
+                        onChange={handleEditChange}
+                      >
+                        {roles.map((role, index) => (
+                          <option key={index} value={role}>{role}</option>
+                        ))}
+                      </select>
+                    ) : (
+                      formatRoleName(employee.role_name)
+                    )}
+                  </td>
+                </tr>
+                <tr>
+                  <th>Status:</th>
+                  <td>
+                    {isEditing ? (
+                      <select
+                        name="status"
+                        value={editFormData.status}
+                        onChange={handleEditChange}
+                      >
+                        <option value="active">Active</option>
+                        <option value="inactive">Inactive</option>
+                      </select>
+                    ) : (
+                      employee.status.charAt(0).toUpperCase() + employee.status.slice(1)
+                    )}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            {isEditing && (
+              <div className="employee-edit-buttons">
+                <button className="employee-save-button" onClick={saveChanges}>Save</button>
+                <button className="employee-cancel-button" onClick={cancelEditing}>Cancel</button>
               </div>
             )}
           </div>
-        ))}
+        )}
       </div>
-    </div>
+    ))}
+  </div>
+</div>
   );
 }
 

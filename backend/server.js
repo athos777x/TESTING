@@ -564,6 +564,26 @@ app.get('/school-years/:id', (req, res) => {
   });
 });
 
+// Endpoint to update school year details by ID
+app.put('/school-years/:schoolYearId', (req, res) => {
+  const { schoolYearId } = req.params;
+  const updatedSchoolYear = req.body;
+
+  const query = 'UPDATE school_year SET ? WHERE school_year_id = ?';
+  db.query(query, [updatedSchoolYear, schoolYearId], (err, results) => {
+    if (err) {
+      console.error('Error updating school year details:', err);
+      res.status(500).json({ error: 'Internal server error' });
+      return;
+    }
+    if (results.affectedRows > 0) {
+      res.json({ message: 'School year updated successfully' });
+    } else {
+      res.status(404).json({ error: 'School year not found' });
+    }
+  });
+});
+
 app.listen(3001, () => {
   console.log('Server running on port 3001');
 });

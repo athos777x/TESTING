@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import SchoolYearSearchFilter from '../Utilities/SchoolYearSearchFilter';
 import '../CssPage/SchoolYearPage.css';
@@ -7,48 +7,105 @@ function SchoolYearPage() {
   const [schoolYears, setSchoolYears] = useState([]);
   const [filteredSchoolYears, setFilteredSchoolYears] = useState([]);
   const [selectedSchoolYearId, setSelectedSchoolYearId] = useState(null);
+  const [isEditing, setIsEditing] = useState(false);
+  const [editFormData, setEditFormData] = useState({});
   const [filters, setFilters] = useState({
     searchTerm: '',
-    school_year: '' // Default filter to show all school years
+    school_year: ''
   });
 
-  useEffect(() => {
-    fetchSchoolYears();
-  }, [filters]);
-
-  const fetchSchoolYears = async (appliedFilters = filters) => {
+  const fetchSchoolYears = useCallback(async () => {
     try {
       const response = await axios.get('http://localhost:3001/school-years', {
-        params: appliedFilters
+        params: filters
       });
-      console.log('School years fetched:', response.data); // Log fetched data
       const sortedSchoolYears = response.data.sort((a, b) => a.school_year.localeCompare(b.school_year));
       setSchoolYears(sortedSchoolYears);
       setFilteredSchoolYears(sortedSchoolYears);
     } catch (error) {
       console.error('Error fetching school years:', error);
     }
-  };
+  }, [filters]);
+
+  useEffect(() => {
+    fetchSchoolYears();
+  }, [fetchSchoolYears]);
 
   const handleSearch = (searchTerm) => {
-    const newFilters = { ...filters, searchTerm };
-    setFilters(newFilters);
-    fetchSchoolYears(newFilters);
-  };
-
-  const handleFilterChange = (type, value) => {
-    const newFilters = { ...filters, [type]: value };
-    setFilters(newFilters);
-    fetchSchoolYears(newFilters);
+    setFilters(prevFilters => ({ ...prevFilters, searchTerm }));
   };
 
   const handleApplyFilters = (newFilters) => {
     setFilters(newFilters);
-    fetchSchoolYears(newFilters);
   };
 
   const toggleSchoolYearDetails = (schoolYearId) => {
-    setSelectedSchoolYearId(selectedSchoolYearId === schoolYearId ? null : schoolYearId);
+    if (selectedSchoolYearId === schoolYearId) {
+      setSelectedSchoolYearId(null);
+      setIsEditing(false);
+    } else {
+      setSelectedSchoolYearId(schoolYearId);
+      setIsEditing(false);
+      const schoolYear = schoolYears.find(sy => sy.school_year_id === schoolYearId);
+      setEditFormData({
+        ...schoolYear,
+        school_year_start: schoolYear.school_year_start.split('T')[0],
+        school_year_end: schoolYear.school_year_end.split('T')[0],
+        enrollment_start: schoolYear.enrollment_start.split('T')[0],
+        enrollment_end: schoolYear.enrollment_end.split('T')[0],
+      });
+    }
+  };
+
+  const startEditing = (schoolYearId) => {
+    setSelectedSchoolYearId(schoolYearId);
+    setIsEditing(true);
+    const schoolYear = schoolYears.find(sy => sy.school_year_id === schoolYearId);
+    setEditFormData({
+      ...schoolYear,
+      school_year_start: schoolYear.school_year_start.split('T')[0],
+      school_year_end: schoolYear.school_year_end.split('T')[0],
+      enrollment_start: schoolYear.enrollment_start.split('T')[0],
+      enrollment_end: schoolYear.enrollment_end.split('T')[0],
+    });
+  };
+
+  const handleEditChange = (event) => {
+    const { name, value } = event.target;
+    setEditFormData(prevFormData => ({
+      ...prevFormData,
+      [name]: value
+    }));
+  };
+
+  const saveChanges = async () => {
+    try {
+      const updatedData = {
+        ...editFormData,
+        school_year_start: editFormData.school_year_start,
+        school_year_end: editFormData.school_year_end,
+        enrollment_start: editFormData.enrollment_start,
+        enrollment_end: editFormData.enrollment_end
+      };
+      await axios.put(`http://localhost:3001/school-years/${selectedSchoolYearId}`, updatedData);
+      fetchSchoolYears();  // Refresh the school year list after saving
+      setIsEditing(false);  // Set editing state to false
+      setSelectedSchoolYearId(null); // Deselect the current school year
+    } catch (error) {
+      console.error('Error saving school year details:', error);
+    }
+  };
+
+  const cancelEditing = () => {
+    setIsEditing(false);
+    const schoolYear = schoolYears.find(sy => sy.school_year_id === selectedSchoolYearId);
+    setEditFormData({
+      ...schoolYear,
+      school_year_start: schoolYear.school_year_start.split('T')[0],
+      school_year_end: schoolYear.school_year_end.split('T')[0],
+      enrollment_start: schoolYear.enrollment_start.split('T')[0],
+      enrollment_end: schoolYear.enrollment_end.split('T')[0],
+    });
   };
 
   const formatDate = (dateString) => {
@@ -62,19 +119,21 @@ function SchoolYearPage() {
       <div className="school-year-search-filter-container">
         <SchoolYearSearchFilter
           handleSearch={handleSearch}
-          handleFilter={handleFilterChange}
           handleApplyFilters={handleApplyFilters}
         />
       </div>
       <div className="school-year-list">
         {filteredSchoolYears.map((schoolYear, index) => (
-          <div key={schoolYear.school_year_id} className="school-year-item-container" onClick={() => toggleSchoolYearDetails(schoolYear.school_year_id)}>
+          <div key={schoolYear.school_year_id} className="school-year-item-container">
             <div className="school-year-item">
               <p className="school-year-name">
                 {index + 1}. {schoolYear.school_year}
               </p>
               <span className="school-year-info">{schoolYear.status}</span>
-              <button className="school-year-view-button">View</button>
+              <div className="school-year-actions">
+                <button className="school-year-view-button" onClick={() => toggleSchoolYearDetails(schoolYear.school_year_id)}>View</button>
+                <button className="school-year-edit-button" onClick={() => startEditing(schoolYear.school_year_id)}>Edit</button>
+              </div>
             </div>
             {selectedSchoolYearId === schoolYear.school_year_id && (
               <div className="school-year-details">
@@ -82,30 +141,104 @@ function SchoolYearPage() {
                   <tbody>
                     <tr>
                       <th>Year:</th>
-                      <td>{schoolYear.school_year}</td>
+                      <td>
+                        {isEditing ? (
+                          <input
+                            type="text"
+                            name="school_year"
+                            value={editFormData.school_year}
+                            onChange={handleEditChange}
+                          />
+                        ) : (
+                          schoolYear.school_year
+                        )}
+                      </td>
                     </tr>
                     <tr>
                       <th>Status:</th>
-                      <td>{schoolYear.status}</td>
+                      <td>
+                        {isEditing ? (
+                          <select
+                            name="status"
+                            value={editFormData.status}
+                            onChange={handleEditChange}
+                          >
+                            <option value="active">Active</option>
+                            <option value="inactive">Inactive</option>
+                          </select>
+                        ) : (
+                          schoolYear.status
+                        )}
+                      </td>
                     </tr>
                     <tr>
                       <th>Start Date:</th>
-                      <td>{formatDate(schoolYear.school_year_start)}</td>
+                      <td>
+                        {isEditing ? (
+                          <input
+                            type="date"
+                            name="school_year_start"
+                            value={editFormData.school_year_start}
+                            onChange={handleEditChange}
+                          />
+                        ) : (
+                          formatDate(schoolYear.school_year_start)
+                        )}
+                      </td>
                     </tr>
                     <tr>
                       <th>End Date:</th>
-                      <td>{formatDate(schoolYear.school_year_end)}</td>
+                      <td>
+                        {isEditing ? (
+                          <input
+                            type="date"
+                            name="school_year_end"
+                            value={editFormData.school_year_end}
+                            onChange={handleEditChange}
+                          />
+                        ) : (
+                          formatDate(schoolYear.school_year_end)
+                        )}
+                      </td>
                     </tr>
                     <tr>
                       <th>Enrollment Start:</th>
-                      <td>{formatDate(schoolYear.enrollment_start)}</td>
+                      <td>
+                        {isEditing ? (
+                          <input
+                            type="date"
+                            name="enrollment_start"
+                            value={editFormData.enrollment_start}
+                            onChange={handleEditChange}
+                          />
+                        ) : (
+                          formatDate(schoolYear.enrollment_start)
+                        )}
+                      </td>
                     </tr>
                     <tr>
                       <th>Enrollment End:</th>
-                      <td>{formatDate(schoolYear.enrollment_end)}</td>
+                      <td>
+                        {isEditing ? (
+                          <input
+                            type="date"
+                            name="enrollment_end"
+                            value={editFormData.enrollment_end}
+                            onChange={handleEditChange}
+                          />
+                        ) : (
+                          formatDate(schoolYear.enrollment_end)
+                        )}
+                      </td>
                     </tr>
                   </tbody>
                 </table>
+                {isEditing && (
+                  <div className="school-year-edit-buttons">
+                    <button className="school-year-save-button" onClick={saveChanges}>Save</button>
+                    <button className="school-year-cancel-button" onClick={cancelEditing}>Cancel</button>
+                  </div>
+                )}
               </div>
             )}
           </div>
