@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import '../CssFiles/searchfilter.css';
 import axios from 'axios';
 
-function EmployeeSearchFilter({ handleSearch, handleFilter, handleApplyFilters }) {
+function EmployeeSearchFilter({ handleSearch, handleApplyFilters }) {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedStatus, setSelectedStatus] = useState('');
   const [selectedPosition, setSelectedPosition] = useState('');
@@ -26,6 +26,7 @@ function EmployeeSearchFilter({ handleSearch, handleFilter, handleApplyFilters }
 
   const handleSearchChange = (event) => {
     setSearchTerm(event.target.value);
+    handleSearch(event.target.value);
   };
 
   const handleStatusChange = (event) => {

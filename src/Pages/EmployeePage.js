@@ -20,6 +20,10 @@ function EmployeePage() {
   useEffect(() => {
     fetchEmployees();
     fetchRoles();
+  }, []);
+
+  useEffect(() => {
+    fetchEmployees();
   }, [filters]);
 
   const fetchEmployees = async () => {
@@ -46,14 +50,6 @@ function EmployeePage() {
 
   const handleSearch = (searchTerm) => {
     setFilters(prevFilters => ({ ...prevFilters, searchTerm }));
-  };
-
-  const handleFilterChange = (type, value) => {
-    setFilters(prevFilters => ({ ...prevFilters, [type]: value }));
-  };
-
-  const applyFilters = () => {
-    fetchEmployees();
   };
 
   const handleApplyFilters = (newFilters) => {
@@ -123,7 +119,6 @@ function EmployeePage() {
       <div className="employee-search-filter-container">
         <EmployeeSearchFilter
           handleSearch={handleSearch}
-          handleFilter={handleFilterChange}
           handleApplyFilters={handleApplyFilters}
         />
       </div>
