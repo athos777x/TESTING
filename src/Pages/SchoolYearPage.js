@@ -87,10 +87,22 @@ function SchoolYearPage() {
         enrollment_start: formatDateForBackend(editFormData.enrollment_start),
         enrollment_end: formatDateForBackend(editFormData.enrollment_end)
       };
-      await axios.put(`http://localhost:3001/school-years/${selectedSchoolYearId}`, updatedData);
+      console.log('Saving data:', updatedData); // Debugging log
+      const response = await axios.put(`http://localhost:3001/school-years/${selectedSchoolYearId}`, updatedData);
+      console.log('Server response:', response.data); // Debugging log
       fetchSchoolYears();  // Refresh the school year list after saving
+      const updatedSchoolYear = response.data;
+      setSchoolYears(prevSchoolYears =>
+        prevSchoolYears.map(sy =>
+          sy.school_year_id === selectedSchoolYearId ? updatedSchoolYear : sy
+        )
+      );
+      setFilteredSchoolYears(prevFilteredSchoolYears =>
+        prevFilteredSchoolYears.map(sy =>
+          sy.school_year_id === selectedSchoolYearId ? updatedSchoolYear : sy
+        )
+      );
       setIsEditing(false);  // Set editing state to false
-      setSelectedSchoolYearId(null); // Deselect the current school year
     } catch (error) {
       console.error('Error saving school year details:', error);
     }
@@ -122,7 +134,10 @@ function SchoolYearPage() {
 
   const formatDateForBackend = (dateString) => {
     const date = new Date(dateString);
-    return date.toISOString();
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
   };
 
   return (
