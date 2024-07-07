@@ -87,22 +87,22 @@ function SchoolYearPage() {
         enrollment_start: formatDateForBackend(editFormData.enrollment_start),
         enrollment_end: formatDateForBackend(editFormData.enrollment_end)
       };
-      console.log('Saving data:', updatedData); // Debugging log
-      const response = await axios.put(`http://localhost:3001/school-years/${selectedSchoolYearId}`, updatedData);
-      console.log('Server response:', response.data); // Debugging log
-      fetchSchoolYears();  // Refresh the school year list after saving
-      const updatedSchoolYear = response.data;
-      setSchoolYears(prevSchoolYears =>
-        prevSchoolYears.map(sy =>
-          sy.school_year_id === selectedSchoolYearId ? updatedSchoolYear : sy
+      await axios.put(`http://localhost:3001/school-years/${selectedSchoolYearId}`, updatedData);
+
+      setSchoolYears(prevSchoolYears => 
+        prevSchoolYears.map(sy => 
+          sy.school_year_id === selectedSchoolYearId ? { ...sy, ...updatedData } : sy
         )
       );
+
       setFilteredSchoolYears(prevFilteredSchoolYears =>
         prevFilteredSchoolYears.map(sy =>
-          sy.school_year_id === selectedSchoolYearId ? updatedSchoolYear : sy
+          sy.school_year_id === selectedSchoolYearId ? { ...sy, ...updatedData } : sy
         )
       );
-      setIsEditing(false);  // Set editing state to false
+
+      setIsEditing(false); // Set editing state to false
+      setSelectedSchoolYearId(selectedSchoolYearId); // Keep the selected school year visible
     } catch (error) {
       console.error('Error saving school year details:', error);
     }

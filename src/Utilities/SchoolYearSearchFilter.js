@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import '../CssFiles/searchfilter.css';
 import axios from 'axios';
 
-function SchoolYearSearchFilter({ handleSearch, handleFilter, handleApplyFilters }) {
+function SchoolYearSearchFilter({ handleSearch, handleApplyFilters }) {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedSchoolYear, setSelectedSchoolYear] = useState('');
   const [schoolYears, setSchoolYears] = useState([]);
@@ -19,12 +19,10 @@ function SchoolYearSearchFilter({ handleSearch, handleFilter, handleApplyFilters
 
   const handleSearchChange = (event) => {
     setSearchTerm(event.target.value);
-    handleSearch(event.target.value);
   };
 
   const handleSchoolYearChange = (event) => {
     setSelectedSchoolYear(event.target.value);
-    handleFilter('school_year', event.target.value);
   };
 
   const applyFilters = () => {
