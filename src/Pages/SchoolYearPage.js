@@ -14,6 +14,14 @@ function SchoolYearPage() {
     school_year: ''
   });
   const [hasActiveSchoolYear, setHasActiveSchoolYear] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [newSchoolYear, setNewSchoolYear] = useState({
+    school_year: '',
+    school_year_start: '',
+    school_year_end: '',
+    enrollment_start: '',
+    enrollment_end: ''
+  });
 
   const fetchSchoolYears = useCallback(async () => {
     try {
@@ -137,9 +145,37 @@ function SchoolYearPage() {
     return `${year}-${month}-${day}`;
   };
 
-  const handleAddSchoolYear = () => {
-    // Implement your logic to add a new school year
-    console.log('Add School Year button clicked');
+  const handleAddSchoolYear = async () => {
+    try {
+      const newSchoolYearData = {
+        ...newSchoolYear,
+        school_year_start: formatDateForBackend(newSchoolYear.school_year_start),
+        school_year_end: formatDateForBackend(newSchoolYear.school_year_end),
+        enrollment_start: formatDateForBackend(newSchoolYear.enrollment_start),
+        enrollment_end: formatDateForBackend(newSchoolYear.enrollment_end),
+        status: 'inactive' // default status for a new school year
+      };
+      await axios.post('http://localhost:3001/school-years', newSchoolYearData);
+      setShowModal(false);
+      setNewSchoolYear({
+        school_year: '',
+        school_year_start: '',
+        school_year_end: '',
+        enrollment_start: '',
+        enrollment_end: ''
+      });
+      fetchSchoolYears(); // Refresh the school year list
+    } catch (error) {
+      console.error('Error adding school year:', error);
+    }
+  };
+
+  const handleNewSchoolYearChange = (event) => {
+    const { name, value } = event.target;
+    setNewSchoolYear(prevState => ({
+      ...prevState,
+      [name]: value
+    }));
   };
 
   return (
@@ -275,11 +311,68 @@ function SchoolYearPage() {
       </div>
       <button
         className={`add-school-year-button ${hasActiveSchoolYear ? 'disabled' : ''}`}
-        onClick={handleAddSchoolYear}
+        onClick={() => setShowModal(true)}
         disabled={hasActiveSchoolYear}
       >
         Add School Year
       </button>
+
+      {showModal && (
+        <div className="modal">
+          <div className="modal-content">
+            <h2>Add New School Year</h2>
+            <label>
+              School Year:
+              <input
+                type="text"
+                name="school_year"
+                value={newSchoolYear.school_year}
+                onChange={handleNewSchoolYearChange}
+              />
+            </label>
+            <label>
+              Start Date:
+              <input
+                type="date"
+                name="school_year_start"
+                value={newSchoolYear.school_year_start}
+                onChange={handleNewSchoolYearChange}
+              />
+            </label>
+            <label>
+              End Date:
+              <input
+                type="date"
+                name="school_year_end"
+                value={newSchoolYear.school_year_end}
+                onChange={handleNewSchoolYearChange}
+              />
+            </label>
+            <label>
+              Enrollment Start:
+              <input
+                type="date"
+                name="enrollment_start"
+                value={newSchoolYear.enrollment_start}
+                onChange={handleNewSchoolYearChange}
+              />
+            </label>
+            <label>
+              Enrollment End:
+              <input
+                type="date"
+                name="enrollment_end"
+                value={newSchoolYear.enrollment_end}
+                onChange={handleNewSchoolYearChange}
+              />
+            </label>
+            <div className="button-group">
+              <button className="save-button" onClick={handleAddSchoolYear}>Save</button>
+              <button className="cancel-button" onClick={() => setShowModal(false)}>Cancel</button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
