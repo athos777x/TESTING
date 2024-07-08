@@ -159,3 +159,24 @@
   margin: 0;
   padding: 0;
 }
+
+.add-school-year-button {
+  display: block;
+  margin: 20px auto;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 20px;
+  background-color: #28a745;
+  color: #fff;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.add-school-year-button:hover {
+  background-color: #218838;
+}
+
+.add-school-year-button.disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}

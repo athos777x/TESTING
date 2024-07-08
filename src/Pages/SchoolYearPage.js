@@ -13,6 +13,7 @@ function SchoolYearPage() {
     searchTerm: '',
     school_year: ''
   });
+  const [hasActiveSchoolYear, setHasActiveSchoolYear] = useState(false);
 
   const fetchSchoolYears = useCallback(async () => {
     try {
@@ -20,8 +21,16 @@ function SchoolYearPage() {
         params: filters
       });
       const sortedSchoolYears = response.data.sort((a, b) => a.school_year.localeCompare(b.school_year));
+      const currentDate = new Date();
+      sortedSchoolYears.forEach(async (sy) => {
+        if (new Date(sy.school_year_end) < currentDate && sy.status === 'active') {
+          sy.status = 'inactive';
+          await axios.put(`http://localhost:3001/school-years/${sy.school_year_id}`, { status: 'inactive' });
+        }
+      });
       setSchoolYears(sortedSchoolYears);
       setFilteredSchoolYears(sortedSchoolYears);
+      setHasActiveSchoolYear(sortedSchoolYears.some(sy => sy.status === 'active'));
     } catch (error) {
       console.error('Error fetching school years:', error);
     }
@@ -88,19 +97,7 @@ function SchoolYearPage() {
         enrollment_end: formatDateForBackend(editFormData.enrollment_end)
       };
       await axios.put(`http://localhost:3001/school-years/${selectedSchoolYearId}`, updatedData);
-
-      setSchoolYears(prevSchoolYears => 
-        prevSchoolYears.map(sy => 
-          sy.school_year_id === selectedSchoolYearId ? { ...sy, ...updatedData } : sy
-        )
-      );
-
-      setFilteredSchoolYears(prevFilteredSchoolYears =>
-        prevFilteredSchoolYears.map(sy =>
-          sy.school_year_id === selectedSchoolYearId ? { ...sy, ...updatedData } : sy
-        )
-      );
-
+      fetchSchoolYears();
       setIsEditing(false); // Set editing state to false
       setSelectedSchoolYearId(selectedSchoolYearId); // Keep the selected school year visible
     } catch (error) {
@@ -138,6 +135,11 @@ function SchoolYearPage() {
     const month = String(date.getMonth() + 1).padStart(2, '0');
     const day = String(date.getDate()).padStart(2, '0');
     return `${year}-${month}-${day}`;
+  };
+
+  const handleAddSchoolYear = () => {
+    // Implement your logic to add a new school year
+    console.log('Add School Year button clicked');
   };
 
   return (
@@ -271,6 +273,13 @@ function SchoolYearPage() {
           </div>
         ))}
       </div>
+      <button
+        className={`add-school-year-button ${hasActiveSchoolYear ? 'disabled' : ''}`}
+        onClick={handleAddSchoolYear}
+        disabled={hasActiveSchoolYear}
+      >
+        Add School Year
+      </button>
     </div>
   );
 }
