@@ -72,7 +72,7 @@ function App() {
             <Route path="/students/:id/details" element={<StudentDetailPage />} />
             <Route path="/grades" element={<GradesPage />} />
             <Route path="/attendance" element={<AttendancePage />} />
-            <Route path="/employees" element={<EmployeePage />} /> {/* Updated path */}
+            <Route path="/employees" element={<EmployeePage />} /> 
             <Route path="/school-year" element={<SchoolYearPage />} />
             <Route path="/enrolled-students" element={<EnrolledStudentsPage />} />
             <Route path="/subjects" element={<SubjectsPage />} />
