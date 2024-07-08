@@ -153,9 +153,11 @@ function SchoolYearPage() {
         school_year_end: formatDateForBackend(newSchoolYear.school_year_end),
         enrollment_start: formatDateForBackend(newSchoolYear.enrollment_start),
         enrollment_end: formatDateForBackend(newSchoolYear.enrollment_end),
-        status: 'inactive' // default status for a new school year
+        status: 'active' // set the default status for a new school year to 'active'
       };
-      await axios.post('http://localhost:3001/school-years', newSchoolYearData);
+      console.log('Sending data to server:', newSchoolYearData);
+      const response = await axios.post('http://localhost:3001/school-years', newSchoolYearData);
+      console.log('Server response:', response);
       setShowModal(false);
       setNewSchoolYear({
         school_year: '',

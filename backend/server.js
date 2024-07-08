@@ -564,6 +564,21 @@ app.get('/school-years/:id', (req, res) => {
   });
 });
 
+// Endpoint to add a new school year
+app.post('/school-years', (req, res) => {
+  const { school_year, school_year_start, school_year_end, enrollment_start, enrollment_end, status } = req.body;
+  const query = 'INSERT INTO school_year (school_year, school_year_start, school_year_end, enrollment_start, enrollment_end, status) VALUES (?, ?, ?, ?, ?, ?)';
+  
+  db.query(query, [school_year, school_year_start, school_year_end, enrollment_start, enrollment_end, status], (err, result) => {
+    if (err) {
+      console.error('Error adding school year:', err);
+      res.status(500).send({ error: 'Error adding school year', details: err.message });
+    } else {
+      res.status(201).send({ message: 'School year added successfully' });
+    }
+  });
+});
+
 // Endpoint to update school year details by ID
 app.put('/school-years/:schoolYearId', (req, res) => {
   const { schoolYearId } = req.params;
