@@ -116,7 +116,7 @@
   border: 1px solid #ddd;
   padding: 8px;
   text-align: left;
-  background-color: #f9f9f9;
+  background-color: #ffffff; /* Set background color to white */
 }
 
 .students-table th {
