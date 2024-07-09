@@ -599,6 +599,46 @@ app.put('/school-years/:schoolYearId', (req, res) => {
   });
 });
 
+// Endpoint to fetch sections
+app.get('/sections', (req, res) => {
+  const { searchTerm, grade } = req.query;
+  let query = 'SELECT * FROM section';
+  const queryParams = [];
+
+  if (searchTerm) {
+    query += ' WHERE section_name LIKE ?';
+    queryParams.push(`%${searchTerm}%`);
+  }
+
+  if (grade) {
+    query += (searchTerm ? ' AND' : ' WHERE') + ' grade_level = ?';
+    queryParams.push(grade);
+  }
+
+  db.query(query, queryParams, (err, results) => {
+    if (err) {
+      console.error('Error fetching sections:', err);
+      res.status(500).json({ error: 'Internal server error' });
+      return;
+    }
+    res.json(results);
+  });
+});
+
+// Endpoint to fetch section details by ID
+app.get('/sections/:id', (req, res) => {
+  const { id } = req.params;
+  const query = 'SELECT * FROM section WHERE section_id = ?';
+  db.query(query, [id], (err, result) => {
+    if (err) {
+      console.error('Error fetching section details:', err);
+      res.status(500).json({ error: 'Internal server error' });
+      return;
+    }
+    res.json(result[0]);
+  });
+});
+
 app.listen(3001, () => {
   console.log('Server running on port 3001');
 });

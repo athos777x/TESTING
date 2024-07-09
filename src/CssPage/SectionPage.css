@@ -1,0 +1,100 @@
+.section-container {
+  margin: 20px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+}
+
+.section-title {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.section-search-filter-container {
+  margin-bottom: 20px;
+}
+
+.section-list {
+  list-style-type: none;
+  padding: 0;
+}
+
+.section-item-container {
+  display: flex;
+  flex-direction: column;
+  margin: 5px 0;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 10px;
+  background-color: #fff;
+  cursor: pointer;
+}
+
+.section-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0;
+  padding: 10px;
+  border-bottom: none;
+  margin-bottom: 0 !important;
+  margin-top: 0 !important;
+  border-bottom: none !important;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.section-name {
+  margin: 5px 0;
+}
+
+.section-info {
+  margin-left: auto;
+  text-align: center;
+  flex: 1;
+  margin: 0;
+}
+
+.section-actions {
+  display: flex;
+}
+
+.section-view-button {
+  margin-left: 5px;
+  padding: 5px 10px;
+  border: none;
+  background-color: #28a745;
+  color: white;
+  cursor: pointer;
+  border-radius: 13px;
+}
+
+.section-view-button:hover {
+  background-color: #218838;
+}
+
+.section-details {
+  margin: 10px 0;
+}
+
+.section-details table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.section-details table th, 
+.section-details table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+.section-details table th {
+  background-color: #f2f2f2 !important;
+  font-weight: bold;
+}
