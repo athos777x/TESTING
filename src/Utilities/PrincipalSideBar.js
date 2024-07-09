@@ -105,7 +105,7 @@ function PrincipalSideBar({ showSidebar, toggleSidebar, handleLogout }) {
               <button onClick={() => handleNavigate('/school-year')}>
                 <FiCalendar className="icon" /> School Year
               </button>
-              <button onClick={() => handleNavigate('/section')}>
+              <button onClick={() => handleNavigate('/section-list')}>
                 <FiBook className="icon" /> Section List
               </button>
               <button onClick={() => handleNavigate('/enrolled-students')}>

@@ -1,15 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import '../CssFiles/searchfilter.css';
-import axios from 'axios';
 
-function SectionSearchFilter({ handleSearch, handleFilter, handleApplyFilters, grades, sections }) {
+function SectionListSearchFilter({ handleSearch, handleFilter, handleApplyFilters, grades, sections }) {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedGrade, setSelectedGrade] = useState('');
   const [filteredSections, setFilteredSections] = useState([]);
   const [selectedSection, setSelectedSection] = useState('');
 
   useEffect(() => {
-    // Filter sections based on selected grade
     if (selectedGrade) {
       setFilteredSections(sections.filter(section => section.grade_level === selectedGrade));
     } else {
@@ -25,7 +23,7 @@ function SectionSearchFilter({ handleSearch, handleFilter, handleApplyFilters, g
   const handleGradeChange = (event) => {
     const grade = event.target.value;
     setSelectedGrade(grade);
-    setSelectedSection(''); // Reset section when grade is changed
+    setSelectedSection('');
     handleFilter('grade', grade);
   };
 
@@ -70,4 +68,4 @@ function SectionSearchFilter({ handleSearch, handleFilter, handleApplyFilters, g
   );
 }
 
-export default SectionSearchFilter;
+export default SectionListSearchFilter;

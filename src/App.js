@@ -1,4 +1,3 @@
-// App.js
 import React, { useState, useEffect } from 'react';
 import { Navigate, Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import './App.css';
@@ -10,6 +9,7 @@ import Layout from './Utilities/Layout';
 import ProfilePage from './Pages/ProfilePage';
 import AcademicRecordPage from './Pages/AcademicRecordPage';
 import EnrollmentPage from './Pages/EnrollmentPage';
+import SectionListPage from './Pages/SectionListPage';
 import SectionPage from './Pages/SectionPage';
 import HomePage from './Pages/HomePage';
 import StudentsPage from './Pages/StudentsPage';
@@ -66,6 +66,7 @@ function App() {
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/academic-record" element={<AcademicRecordPage />} />
             <Route path="/enrollment" element={<EnrollmentPage />} />
+            <Route path="/section-list" element={<SectionListPage />} />
             <Route path="/section" element={<SectionPage />} />
             <Route path="/home" element={<HomePage />} />
             <Route path="/students" element={<StudentsPage />} />
