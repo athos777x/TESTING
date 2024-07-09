@@ -519,7 +519,7 @@ app.get('/school-years', (req, res) => {
   const { searchTerm, school_year } = req.query;
 
   let query = 'SELECT * FROM school_year';
-  let queryParams = [];
+  const queryParams = [];
 
   if (searchTerm || school_year) {
     query += ' WHERE';
@@ -664,6 +664,51 @@ app.get('/sections/:id/students', (req, res) => {
     const boys = result.filter(student => student.gender === 'Male');
     const girls = result.filter(student => student.gender === 'Female');
     res.json({ boys, girls });
+  });
+});
+
+// New endpoint to fetch active enrolled students for the current school year
+app.get('/enrolled-students', (req, res) => {
+  const { searchTerm, grade } = req.query;
+  console.log('Received params:', { searchTerm, grade });
+
+  let query = `
+    SELECT e.student_id, e.enrollment_id, e.grade_level, e.enrollee_type, e.enrollment_status, s.firstname, s.middlename, s.lastname 
+    FROM enrollment e
+    JOIN student s ON e.student_id = s.student_id
+    JOIN school_year sy ON e.school_year_id = sy.school_year_id
+    WHERE e.enrollment_status = 'active' AND sy.status = 'active'
+  `;
+  
+  const queryParams = [];
+  const conditions = [];
+
+  if (searchTerm) {
+    conditions.push(`(s.firstname LIKE ? OR s.lastname LIKE ?)`);
+    queryParams.push(`%${searchTerm}%`, `%${searchTerm}%`);
+  }
+  if (grade) {
+    conditions.push(`e.grade_level = ?`);
+    queryParams.push(grade);
+  }
+
+  if (conditions.length > 0) {
+    query += ' AND ' + conditions.join(' AND ');
+  }
+
+  query += ' ORDER BY s.firstname';
+
+  console.log('Final query:', query);
+  console.log('With parameters:', queryParams);
+
+  db.query(query, queryParams, (err, results) => {
+    if (err) {
+      console.error('Error fetching students:', err);
+      res.status(500).json({ error: 'Internal server error' });
+      return;
+    }
+    console.log('Query results:', results);
+    res.json(results);
   });
 });
 
