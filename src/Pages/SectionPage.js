@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
-import SearchFilter from '../Utilities/SearchFilter'; // Import the SearchFilter component
+import SectionSearchFilter from '../Utilities/SectionSearchFilter'; // Import the new SectionSearchFilter component
 import '../CssPage/SectionPage.css';
 
 function SectionPage() {
@@ -29,14 +29,19 @@ function SectionPage() {
   const fetchSections = useCallback(async (schoolYearId) => {
     try {
       const response = await axios.get('http://localhost:3001/sections', {
-        params: { ...filters, schoolYearId }
+        params: { schoolYearId }
       });
       setSections(response.data);
       setFilteredSections(response.data);
     } catch (error) {
       console.error('There was an error fetching the sections!', error);
     }
-  }, [filters]);
+  }, []);
+
+  const getUniqueGrades = (sections) => {
+    const grades = sections.map(section => section.grade_level);
+    return [...new Set(grades)];
+  };
 
   useEffect(() => {
     async function loadSections() {
@@ -51,7 +56,6 @@ function SectionPage() {
   const handleSearch = (searchTerm) => {
     setFilters(prevFilters => {
       const updatedFilters = { ...prevFilters, searchTerm };
-      applyFilters(updatedFilters);
       return updatedFilters;
     });
   };
@@ -76,13 +80,15 @@ function SectionPage() {
       filtered = filtered.filter(section => section.grade_level === updatedFilters.grade);
     }
 
+    if (updatedFilters.section) {
+      filtered = filtered.filter(section => section.section_id === parseInt(updatedFilters.section));
+    }
+
     setFilteredSections(filtered);
   };
 
   const handleApplyFilters = () => {
-    if (activeSchoolYear) {
-      fetchSections(activeSchoolYear);
-    }
+    applyFilters(filters);
   };
 
   const handleViewClick = async (sectionId) => {
@@ -108,12 +114,12 @@ function SectionPage() {
     <div className="section-container">
       <h1 className="section-title">Section Management</h1>
       <div className="section-search-filter-container">
-        <SearchFilter
+        <SectionSearchFilter
           handleSearch={handleSearch}
           handleFilter={handleFilterChange}
           handleApplyFilters={handleApplyFilters}
-          showSchoolYearFilter={false}
-          showSectionFilter={false}
+          grades={getUniqueGrades(sections)}
+          sections={sections}
         />
       </div>
       <div className="section-list">
@@ -151,6 +157,10 @@ function SectionPage() {
                     <tr>
                       <th>Max Capacity:</th>
                       <td>{sectionDetails.max_capacity}</td>
+                    </tr>
+                    <tr>
+                      <th>School Year:</th>
+                      <td>{sectionDetails.school_year}</td>
                     </tr>
                     {/* Add other details as needed */}
                   </tbody>

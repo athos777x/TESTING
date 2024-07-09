@@ -166,7 +166,7 @@ app.get('/students/:student_id/grades', (req, res) => {
   });
 });
 
-// Endpoint to fetch sections
+// Endpoint to fetch sections for select section filter for StudentsPage, GradesPage, and AttendancePage
 app.get('/api/sections', (req, res) => {
   const query = 'SELECT section_id, section_name FROM section';
   db.query(query, (err, results) => {
@@ -599,19 +599,25 @@ app.put('/school-years/:schoolYearId', (req, res) => {
   });
 });
 
-// Endpoint to fetch sections
+// Endpoint to fetch sections for SectionPage
 app.get('/sections', (req, res) => {
   const { searchTerm, grade } = req.query;
-  let query = 'SELECT * FROM section';
+  const query = `
+    SELECT s.section_id, s.section_name, s.grade_level, s.status, s.max_capacity, sy.school_year
+    FROM section s
+    JOIN section_open so ON s.section_id = so.section_id
+    JOIN school_year sy ON so.school_year_id = sy.school_year_id
+    WHERE sy.status = 'active'
+  `;
   const queryParams = [];
 
   if (searchTerm) {
-    query += ' WHERE section_name LIKE ?';
+    query += ' AND s.section_name LIKE ?';
     queryParams.push(`%${searchTerm}%`);
   }
 
   if (grade) {
-    query += (searchTerm ? ' AND' : ' WHERE') + ' grade_level = ?';
+    query += ' AND s.grade_level = ?';
     queryParams.push(grade);
   }
 
@@ -628,7 +634,13 @@ app.get('/sections', (req, res) => {
 // Endpoint to fetch section details by ID
 app.get('/sections/:id', (req, res) => {
   const { id } = req.params;
-  const query = 'SELECT * FROM section WHERE section_id = ?';
+  const query = `
+    SELECT s.section_id, s.section_name, s.grade_level, s.status, s.max_capacity, sy.school_year
+    FROM section s
+    JOIN section_open so ON s.section_id = so.section_id
+    JOIN school_year sy ON so.school_year_id = sy.school_year_id
+    WHERE s.section_id = ?
+  `;
   db.query(query, [id], (err, result) => {
     if (err) {
       console.error('Error fetching section details:', err);
