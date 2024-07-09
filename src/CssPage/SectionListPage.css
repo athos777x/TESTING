@@ -64,8 +64,9 @@
   display: flex;
 }
 
-.section-view-button {
-  margin-left: 5px;
+.section-view-button,
+.section-students-button {
+  margin-left: 5px; /* Added margin to create space between buttons */
   padding: 5px 10px;
   border: none;
   background-color: #28a745;
@@ -74,7 +75,8 @@
   border-radius: 13px;
 }
 
-.section-view-button:hover {
+.section-view-button:hover,
+.section-students-button:hover {
   background-color: #218838;
 }
 
@@ -95,6 +97,32 @@
 }
 
 .section-details table th {
-  background-color: #f2f2f2 !important;
+  background-color: #f2f2f2 !important; /* Grey background color for row headers with higher specificity */
   font-weight: bold;
+}
+
+/* Styles for student lists */
+.section-students-container {
+  margin-top: 20px;
+}
+
+.students-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+.students-table th, .students-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+  background-color: #f9f9f9;
+}
+
+.students-table th {
+  background-color: #f2f2f2;
+}
+
+.students-table tr:nth-child(even) {
+  background-color: #f2f2f2;
 }

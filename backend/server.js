@@ -651,6 +651,22 @@ app.get('/sections/:id', (req, res) => {
   });
 });
 
+// Fetch students by section ID and segregate by gender
+app.get('/sections/:id/students', (req, res) => {
+  const { id } = req.params;
+  const sql = 'SELECT * FROM student WHERE section_id = ?';
+  db.query(sql, [id], (err, result) => {
+    if (err) {
+      console.error('Error fetching students:', err); // Detailed error logging
+      return res.status(500).send({ error: 'Error fetching students', details: err.message });
+    }
+    console.log('Fetched students:', result); // Log the fetched students
+    const boys = result.filter(student => student.gender === 'Male');
+    const girls = result.filter(student => student.gender === 'Female');
+    res.json({ boys, girls });
+  });
+});
+
 app.listen(3001, () => {
   console.log('Server running on port 3001');
 });

@@ -14,6 +14,8 @@ function SectionListPage() {
     grade: '',
     section: ''
   });
+  const [studentsByGender, setStudentsByGender] = useState({ boys: [], girls: [] });
+  const [showStudents, setShowStudents] = useState(false);
 
   const fetchActiveSchoolYear = useCallback(async () => {
     try {
@@ -84,9 +86,11 @@ function SectionListPage() {
     if (selectedSectionId === sectionId) {
       setSelectedSectionId(null);
       setSectionDetails({});
+      setShowStudents(false);
     } else {
       setSelectedSectionId(sectionId);
       fetchSectionDetails(sectionId);
+      fetchStudentsByGender(sectionId);
     }
   };
 
@@ -98,6 +102,37 @@ function SectionListPage() {
       console.error('There was an error fetching the section details!', error);
     }
   };
+
+  const fetchStudentsByGender = async (sectionId) => {
+    try {
+      const response = await axios.get(`http://localhost:3001/sections/${sectionId}/students`);
+      const boys = response.data.boys;
+      const girls = response.data.girls;
+      setStudentsByGender({ boys, girls });
+      setShowStudents(true);
+    } catch (error) {
+      console.error('There was an error fetching the students by gender!', error);
+    }
+  };
+
+  const renderStudentsTable = () => (
+    <table className="students-table">
+      <thead>
+        <tr>
+          <th>Boys</th>
+          <th>Girls</th>
+        </tr>
+      </thead>
+      <tbody>
+        {Array.from({ length: Math.max(studentsByGender.boys.length, studentsByGender.girls.length) }).map((_, index) => (
+          <tr key={index}>
+            <td>{studentsByGender.boys[index] ? `${index + 1}. ${studentsByGender.boys[index].firstname} ${studentsByGender.boys[index].lastname}` : ''}</td>
+            <td>{studentsByGender.girls[index] ? `${index + 1}. ${studentsByGender.girls[index].firstname} ${studentsByGender.girls[index].lastname}` : ''}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  );
 
   return (
     <div className="section-container">
@@ -121,7 +156,7 @@ function SectionListPage() {
                 <button className="section-view-button" onClick={() => handleViewClick(section.section_id)}>View</button>
               </div>
             </div>
-            {selectedSectionId === section.section_id && (
+            {selectedSectionId === section.section_id && sectionDetails.section_id && (
               <div className="section-details">
                 <table>
                   <tbody>
@@ -152,6 +187,11 @@ function SectionListPage() {
                     {/* Add other details as needed */}
                   </tbody>
                 </table>
+              </div>
+            )}
+            {showStudents && selectedSectionId === section.section_id && (
+              <div className="section-students-container">
+                {renderStudentsTable()}
               </div>
             )}
           </div>
