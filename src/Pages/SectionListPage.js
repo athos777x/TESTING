@@ -53,23 +53,8 @@ function SectionListPage() {
     loadSections();
   }, [fetchActiveSchoolYear, fetchSections]);
 
-  const handleSearch = (searchTerm) => {
-    setFilters(prevFilters => {
-      const updatedFilters = { ...prevFilters, searchTerm };
-      applyFilters(updatedFilters);
-      return updatedFilters;
-    });
-  };
-
-  const handleFilterChange = (type, value) => {
-    setFilters(prevFilters => {
-      const updatedFilters = { ...prevFilters, [type]: value };
-      applyFilters(updatedFilters);
-      return updatedFilters;
-    });
-  };
-
   const applyFilters = (updatedFilters) => {
+    console.log('Updated filters:', updatedFilters);
     let filtered = sections;
 
     if (updatedFilters.searchTerm) {
@@ -86,10 +71,12 @@ function SectionListPage() {
       filtered = filtered.filter(section => section.section_id === parseInt(updatedFilters.section));
     }
 
+    console.log('Filtered sections:', filtered);
     setFilteredSections(filtered);
   };
 
-  const handleApplyFilters = () => {
+  const handleApplyFilters = (filters) => {
+    setFilters(filters);
     applyFilters(filters);
   };
 
@@ -117,8 +104,6 @@ function SectionListPage() {
       <h1 className="section-title">Section Management</h1>
       <div className="section-search-filter-container">
         <SectionSearchFilter
-          handleSearch={handleSearch}
-          handleFilter={handleFilterChange}
           handleApplyFilters={handleApplyFilters}
           grades={getUniqueGrades(sections)}
           sections={sections}
