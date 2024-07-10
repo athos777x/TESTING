@@ -9,6 +9,7 @@ function SectionPage() {
   const [selectedSectionId, setSelectedSectionId] = useState(null);
   const [sectionDetails, setSectionDetails] = useState({});
   const [activeSchoolYear, setActiveSchoolYear] = useState(null);
+  const [schoolYears, setSchoolYears] = useState([]); // New state for school years
   const [filters, setFilters] = useState({
     searchTerm: '',
     grade: '',
@@ -20,10 +21,11 @@ function SectionPage() {
   const [showModal, setShowModal] = useState(false);
   const [newSectionData, setNewSectionData] = useState({
     section_name: '',
-    grade_level: '',
+    grade_level: '7', // Set a default grade level
     status: 'active',
     max_capacity: '',
-    school_year: ''
+    school_year_id: '', // Initialize with empty value
+    room_number: '' // New field for room number
   });
 
   const fetchActiveSchoolYear = useCallback(async () => {
@@ -49,6 +51,15 @@ function SectionPage() {
     }
   }, []);
 
+  const fetchSchoolYears = useCallback(async () => {
+    try {
+      const response = await axios.get('http://localhost:3001/school-years');
+      setSchoolYears(response.data);
+    } catch (error) {
+      console.error('There was an error fetching the school years!', error);
+    }
+  }, []);
+
   const getUniqueGrades = (sections) => {
     const grades = sections.map(section => section.grade_level);
     return [...new Set(grades)];
@@ -62,7 +73,8 @@ function SectionPage() {
       }
     }
     loadSections();
-  }, [fetchActiveSchoolYear, fetchSections]);
+    fetchSchoolYears(); // Fetch school years when the component mounts
+  }, [fetchActiveSchoolYear, fetchSections, fetchSchoolYears]);
 
   const applyFilters = (updatedFilters) => {
     console.log('Updated filters:', updatedFilters);
@@ -130,7 +142,7 @@ function SectionPage() {
 
   const saveChanges = async () => {
     try {
-      const { school_year, ...updateData } = editFormData; // Exclude the school_year field
+      const { school_year_id, ...updateData } = editFormData; // Exclude the school_year field
       await axios.put(`http://localhost:3001/sections/${selectedSectionId}`, updateData);
       fetchSections(activeSchoolYear);  // Refresh the section list after saving
       fetchSectionDetails(selectedSectionId); // Fetch the updated section details
@@ -159,10 +171,11 @@ function SectionPage() {
     setIsAdding(true);
     setNewSectionData({
       section_name: '',
-      grade_level: '',
+      grade_level: '7', // Default value for grade level
       status: 'active',
       max_capacity: '',
-      school_year: activeSchoolYear
+      school_year_id: schoolYears.length > 0 ? schoolYears[0].school_year_id : '', // Default to first school year ID if available
+      room_number: '' // Initialize room_number
     });
     setShowModal(true);
   };
@@ -177,6 +190,7 @@ function SectionPage() {
 
   const saveNewSection = async () => {
     try {
+      console.log('New section data:', newSectionData); // Log the data being sent
       await axios.post('http://localhost:3001/sections', newSectionData);
       fetchSections(activeSchoolYear);  // Refresh the section list after adding
       setIsAdding(false);
@@ -319,14 +333,33 @@ function SectionPage() {
                       <td>
                         {isEditing ? (
                           <select
-                            name="school_year"
-                            value={editFormData.school_year}
+                            name="school_year_id"
+                            value={editFormData.school_year_id}
                             onChange={handleEditChange}
                           >
-                            <option value={activeSchoolYear}>{activeSchoolYear}</option>
+                            {schoolYears.map((year) => (
+                              <option key={year.school_year_id} value={year.school_year_id}>
+                                {year.school_year}
+                              </option>
+                            ))}
                           </select>
                         ) : (
                           sectionDetails.school_year
+                        )}
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Room Number:</th> {/* Add room number field */}
+                      <td>
+                        {isEditing ? (
+                          <input
+                            type="text"
+                            name="room_number"
+                            value={editFormData.room_number}
+                            onChange={handleEditChange}
+                          />
+                        ) : (
+                          sectionDetails.room_number
                         )}
                       </td>
                     </tr>
@@ -393,12 +426,25 @@ function SectionPage() {
             <label>
               School Year:
               <select
-                name="school_year"
-                value={newSectionData.school_year}
+                name="school_year_id"
+                value={newSectionData.school_year_id}
                 onChange={handleAddChange}
               >
-                <option value={activeSchoolYear}>{activeSchoolYear}</option>
+                {schoolYears.map((year) => (
+                  <option key={year.school_year_id} value={year.school_year_id}>
+                    {year.school_year}
+                  </option>
+                ))}
               </select>
+            </label>
+            <label>
+              Room Number: {/* Add room number field */}
+              <input
+                type="text"
+                name="room_number"
+                value={newSectionData.room_number}
+                onChange={handleAddChange}
+              />
             </label>
             <div className="section-button-group">
               <button className="section-save-button" onClick={saveNewSection}>Save</button>

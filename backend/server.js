@@ -737,6 +737,44 @@ app.put('/sections/:sectionId', (req, res) => {
   });
 });
 
+// Endpoint to fetch all school years for section
+app.get('/school-years', (req, res) => {
+  const query = 'SELECT school_year_id, school_year FROM school_year ORDER BY school_year DESC';
+  db.query(query, (err, results) => {
+    if (err) {
+      console.error('Error fetching school years:', err);
+      res.status(500).send('Error fetching school years');
+      return;
+    }
+    res.json(results);
+  });
+});
+
+// Endpoint to add a new section
+app.post('/sections', (req, res) => {
+  const { section_name, grade_level, status, max_capacity, school_year_id, room_number } = req.body;
+  
+  // Log the request body to see the received data
+  console.log('Request body:', req.body);
+  
+  // SQL query to insert a new section
+  const query = `
+    INSERT INTO section (section_name, grade_level, status, max_capacity, school_year_id, room_number)
+    VALUES (?, ?, ?, ?, ?, ?)
+  `;
+  
+  // Execute the query
+  db.query(query, [section_name, grade_level, status, max_capacity, school_year_id, room_number], (err, result) => {
+    if (err) {
+      // Log the error for detailed analysis
+      console.error('Error adding new section:', err);
+      res.status(500).json({ error: 'Internal server error', details: err.message });
+      return;
+    }
+    res.status(201).json({ message: 'Section added successfully' });
+  });
+});
+
 app.listen(3001, () => {
   console.log('Server running on port 3001');
 });
