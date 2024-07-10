@@ -116,7 +116,7 @@ function SectionListPage() {
   };
 
   const renderStudentsTable = () => (
-    <table className="students-table">
+    <table className="sectionlist-students-table">
       <thead>
         <tr>
           <th>Boys</th>
@@ -135,29 +135,29 @@ function SectionListPage() {
   );
 
   return (
-    <div className="section-container">
-      <h1 className="section-title">Section Management</h1>
-      <div className="section-search-filter-container">
+    <div className="sectionlist-container">
+      <h1 className="sectionlist-title">Section Management</h1>
+      <div className="sectionlist-search-filter-container">
         <SectionSearchFilter
           handleApplyFilters={handleApplyFilters}
           grades={getUniqueGrades(sections)}
           sections={sections}
         />
       </div>
-      <div className="section-list">
+      <div className="sectionlist-list">
         {filteredSections.map((section, index) => (
-          <div key={section.section_id} className="section-item-container">
-            <div className="section-item">
-              <p className="section-name">
+          <div key={section.section_id} className="sectionlist-item-container">
+            <div className="sectionlist-item">
+              <p className="sectionlist-name">
                 {index + 1}. Section {section.section_name}
               </p>
-              <span className="section-info">Grade: {section.grade_level} - {section.status.charAt(0).toUpperCase() + section.status.slice(1)}</span>
-              <div className="section-actions">
-                <button className="section-view-button" onClick={() => handleViewClick(section.section_id)}>View</button>
+              <span className="sectionlist-info">Grade: {section.grade_level} - {section.status.charAt(0).toUpperCase() + section.status.slice(1)}</span>
+              <div className="sectionlist-actions">
+                <button className="sectionlist-view-button" onClick={() => handleViewClick(section.section_id)}>View</button>
               </div>
             </div>
             {selectedSectionId === section.section_id && sectionDetails.section_id && (
-              <div className="section-details">
+              <div className="sectionlist-details">
                 <table>
                   <tbody>
                     <tr>
@@ -190,7 +190,7 @@ function SectionListPage() {
               </div>
             )}
             {showStudents && selectedSectionId === section.section_id && (
-              <div className="section-students-container">
+              <div className="sectionlist-students-container">
                 {renderStudentsTable()}
               </div>
             )}
