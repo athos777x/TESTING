@@ -15,6 +15,8 @@ function SectionPage() {
     grade: '',
     section: ''
   });
+  const [isEditing, setIsEditing] = useState(false);
+  const [editFormData, setEditFormData] = useState({});
 
   const fetchActiveSchoolYear = useCallback(async () => {
     try {
@@ -85,8 +87,10 @@ function SectionPage() {
     if (selectedSectionId === sectionId) {
       setSelectedSectionId(null);
       setSectionDetails({});
+      setIsEditing(false);
     } else {
       setSelectedSectionId(sectionId);
+      setIsEditing(false);
       fetchSectionDetails(sectionId);
     }
   };
@@ -95,9 +99,56 @@ function SectionPage() {
     try {
       const response = await axios.get(`http://localhost:3001/sections/${sectionId}`);
       setSectionDetails(response.data);
+      setEditFormData(response.data);
     } catch (error) {
       console.error('There was an error fetching the section details!', error);
     }
+  };
+
+  const startEditing = (sectionId) => {
+    setSelectedSectionId(sectionId);
+    setIsEditing(true);
+    const section = sections.find(sec => sec.section_id === sectionId);
+    setEditFormData(section);
+  };
+
+  const handleEditChange = (event) => {
+    const { name, value } = event.target;
+    setEditFormData(prevFormData => ({
+      ...prevFormData,
+      [name]: value
+    }));
+  };
+
+  const saveChanges = async () => {
+    try {
+      const { school_year, ...updateData } = editFormData; // Exclude the school_year field
+      await axios.put(`http://localhost:3001/sections/${selectedSectionId}`, updateData);
+      fetchSections(activeSchoolYear);  // Refresh the section list after saving
+      fetchSectionDetails(selectedSectionId); // Fetch the updated section details
+      setIsEditing(false);
+    } catch (error) {
+      console.error('Error saving section details:', error);
+    }
+  };
+
+  const toggleArchiveStatus = async (sectionId, currentStatus) => {
+    try {
+      const newStatus = currentStatus === 'inactive' ? 'active' : 'inactive';
+      await axios.put(`http://localhost:3001/sections/${sectionId}/status`, { status: newStatus });
+      fetchSections(activeSchoolYear);  // Refresh the section list after changing archive status
+    } catch (error) {
+      console.error(`Error changing status:`, error);
+    }
+  };
+
+  const cancelEditing = () => {
+    setIsEditing(false);
+    fetchSectionDetails(selectedSectionId);
+  };
+
+  const capitalizeStatus = (status) => {
+    return status.charAt(0).toUpperCase() + status.slice(1);
   };
 
   return (
@@ -117,42 +168,124 @@ function SectionPage() {
               <p className="section-name">
                 {index + 1}. Section {section.section_name}
               </p>
-              <span className="section-info">Grade: {section.grade_level} - {section.status.charAt(0).toUpperCase() + section.status.slice(1)}</span>
+              <span className="section-info">Grade: {section.grade_level} - {capitalizeStatus(section.status)}</span>
               <div className="section-actions">
                 <button className="section-view-button" onClick={() => handleViewClick(section.section_id)}>View</button>
+                <button className="section-edit-button" onClick={() => startEditing(section.section_id)}>Edit</button>
+                <button
+                  className="section-archive-button"
+                  onClick={() => toggleArchiveStatus(section.section_id, section.status)}
+                >
+                  {section.status === 'inactive' ? 'Activate' : 'Archive'}
+                </button>
               </div>
             </div>
-            {selectedSectionId === section.section_id && sectionDetails.section_id && (
+            {selectedSectionId === section.section_id && (
               <div className="section-details">
                 <table>
                   <tbody>
                     <tr>
                       <th>Section ID:</th>
-                      <td>{sectionDetails.section_id}</td>
+                      <td>
+                        {isEditing ? (
+                          <input
+                            type="text"
+                            name="section_id"
+                            value={editFormData.section_id}
+                            onChange={handleEditChange}
+                            readOnly
+                          />
+                        ) : (
+                          sectionDetails.section_id
+                        )}
+                      </td>
                     </tr>
                     <tr>
                       <th>Section Name:</th>
-                      <td>{sectionDetails.section_name}</td>
+                      <td>
+                        {isEditing ? (
+                          <input
+                            type="text"
+                            name="section_name"
+                            value={editFormData.section_name}
+                            onChange={handleEditChange}
+                          />
+                        ) : (
+                          sectionDetails.section_name
+                        )}
+                      </td>
                     </tr>
                     <tr>
                       <th>Grade Level:</th>
-                      <td>{sectionDetails.grade_level}</td>
+                      <td>
+                        {isEditing ? (
+                          <input
+                            type="text"
+                            name="grade_level"
+                            value={editFormData.grade_level}
+                            onChange={handleEditChange}
+                          />
+                        ) : (
+                          sectionDetails.grade_level
+                        )}
+                      </td>
                     </tr>
                     <tr>
                       <th>Status:</th>
-                      <td>{sectionDetails.status}</td>
+                      <td>
+                        {isEditing ? (
+                          <select
+                            name="status"
+                            value={editFormData.status}
+                            onChange={handleEditChange}
+                          >
+                            <option value="active">Active</option>
+                            <option value="inactive">Inactive</option>
+                          </select>
+                        ) : (
+                          capitalizeStatus(sectionDetails.status)
+                        )}
+                      </td>
                     </tr>
                     <tr>
                       <th>Max Capacity:</th>
-                      <td>{sectionDetails.max_capacity}</td>
+                      <td>
+                        {isEditing ? (
+                          <input
+                            type="text"
+                            name="max_capacity"
+                            value={editFormData.max_capacity}
+                            onChange={handleEditChange}
+                          />
+                        ) : (
+                          sectionDetails.max_capacity
+                        )}
+                      </td>
                     </tr>
                     <tr>
                       <th>School Year:</th>
-                      <td>{sectionDetails.school_year}</td>
+                      <td>
+                        {isEditing ? (
+                          <input
+                            type="text"
+                            name="school_year"
+                            value={editFormData.school_year}
+                            onChange={handleEditChange}
+                            readOnly
+                          />
+                        ) : (
+                          sectionDetails.school_year
+                        )}
+                      </td>
                     </tr>
-                    {/* Add other details as needed */}
                   </tbody>
                 </table>
+                {isEditing && (
+                  <div className="section-edit-buttons">
+                    <button className="section-save-button" onClick={saveChanges}>Save</button>
+                    <button className="section-cancel-button" onClick={cancelEditing}>Cancel</button>
+                  </div>
+                )}
               </div>
             )}
           </div>

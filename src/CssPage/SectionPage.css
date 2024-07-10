@@ -65,7 +65,8 @@
 }
 
 .section-view-button,
-.section-students-button {
+.section-edit-button,
+.section-archive-button {
   margin-left: 5px; /* Added margin to create space between buttons */
   padding: 5px 10px;
   border: none;
@@ -76,7 +77,8 @@
 }
 
 .section-view-button:hover,
-.section-students-button:hover {
+.section-edit-button:hover,
+.section-archive-button:hover {
   background-color: #218838;
 }
 
@@ -101,7 +103,42 @@
   font-weight: bold;
 }
 
-/* Styles for student lists */
-.section-students-container {
-  margin-top: 20px;
+.section-details input[type="text"], .section-details select {
+  width: 100%;
+  padding: 5px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+.section-edit-buttons {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 10px;
+}
+
+.section-save-button,
+.section-cancel-button {
+  margin-left: 5px; /* Added margin to create space between buttons */
+  padding: 5px 10px;
+  border: none;
+  color: white;
+  cursor: pointer;
+  border-radius: 13px;
+}
+
+.section-save-button {
+  background-color: #28a745;
+}
+
+.section-save-button:hover {
+  background-color: #218838;
+}
+
+.section-cancel-button {
+  background-color: #dc3545;
+}
+
+.section-cancel-button:hover {
+  background-color: #c82333;
 }

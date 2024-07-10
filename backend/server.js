@@ -599,7 +599,7 @@ app.put('/school-years/:schoolYearId', (req, res) => {
   });
 });
 
-// Endpoint to fetch sections for SectionPage
+// Endpoint to fetch sections for SectionPage and SectionListPage
 app.get('/sections', (req, res) => {
   const { searchTerm, grade } = req.query;
   const query = `
@@ -709,6 +709,28 @@ app.get('/enrolled-students', (req, res) => {
     }
     console.log('Query results:', results);
     res.json(results);
+  });
+});
+
+// Endpoint to update section details by ID
+app.put('/sections/:sectionId', (req, res) => {
+  const { sectionId } = req.params;
+  const updatedSection = req.body;
+
+  console.log(`Updating section with ID: ${sectionId}`, updatedSection);
+
+  const query = 'UPDATE section SET ? WHERE section_id = ?';
+  db.query(query, [updatedSection, sectionId], (err, results) => {
+    if (err) {
+      console.error('Error updating section details:', err);
+      res.status(500).json({ error: 'Internal server error' });
+      return;
+    }
+    if (results.affectedRows > 0) {
+      res.json({ message: 'Section updated successfully' });
+    } else {
+      res.status(404).json({ error: 'Section not found' });
+    }
   });
 });
 
