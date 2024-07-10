@@ -599,14 +599,13 @@ app.put('/school-years/:schoolYearId', (req, res) => {
   });
 });
 
-// Endpoint to fetch sections for SectionPage and SectionListPage
+// Updated endpoint to fetch sections without using section_open table
 app.get('/sections', (req, res) => {
   const { searchTerm, grade } = req.query;
-  const query = `
+  let query = `
     SELECT s.section_id, s.section_name, s.grade_level, s.status, s.max_capacity, sy.school_year
     FROM section s
-    JOIN section_open so ON s.section_id = so.section_id
-    JOIN school_year sy ON so.school_year_id = sy.school_year_id
+    JOIN school_year sy ON s.school_year_id = sy.school_year_id
     WHERE sy.status = 'active'
   `;
   const queryParams = [];
@@ -631,23 +630,27 @@ app.get('/sections', (req, res) => {
   });
 });
 
+
 // Endpoint to fetch section details by ID
 app.get('/sections/:id', (req, res) => {
   const { id } = req.params;
   const query = `
     SELECT s.section_id, s.section_name, s.grade_level, s.status, s.max_capacity, sy.school_year
     FROM section s
-    JOIN section_open so ON s.section_id = so.section_id
-    JOIN school_year sy ON so.school_year_id = sy.school_year_id
+    JOIN school_year sy ON s.school_year_id = sy.school_year_id
     WHERE s.section_id = ?
   `;
   db.query(query, [id], (err, result) => {
     if (err) {
-      console.error('Error fetching section details:', err);
+      console.error('Error fetching section details:', err); // Detailed error logging
       res.status(500).json({ error: 'Internal server error' });
       return;
     }
-    res.json(result[0]);
+    if (result.length === 0) {
+      res.status(404).json({ error: 'Section not found' });
+    } else {
+      res.json(result[0]);
+    }
   });
 });
 

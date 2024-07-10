@@ -33,6 +33,7 @@ function SectionListPage() {
       const response = await axios.get('http://localhost:3001/sections', {
         params: { schoolYearId }
       });
+      console.log('Fetched sections:', response.data);
       setSections(response.data);
       setFilteredSections(response.data);
     } catch (error) {
@@ -97,6 +98,7 @@ function SectionListPage() {
   const fetchSectionDetails = async (sectionId) => {
     try {
       const response = await axios.get(`http://localhost:3001/sections/${sectionId}`);
+      console.log('Fetched section details:', response.data);
       setSectionDetails(response.data);
     } catch (error) {
       console.error('There was an error fetching the section details!', error);
@@ -136,7 +138,7 @@ function SectionListPage() {
 
   return (
     <div className="sectionlist-container">
-      <h1 className="sectionlist-title">Section Management</h1>
+      <h1 className="sectionlist-title">Section List</h1>
       <div className="sectionlist-search-filter-container">
         <SectionSearchFilter
           handleApplyFilters={handleApplyFilters}
@@ -145,57 +147,61 @@ function SectionListPage() {
         />
       </div>
       <div className="sectionlist-list">
-        {filteredSections.map((section, index) => (
-          <div key={section.section_id} className="sectionlist-item-container">
-            <div className="sectionlist-item">
-              <p className="sectionlist-name">
-                {index + 1}. Section {section.section_name}
-              </p>
-              <span className="sectionlist-info">Grade: {section.grade_level} - {section.status.charAt(0).toUpperCase() + section.status.slice(1)}</span>
-              <div className="sectionlist-actions">
-                <button className="sectionlist-view-button" onClick={() => handleViewClick(section.section_id)}>View</button>
+        {filteredSections.length > 0 ? (
+          filteredSections.map((section, index) => (
+            <div key={section.section_id} className="sectionlist-item-container">
+              <div className="sectionlist-item">
+                <p className="sectionlist-name">
+                  {index + 1}. Section {section.section_name}
+                </p>
+                <span className="sectionlist-info">Grade: {section.grade_level} - {section.status.charAt(0).toUpperCase() + section.status.slice(1)}</span>
+                <div className="sectionlist-actions">
+                  <button className="sectionlist-view-button" onClick={() => handleViewClick(section.section_id)}>View</button>
+                </div>
               </div>
+              {selectedSectionId === section.section_id && sectionDetails.section_id && (
+                <div className="sectionlist-details">
+                  <table>
+                    <tbody>
+                      <tr>
+                        <th>Section ID:</th>
+                        <td>{sectionDetails.section_id}</td>
+                      </tr>
+                      <tr>
+                        <th>Section Name:</th>
+                        <td>{sectionDetails.section_name}</td>
+                      </tr>
+                      <tr>
+                        <th>Grade Level:</th>
+                        <td>{sectionDetails.grade_level}</td>
+                      </tr>
+                      <tr>
+                        <th>Status:</th>
+                        <td>{sectionDetails.status}</td>
+                      </tr>
+                      <tr>
+                        <th>Max Capacity:</th>
+                        <td>{sectionDetails.max_capacity}</td>
+                      </tr>
+                      <tr>
+                        <th>School Year:</th>
+                        <td>{sectionDetails.school_year}</td>
+                      </tr>
+                      {/* Add other details as needed */}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+              {showStudents && selectedSectionId === section.section_id && (
+                <div className="sectionlist-students-container">
+                  {renderStudentsTable()}
+                </div>
+              )}
             </div>
-            {selectedSectionId === section.section_id && sectionDetails.section_id && (
-              <div className="sectionlist-details">
-                <table>
-                  <tbody>
-                    <tr>
-                      <th>Section ID:</th>
-                      <td>{sectionDetails.section_id}</td>
-                    </tr>
-                    <tr>
-                      <th>Section Name:</th>
-                      <td>{sectionDetails.section_name}</td>
-                    </tr>
-                    <tr>
-                      <th>Grade Level:</th>
-                      <td>{sectionDetails.grade_level}</td>
-                    </tr>
-                    <tr>
-                      <th>Status:</th>
-                      <td>{sectionDetails.status}</td>
-                    </tr>
-                    <tr>
-                      <th>Max Capacity:</th>
-                      <td>{sectionDetails.max_capacity}</td>
-                    </tr>
-                    <tr>
-                      <th>School Year:</th>
-                      <td>{sectionDetails.school_year}</td>
-                    </tr>
-                    {/* Add other details as needed */}
-                  </tbody>
-                </table>
-              </div>
-            )}
-            {showStudents && selectedSectionId === section.section_id && (
-              <div className="sectionlist-students-container">
-                {renderStudentsTable()}
-              </div>
-            )}
-          </div>
-        ))}
+          ))
+        ) : (
+          <p>No sections available.</p>
+        )}
       </div>
     </div>
   );
