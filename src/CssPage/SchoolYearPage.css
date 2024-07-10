@@ -182,7 +182,7 @@
 }
 
 /* Modal styles */
-.modal {
+.school-year-modal {
   position: fixed;
   z-index: 1;
   left: 0;
@@ -194,7 +194,7 @@
   background-color: rgba(0,0,0,0.4);
 }
 
-.modal-content {
+.school-year-modal-content {
   background-color: #fefefe;
   margin: 15% auto;
   padding: 20px;
@@ -204,12 +204,12 @@
   border-radius: 5px;
 }
 
-.modal-content label {
+.school-year-modal-content label {
   display: block;
   margin: 10px 0;
 }
 
-.modal-content input {
+.school-year-modal-content input {
   width: calc(100% - 22px);
   padding: 10px;
   margin-top: 5px;
@@ -217,13 +217,13 @@
   border-radius: 3px;
 }
 
-.modal-content .button-group {
+.school-year-modal-content .button-group {
   display: flex;
   justify-content: center;
   margin-top: 20px;
 }
 
-.modal-content .button-group button {
+.school-year-modal-content .button-group button {
   margin: 0 10px;
   padding: 8px 16px;
   border: none;
@@ -232,20 +232,20 @@
   cursor: pointer;
 }
 
-.modal-content .button-group .save-button {
+.school-year-modal-content .button-group .school-year-save-button {
   background-color: #28a745;
   color: #fff;
 }
 
-.modal-content .button-group .save-button:hover {
+.school-year-modal-content .button-group .school-year-save-button:hover {
   background-color: #218838;
 }
 
-.modal-content .button-group .cancel-button {
+.school-year-modal-content .button-group .school-year-cancel-button {
   background-color: #dc3545;
   color: #fff;
 }
 
-.modal-content .button-group .cancel-button:hover {
+.school-year-modal-content .button-group .school-year-cancel-button:hover {
   background-color: #c82333;
 }

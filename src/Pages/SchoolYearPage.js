@@ -320,8 +320,8 @@ function SchoolYearPage() {
       </button>
 
       {showModal && (
-        <div className="modal">
-          <div className="modal-content">
+        <div className="school-year-modal">
+          <div className="school-year-modal-content">
             <h2>Add New School Year</h2>
             <label>
               School Year:
@@ -368,9 +368,9 @@ function SchoolYearPage() {
                 onChange={handleNewSchoolYearChange}
               />
             </label>
-            <div className="button-group">
-              <button className="save-button" onClick={handleAddSchoolYear}>Save</button>
-              <button className="cancel-button" onClick={() => setShowModal(false)}>Cancel</button>
+            <div className="school-year-button-group">
+              <button className="school-year-save-button" onClick={handleAddSchoolYear}>Save</button>
+              <button className="school-year-cancel-button" onClick={() => setShowModal(false)}>Cancel</button>
             </div>
           </div>
         </div>

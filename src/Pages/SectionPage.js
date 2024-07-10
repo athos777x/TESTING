@@ -1,4 +1,3 @@
-// SectionPage.js
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import SectionSearchFilter from '../Utilities/SectionSearchFilter'; // Ensure correct path
@@ -16,12 +15,21 @@ function SectionPage() {
     section: ''
   });
   const [isEditing, setIsEditing] = useState(false);
+  const [isAdding, setIsAdding] = useState(false);
   const [editFormData, setEditFormData] = useState({});
+  const [showModal, setShowModal] = useState(false);
+  const [newSectionData, setNewSectionData] = useState({
+    section_name: '',
+    grade_level: '',
+    status: 'active',
+    max_capacity: '',
+    school_year: ''
+  });
 
   const fetchActiveSchoolYear = useCallback(async () => {
     try {
       const response = await axios.get('http://localhost:3001/school-years/active');
-      setActiveSchoolYear(response.data.school_year_id);
+      setActiveSchoolYear(response.data.school_year);
       return response.data;
     } catch (error) {
       console.error('There was an error fetching the active school year!', error);
@@ -147,7 +155,44 @@ function SectionPage() {
     fetchSectionDetails(selectedSectionId);
   };
 
+  const startAdding = () => {
+    setIsAdding(true);
+    setNewSectionData({
+      section_name: '',
+      grade_level: '',
+      status: 'active',
+      max_capacity: '',
+      school_year: activeSchoolYear
+    });
+    setShowModal(true);
+  };
+
+  const handleAddChange = (event) => {
+    const { name, value } = event.target;
+    setNewSectionData(prevFormData => ({
+      ...prevFormData,
+      [name]: value
+    }));
+  };
+
+  const saveNewSection = async () => {
+    try {
+      await axios.post('http://localhost:3001/sections', newSectionData);
+      fetchSections(activeSchoolYear);  // Refresh the section list after adding
+      setIsAdding(false);
+      setShowModal(false);
+    } catch (error) {
+      console.error('Error adding new section:', error);
+    }
+  };
+
+  const cancelAdding = () => {
+    setIsAdding(false);
+    setShowModal(false);
+  };
+
   const capitalizeStatus = (status) => {
+    if (!status) return ''; // Handle undefined status
     return status.charAt(0).toUpperCase() + status.slice(1);
   };
 
@@ -160,6 +205,9 @@ function SectionPage() {
           grades={getUniqueGrades(sections)}
           sections={sections}
         />
+      </div>
+      <div className="section-add-section-button-container">
+        <button className="section-add-section-button" onClick={startAdding}>Add New Section</button>
       </div>
       <div className="section-list">
         {filteredSections.map((section, index) => (
@@ -219,12 +267,16 @@ function SectionPage() {
                       <th>Grade Level:</th>
                       <td>
                         {isEditing ? (
-                          <input
-                            type="text"
+                          <select
                             name="grade_level"
                             value={editFormData.grade_level}
                             onChange={handleEditChange}
-                          />
+                          >
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                            <option value="9">9</option>
+                            <option value="10">10</option>
+                          </select>
                         ) : (
                           sectionDetails.grade_level
                         )}
@@ -266,13 +318,13 @@ function SectionPage() {
                       <th>School Year:</th>
                       <td>
                         {isEditing ? (
-                          <input
-                            type="text"
+                          <select
                             name="school_year"
                             value={editFormData.school_year}
                             onChange={handleEditChange}
-                            readOnly
-                          />
+                          >
+                            <option value={activeSchoolYear}>{activeSchoolYear}</option>
+                          </select>
                         ) : (
                           sectionDetails.school_year
                         )}
@@ -291,6 +343,70 @@ function SectionPage() {
           </div>
         ))}
       </div>
+
+      {showModal && (
+        <div className="section-modal">
+          <div className="section-modal-content">
+            <h2>Add New Section</h2>
+            <label>
+              Section Name:
+              <input
+                type="text"
+                name="section_name"
+                value={newSectionData.section_name}
+                onChange={handleAddChange}
+              />
+            </label>
+            <label>
+              Grade Level:
+              <select
+                name="grade_level"
+                value={newSectionData.grade_level}
+                onChange={handleAddChange}
+              >
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10">10</option>
+              </select>
+            </label>
+            <label>
+              Status:
+              <select
+                name="status"
+                value={newSectionData.status}
+                onChange={handleAddChange}
+              >
+                <option value="active">Active</option>
+                <option value="inactive">Inactive</option>
+              </select>
+            </label>
+            <label>
+              Max Capacity:
+              <input
+                type="text"
+                name="max_capacity"
+                value={newSectionData.max_capacity}
+                onChange={handleAddChange}
+              />
+            </label>
+            <label>
+              School Year:
+              <select
+                name="school_year"
+                value={newSectionData.school_year}
+                onChange={handleAddChange}
+              >
+                <option value={activeSchoolYear}>{activeSchoolYear}</option>
+              </select>
+            </label>
+            <div className="section-button-group">
+              <button className="section-save-button" onClick={saveNewSection}>Save</button>
+              <button className="section-cancel-button" onClick={cancelAdding}>Cancel</button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
