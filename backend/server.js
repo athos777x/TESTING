@@ -770,6 +770,53 @@ app.put('/sections/:sectionId/archive', (req, res) => {
   });
 });
 
+// Endpoint to fetch enrolled students
+// Function: Retrieves a list of all enrolled students with optional filtering by status, grade, section, etc.
+// Pages: EnrolledStudentsPage.js
+app.get('/enrolled-students', (req, res) => {
+  const { status, grade, section, searchTerm } = req.query;
+  let query = `
+    SELECT s.student_id, s.firstname, s.middlename, s.lastname, e.grade_level, e.enrollment_status
+    FROM student s
+    JOIN enrollment e ON s.student_id = e.student_id
+    WHERE 1=1
+  `;
+  const queryParams = [];
+
+  if (status) {
+    query += ' AND e.enrollment_status = ?';
+    queryParams.push(status);
+  }
+
+  if (grade) {
+    query += ' AND e.grade_level = ?';
+    queryParams.push(grade);
+  }
+
+  if (section) {
+    query += ' AND e.section_id = ?';
+    queryParams.push(section);
+  }
+
+  if (searchTerm) {
+    query += ' AND (s.firstname LIKE ? OR s.lastname LIKE ?)';
+    queryParams.push(`%${searchTerm}%`, `%${searchTerm}%`);
+  }
+
+  console.log('Final query:', query);
+  console.log('Query parameters:', queryParams);
+
+  db.query(query, queryParams, (err, results) => {
+    if (err) {
+      console.error('Error fetching enrolled students:', err);
+      res.status(500).json({ error: 'Internal server error', details: err.message });
+      return;
+    }
+    res.json(results);
+  });
+});
+
+
 app.listen(3001, () => {
   console.log('Server running on port 3001');
 });
