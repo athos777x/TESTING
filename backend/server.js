@@ -599,14 +599,14 @@ app.put('/school-years/:schoolYearId', (req, res) => {
   });
 });
 
-// Updated endpoint to fetch sections without using section_open table (only with the archive_status of unarchive)
+// Endpoint to fetch sections without using section_open table (archive_status of unarchive/archive)
 app.get('/sections', (req, res) => {
-  const { searchTerm, grade } = req.query;
+  const { searchTerm, grade, showArchive } = req.query;
   let query = `
-    SELECT s.section_id, s.section_name, s.grade_level, s.status, s.max_capacity, sy.school_year
+    SELECT s.section_id, s.section_name, s.grade_level, s.status, s.max_capacity, sy.school_year, s.archive_status
     FROM section s
     JOIN school_year sy ON s.school_year_id = sy.school_year_id
-    WHERE sy.status = 'active' AND s.archive_status = 'unarchive'
+    WHERE sy.status = 'active'
   `;
   const queryParams = [];
 
@@ -620,6 +620,11 @@ app.get('/sections', (req, res) => {
     queryParams.push(grade);
   }
 
+  if (showArchive) {
+    query += ' AND s.archive_status = ?';
+    queryParams.push(showArchive);
+  }
+
   db.query(query, queryParams, (err, results) => {
     if (err) {
       console.error('Error fetching sections:', err);
@@ -629,6 +634,8 @@ app.get('/sections', (req, res) => {
     res.json(results);
   });
 });
+
+
 
 
 

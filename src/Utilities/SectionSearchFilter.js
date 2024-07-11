@@ -6,6 +6,7 @@ function SectionSearchFilter({ handleApplyFilters, grades, sections }) {
   const [selectedGrade, setSelectedGrade] = useState('');
   const [filteredSections, setFilteredSections] = useState([]);
   const [selectedSection, setSelectedSection] = useState('');
+  const [showArchive, setShowArchive] = useState('unarchive'); // Add this line
 
   useEffect(() => {
     if (selectedGrade) {
@@ -30,11 +31,16 @@ function SectionSearchFilter({ handleApplyFilters, grades, sections }) {
     setSelectedSection(section);
   };
 
+  const handleShowArchiveChange = (event) => { // Add this function
+    setShowArchive(event.target.value);
+  };
+
   const applyFilters = () => {
     const filters = {
       searchTerm,
       grade: selectedGrade,
-      section: selectedSection
+      section: selectedSection,
+      showArchive // Add this line
     };
     console.log('Applying filters:', filters);
     handleApplyFilters(filters);
@@ -60,6 +66,10 @@ function SectionSearchFilter({ handleApplyFilters, grades, sections }) {
         {filteredSections.map((section, index) => (
           <option key={index} value={section.section_id}>{section.section_name}</option>
         ))}
+      </select>
+      <select id="showArchive" value={showArchive} onChange={handleShowArchiveChange} className="filter-select"> {/* Add this block */}
+        <option value="unarchive">Show Unarchived</option>
+        <option value="archive">Show Archived</option>
       </select>
       <button onClick={applyFilters} className="filter-button">Apply Filters</button>
     </div>

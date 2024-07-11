@@ -1,4 +1,3 @@
-// SectionPage.js
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import SectionSearchFilter from '../Utilities/SectionSearchFilter'; // Ensure correct path
@@ -14,7 +13,8 @@ function SectionPage() {
   const [filters, setFilters] = useState({
     searchTerm: '',
     grade: '',
-    section: ''
+    section: '',
+    showArchive: 'unarchive' // Add this line
   });
   const [isEditing, setIsEditing] = useState(false);
   const [isAdding, setIsAdding] = useState(false);
@@ -46,11 +46,11 @@ function SectionPage() {
         params: { schoolYearId }
       });
       setSections(response.data);
-      setFilteredSections(response.data.filter(section => section.archive_status !== 'archive')); // Filter out archived sections
+      setFilteredSections(response.data.filter(section => section.archive_status === filters.showArchive)); // Filter by archive status
     } catch (error) {
       console.error('There was an error fetching the sections!', error);
     }
-  }, []);
+  }, [filters.showArchive]);
 
   const fetchSchoolYears = useCallback(async () => {
     try {
@@ -95,8 +95,12 @@ function SectionPage() {
       filtered = filtered.filter(section => section.section_id === parseInt(updatedFilters.section));
     }
 
+    if (updatedFilters.showArchive) {
+      filtered = filtered.filter(section => section.archive_status === updatedFilters.showArchive);
+    }
+
     console.log('Filtered sections:', filtered);
-    setFilteredSections(filtered.filter(section => section.archive_status !== 'archive')); // Filter out archived sections
+    setFilteredSections(filtered);
   };
 
   const handleApplyFilters = (filters) => {
