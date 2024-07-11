@@ -1,3 +1,4 @@
+// PrincipalSideBar.js
 import React, { useState } from 'react';
 import '../CssFiles/principaldashboard.css';
 import {
@@ -113,7 +114,7 @@ function PrincipalSideBar({ showSidebar, toggleSidebar, handleLogout }) {
               <button onClick={() => handleNavigate('/section')}>
                 <FiBook className="icon" /> Section
               </button>
-              <button onClick={() => handleNavigate('/schedule')}>
+              <button onClick={() => handleNavigate('/schedule')}> {/* Add this line */}
                 <FiCalendar className="icon" /> Schedule
               </button>
             </div>

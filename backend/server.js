@@ -816,6 +816,38 @@ app.get('/enrolled-students', (req, res) => {
   });
 });
 
+// Endpoint to fetch schedules
+// Function: Retrieves a list of schedules with optional filtering by search term, date, and section
+// Pages: SchedulePage.js
+app.get('/schedules', (req, res) => {
+  const { searchTerm, date } = req.query;
+  let query = `
+    SELECT s.schedule_id, s.section_name, sc.date, sc.time
+    FROM schedule sc
+    JOIN section s ON sc.section_id = s.section_id
+    WHERE 1=1
+  `;
+  const queryParams = [];
+
+  if (searchTerm) {
+    query += ' AND s.section_name LIKE ?';
+    queryParams.push(`%${searchTerm}%`);
+  }
+
+  if (date) {
+    query += ' AND sc.date = ?';
+    queryParams.push(date);
+  }
+
+  db.query(query, queryParams, (err, results) => {
+    if (err) {
+      console.error('Error fetching schedules:', err);
+      res.status(500).json({ error: 'Internal server error' });
+      return;
+    }
+    res.json(results);
+  });
+});
 
 app.listen(3001, () => {
   console.log('Server running on port 3001');

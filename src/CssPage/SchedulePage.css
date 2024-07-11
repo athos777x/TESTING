@@ -1,0 +1,24 @@
+/* SchedulePage.css */
+.schedule-container {
+  padding: 20px;
+}
+
+.schedule-title {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+.schedule-search-filter-container {
+  margin-bottom: 20px;
+}
+
+.schedule-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.schedule-item {
+  padding: 10px;
+  border: 1px solid #ddd;
+  margin-bottom: 10px;
+}

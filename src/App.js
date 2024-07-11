@@ -1,3 +1,4 @@
+// App.js
 import React, { useState, useEffect } from 'react';
 import { Navigate, Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import './App.css';
@@ -24,6 +25,7 @@ import ListofStudentEnrolleesPage from './Pages/ListofStudentEnrolleesPage';
 import SummaryReportonPromotionPage from './Pages/SummaryReportonPromotionPage';
 import EarlyEnrollmentReportPage from './Pages/EarlyEnrollmentReportPage';
 import StudentDetailPage from './Pages/StudentDetailPage';
+import SchedulePage from './Pages/SchedulePage'; // Import the SchedulePage
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(
@@ -81,6 +83,7 @@ function App() {
             <Route path="/list-of-student-enrollees" element={<ListofStudentEnrolleesPage />} />
             <Route path="/summary-report-promotion" element={<SummaryReportonPromotionPage />} />
             <Route path="/early-enrollment-report" element={<EarlyEnrollmentReportPage />} />
+            <Route path="/schedule" element={<SchedulePage />} /> 
           </Route>
         )}
         <Route path="*" element={<Navigate to={isAuthenticated ? (role === 'principal' ? '/principal-dashboard' : '/student-dashboard') : '/'} />} />
