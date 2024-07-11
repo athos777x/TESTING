@@ -15,17 +15,7 @@ import {
   FiCheckSquare
 } from 'react-icons/fi';
 import { useNavigate } from 'react-router-dom';
-import HomeButton from '../Buttons/HomeButton';
-import AttendanceButton from '../Buttons/AttendanceButton';
-import EmployeeButton from '../Buttons/EmployeeButton';
-import SchoolYearButton from '../Buttons/SchoolYearButton';
-import EnrolledStudentsButton from '../Buttons/EnrolledStudentsButton';
-import SectionButton from '../Buttons/SectionButton';
-import SubjectsButton from '../Buttons/SubjectsButton';
 import LogoutButton from '../Buttons/LogoutButton';
-import ListofStudentEnrolleesButton from '../Buttons/ListofStudentEnrolleesButton';
-import SummaryReportonPromotionButton from '../Buttons/SummaryReportonPromotionButton';
-import EarlyEnrollmentReportButton from '../Buttons/EarlyEnrollmentReportButton';
 
 function PrincipalSideBar({ showSidebar, toggleSidebar, handleLogout }) {
   const [showRecordsSubMenu, setShowRecordsSubMenu] = useState(false);
