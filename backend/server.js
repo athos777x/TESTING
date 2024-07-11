@@ -643,7 +643,7 @@ app.get('/sections', (req, res) => {
 app.get('/sections/:id', (req, res) => {
   const { id } = req.params;
   const query = `
-    SELECT s.section_id, s.section_name, s.grade_level, s.status, s.max_capacity, sy.school_year
+    SELECT s.section_id, s.section_name, s.grade_level, s.status, s.max_capacity, sy.school_year, s.room_number
     FROM section s
     JOIN school_year sy ON s.school_year_id = sy.school_year_id
     WHERE s.section_id = ?
@@ -661,6 +661,7 @@ app.get('/sections/:id', (req, res) => {
     }
   });
 });
+
 
 // Fetch students by section ID and segregate by gender
 app.get('/sections/:id/students', (req, res) => {

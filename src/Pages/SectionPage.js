@@ -9,12 +9,12 @@ function SectionPage() {
   const [selectedSectionId, setSelectedSectionId] = useState(null);
   const [sectionDetails, setSectionDetails] = useState({});
   const [activeSchoolYear, setActiveSchoolYear] = useState(null);
-  const [schoolYears, setSchoolYears] = useState([]); // New state for school years
+  const [schoolYears, setSchoolYears] = useState([]);
   const [filters, setFilters] = useState({
     searchTerm: '',
     grade: '',
     section: '',
-    showArchive: 'unarchive' // Add this line
+    showArchive: 'unarchive'
   });
   const [isEditing, setIsEditing] = useState(false);
   const [isAdding, setIsAdding] = useState(false);
@@ -22,11 +22,11 @@ function SectionPage() {
   const [showModal, setShowModal] = useState(false);
   const [newSectionData, setNewSectionData] = useState({
     section_name: '',
-    grade_level: '7', // Set a default grade level
+    grade_level: '7',
     status: 'active',
     max_capacity: '',
-    school_year_id: '', // Initialize with empty value
-    room_number: '' // New field for room number
+    school_year_id: '',
+    room_number: ''
   });
 
   const fetchActiveSchoolYear = useCallback(async () => {
@@ -46,7 +46,7 @@ function SectionPage() {
         params: { schoolYearId }
       });
       setSections(response.data);
-      setFilteredSections(response.data.filter(section => section.archive_status === filters.showArchive)); // Filter by archive status
+      setFilteredSections(response.data.filter(section => section.archive_status === filters.showArchive));
     } catch (error) {
       console.error('There was an error fetching the sections!', error);
     }
@@ -74,7 +74,7 @@ function SectionPage() {
       }
     }
     loadSections();
-    fetchSchoolYears(); // Fetch school years when the component mounts
+    fetchSchoolYears();
   }, [fetchActiveSchoolYear, fetchSections, fetchSchoolYears]);
 
   const applyFilters = (updatedFilters) => {
@@ -147,10 +147,10 @@ function SectionPage() {
 
   const saveChanges = async () => {
     try {
-      const { school_year_id, ...updateData } = editFormData; // Exclude the school_year field
+      const { school_year_id, ...updateData } = editFormData;
       await axios.put(`http://localhost:3001/sections/${selectedSectionId}`, updateData);
-      fetchSections(activeSchoolYear);  // Refresh the section list after saving
-      fetchSectionDetails(selectedSectionId); // Fetch the updated section details
+      fetchSections(activeSchoolYear);
+      fetchSectionDetails(selectedSectionId);
       setIsEditing(false);
     } catch (error) {
       console.error('Error saving section details:', error);
@@ -162,7 +162,7 @@ function SectionPage() {
       const newStatus = currentStatus === 'inactive' ? 'active' : 'inactive';
       const newArchiveStatus = currentStatus === 'inactive' ? 'unarchive' : 'archive';
       await axios.put(`http://localhost:3001/sections/${sectionId}/archive`, { status: newStatus, archive_status: newArchiveStatus });
-      fetchSections(activeSchoolYear);  // Refresh the section list after changing archive status
+      fetchSections(activeSchoolYear);
     } catch (error) {
       console.error(`Error changing status:`, error);
     }
@@ -177,11 +177,11 @@ function SectionPage() {
     setIsAdding(true);
     setNewSectionData({
       section_name: '',
-      grade_level: '7', // Default value for grade level
+      grade_level: '7',
       status: 'active',
       max_capacity: '',
-      school_year_id: schoolYears.length > 0 ? schoolYears[0].school_year_id : '', // Default to first school year ID if available
-      room_number: '' // Initialize room_number
+      school_year_id: schoolYears.length > 0 ? schoolYears[0].school_year_id : '',
+      room_number: ''
     });
     setShowModal(true);
   };
@@ -196,9 +196,9 @@ function SectionPage() {
 
   const saveNewSection = async () => {
     try {
-      console.log('New section data:', newSectionData); // Log the data being sent
+      console.log('New section data:', newSectionData);
       await axios.post('http://localhost:3001/sections', newSectionData);
-      fetchSections(activeSchoolYear);  // Refresh the section list after adding
+      fetchSections(activeSchoolYear);
       setIsAdding(false);
       setShowModal(false);
     } catch (error) {
@@ -212,7 +212,7 @@ function SectionPage() {
   };
 
   const capitalizeStatus = (status) => {
-    if (!status) return ''; // Handle undefined status
+    if (!status) return '';
     return status.charAt(0).toUpperCase() + status.slice(1);
   };
 
