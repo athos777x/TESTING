@@ -599,14 +599,14 @@ app.put('/school-years/:schoolYearId', (req, res) => {
   });
 });
 
-// Updated endpoint to fetch sections without using section_open table
+// Updated endpoint to fetch sections without using section_open table (only with the archive_status of unarchive)
 app.get('/sections', (req, res) => {
   const { searchTerm, grade } = req.query;
   let query = `
     SELECT s.section_id, s.section_name, s.grade_level, s.status, s.max_capacity, sy.school_year
     FROM section s
     JOIN school_year sy ON s.school_year_id = sy.school_year_id
-    WHERE sy.status = 'active'
+    WHERE sy.status = 'active' AND s.archive_status = 'unarchive'
   `;
   const queryParams = [];
 
@@ -629,6 +629,7 @@ app.get('/sections', (req, res) => {
     res.json(results);
   });
 });
+
 
 
 // Endpoint to fetch section details by ID
@@ -772,6 +773,25 @@ app.post('/sections', (req, res) => {
       return;
     }
     res.status(201).json({ message: 'Section added successfully' });
+  });
+});
+
+// Endpoint to archive a section
+app.put('/sections/:sectionId/archive', (req, res) => {
+  const { sectionId } = req.params;
+  const { status, archive_status } = req.body;
+  const query = 'UPDATE section SET status = ?, archive_status = ? WHERE section_id = ?';
+  db.query(query, [status, archive_status, sectionId], (err, results) => {
+    if (err) {
+      console.error('Error archiving section:', err);
+      res.status(500).json({ error: 'Internal server error' });
+      return;
+    }
+    if (results.affectedRows > 0) {
+      res.json({ message: 'Section archived and status updated successfully' });
+    } else {
+      res.status(404).json({ error: 'Section not found' });
+    }
   });
 });
 

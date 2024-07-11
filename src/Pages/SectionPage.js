@@ -1,3 +1,4 @@
+// SectionPage.js
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import SectionSearchFilter from '../Utilities/SectionSearchFilter'; // Ensure correct path
@@ -45,7 +46,7 @@ function SectionPage() {
         params: { schoolYearId }
       });
       setSections(response.data);
-      setFilteredSections(response.data);
+      setFilteredSections(response.data.filter(section => section.archive_status !== 'archive')); // Filter out archived sections
     } catch (error) {
       console.error('There was an error fetching the sections!', error);
     }
@@ -95,7 +96,7 @@ function SectionPage() {
     }
 
     console.log('Filtered sections:', filtered);
-    setFilteredSections(filtered);
+    setFilteredSections(filtered.filter(section => section.archive_status !== 'archive')); // Filter out archived sections
   };
 
   const handleApplyFilters = (filters) => {
@@ -155,7 +156,8 @@ function SectionPage() {
   const toggleArchiveStatus = async (sectionId, currentStatus) => {
     try {
       const newStatus = currentStatus === 'inactive' ? 'active' : 'inactive';
-      await axios.put(`http://localhost:3001/sections/${sectionId}/status`, { status: newStatus });
+      const newArchiveStatus = currentStatus === 'inactive' ? 'unarchive' : 'archive';
+      await axios.put(`http://localhost:3001/sections/${sectionId}/archive`, { status: newStatus, archive_status: newArchiveStatus });
       fetchSections(activeSchoolYear);  // Refresh the section list after changing archive status
     } catch (error) {
       console.error(`Error changing status:`, error);
@@ -238,7 +240,7 @@ function SectionPage() {
                   className="section-archive-button"
                   onClick={() => toggleArchiveStatus(section.section_id, section.status)}
                 >
-                  {section.status === 'inactive' ? 'Activate' : 'Archive'}
+                  {section.status === 'inactive' ? 'Unarchive' : 'Archive'}
                 </button>
               </div>
             </div>
