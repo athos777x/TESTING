@@ -25,6 +25,8 @@ const roleMap = {
 };
 
 // Login endpoint
+// Function: Authenticates a user based on provided username and password
+// Pages: LoginForm.js
 app.post('/login', (req, res) => {
   const { username, password } = req.body;
   console.log(`Login attempt: username=${username}, password=${password}`);
@@ -48,6 +50,8 @@ app.post('/login', (req, res) => {
 });
 
 // Endpoint to fetch user details by ID
+// Function: Fetches detailed information about a user based on their user ID
+// Pages: Layout.js
 app.get('/users/:userId', (req, res) => {
   const userId = req.params.userId;
   console.log(`Fetching user details for userId: ${userId}`);
@@ -57,7 +61,6 @@ app.get('/users/:userId', (req, res) => {
     JOIN employee e ON u.user_id = e.user_id 
     WHERE u.user_id = ?
   `;
-  
   db.query(query, [userId], (err, results) => {
     if (err) {
       console.error('Database query error:', err);
@@ -75,6 +78,8 @@ app.get('/users/:userId', (req, res) => {
 });
 
 // Endpoint to fetch all students
+// Function: Retrieves a list of all students with optional filtering by search term, grade, section, and school year
+// Pages: StudentsPage.js, SectionPage.js, GradesPage.js, AttendancePage.js
 app.get('/students', (req, res) => {
   const { searchTerm, grade, section, school_year } = req.query;
   console.log('Received params:', { searchTerm, grade, section, school_year });
@@ -148,6 +153,8 @@ app.get('/students', (req, res) => {
 });
 
 // Endpoint to fetch grades for a specific student
+// Function: Retrieves the grades of a student based on their student ID
+// Pages: AcademicRecordPage.js
 app.get('/students/:student_id/grades', (req, res) => {
   const { student_id } = req.params;
   const query = `SELECT g.first_quarter AS q1_grade, g.second_quarter AS q2_grade, g.third_quarter AS q3_grade, g.fourth_quarter AS q4_grade, s.subject_name
@@ -166,7 +173,9 @@ app.get('/students/:student_id/grades', (req, res) => {
   });
 });
 
-// Endpoint to fetch sections for select section filter for StudentsPage, GradesPage, and AttendancePage
+// Endpoint to fetch sections for select section filter
+// Function: Retrieves sections for filtering in various pages
+// Pages: StudentsPage.js, GradesPage.js, AttendancePage.js, SectionListSearchFilter.js, SectionSearchFilter.js, SearchFilter.js
 app.get('/api/sections', (req, res) => {
   const query = 'SELECT section_id, section_name FROM section';
   db.query(query, (err, results) => {
@@ -180,6 +189,8 @@ app.get('/api/sections', (req, res) => {
 });
 
 // Endpoint to fetch positions
+// Function: Retrieves distinct positions from the employee table
+// Pages: EmployeeSearchFilter.js
 app.get('/api/positions', (req, res) => {
   const query = 'SELECT DISTINCT role_name FROM employee';
   db.query(query, (err, results) => {
@@ -193,6 +204,8 @@ app.get('/api/positions', (req, res) => {
 });
 
 // Endpoint to fetch departments
+// Function: Retrieves distinct departments from the employee table
+// Pages: EmployeePage.js
 app.get('/api/departments', (req, res) => {
   const query = 'SELECT DISTINCT department FROM employee';
   db.query(query, (err, results) => {
@@ -206,6 +219,8 @@ app.get('/api/departments', (req, res) => {
 });
 
 // Fetch filter options for school year and grades
+// Function: Retrieves filter options for school years, grades, and sections
+// Pages: SchoolYearPage.js, SearchFilter.js, SectionListSearchFilter.js, SectionSearchFilter.js
 app.get('/filters', (req, res) => {
   const filters = {
     schoolYears: [],
@@ -239,6 +254,8 @@ app.get('/filters', (req, res) => {
 });
 
 // Endpoint to fetch attendance data for a specific student
+// Function: Retrieves the attendance records of a student based on their student ID
+// Pages: AttendancePage.js
 app.get('/attendance/:studentId', (req, res) => {
   const studentId = req.params.studentId;
   const query = `
@@ -273,6 +290,8 @@ app.get('/attendance/:studentId', (req, res) => {
 });
 
 // Fetch school years
+// Function: Retrieves all school years in descending order
+// Pages: SchoolYearSearchFilter.js, SearchFilter.js
 app.get('/api/school_years', (req, res) => {
   const query = 'SELECT school_year FROM school_year ORDER BY school_year DESC';
   db.query(query, (err, results) => {
@@ -286,6 +305,8 @@ app.get('/api/school_years', (req, res) => {
 });
 
 // Endpoint to fetch the current school year
+// Function: Retrieves the current active school year
+// Pages: SchoolYearPage.js
 app.get('/current-school-year', (req, res) => {
   try {
     const currentSchoolYear = '2023-2024'; // Replace with actual logic to fetch from database
@@ -296,6 +317,8 @@ app.get('/current-school-year', (req, res) => {
 });
 
 // Endpoint to fetch student details
+// Function: Retrieves detailed information about a student based on their student ID
+// Pages: StudentDetailPage.js
 app.get('/students/:id/details', (req, res) => {
   const studentId = req.params.id;
 
@@ -309,9 +332,7 @@ app.get('/students/:id/details', (req, res) => {
     LEFT JOIN student_school_year ss ON s.student_id = ss.student_id
     LEFT JOIN school_year sy ON ss.school_year_id = sy.school_year_id
     WHERE s.student_id = ?
-    ORDER BY sy.school_year DESC
   `;
-
   db.query(query, [studentId], (err, results) => {
     if (err) {
       console.error('Error fetching student details:', err);
@@ -354,6 +375,8 @@ app.get('/students/:id/details', (req, res) => {
 });
 
 // Endpoint to fetch all employees
+// Function: Retrieves a list of all employees with optional filtering by status, position, department, search term, and archive status
+// Pages: EmployeePage.js
 app.get('/employees', (req, res) => {
   const { status, position, department, searchTerm, showArchive } = req.query;
 
@@ -406,6 +429,8 @@ app.get('/employees', (req, res) => {
 });
 
 // Endpoint to fetch employee details by ID
+// Function: Fetches detailed information about an employee based on their employee ID
+// Pages: EmployeePage.js
 app.get('/employees/:employeeId', (req, res) => {
   const { employeeId } = req.params;
   const query = 'SELECT * FROM employee WHERE employee_id = ?';
@@ -423,7 +448,10 @@ app.get('/employees/:employeeId', (req, res) => {
   });
 });
 
+
 // Endpoint to update employee details by ID
+// Function: Updates an employee's details based on their employee ID
+// Pages: EmployeePage.js
 app.put('/employees/:employeeId', (req, res) => {
   const { employeeId } = req.params;
   const updatedEmployee = req.body;
@@ -466,6 +494,8 @@ app.put('/employees/:employeeId', (req, res) => {
 });
 
 // Endpoint to archive an employee
+// Function: Archives an employee by updating their status to inactive and archive status to archive
+// Pages: EmployeePage.js
 app.put('/employees/:employeeId/archive', (req, res) => {
   const { employeeId } = req.params;
   const query = 'UPDATE employee SET archive_status = "archive", status = "inactive" WHERE employee_id = ?';
@@ -484,6 +514,8 @@ app.put('/employees/:employeeId/archive', (req, res) => {
 });
 
 // Endpoint to unarchive an employee
+// Function: Unarchives an employee by updating their status to active and archive status to unarchive
+// Pages: EmployeePage.js
 app.put('/employees/:employeeId/unarchive', (req, res) => {
   const { employeeId } = req.params;
   const query = 'UPDATE employee SET archive_status = "unarchive", status = "active" WHERE employee_id = ?';
@@ -502,6 +534,8 @@ app.put('/employees/:employeeId/unarchive', (req, res) => {
 });
 
 // Endpoint to fetch roles
+// Function: Retrieves a list of roles from the roles table
+// Pages: EmployeePage.js
 app.get('/roles', (req, res) => {
   const query = 'SELECT role_name FROM roles';
   db.query(query, (err, results) => {
@@ -515,6 +549,8 @@ app.get('/roles', (req, res) => {
 });
 
 // Fetch all school years
+// Function: Retrieves a list of all school years
+// Pages: SchoolYearPage.js, SchoolYearSearchFilter.js
 app.get('/school-years', (req, res) => {
   const { searchTerm, school_year } = req.query;
 
@@ -551,6 +587,8 @@ app.get('/school-years', (req, res) => {
 });
 
 // Fetch specific school year details
+// Function: Retrieves detailed information about a specific school year based on its ID
+// Pages: SchoolYearPage.js
 app.get('/school-years/:id', (req, res) => {
   const { id } = req.params;
   const query = 'SELECT * FROM school_year WHERE school_year_id = ?';
@@ -565,6 +603,8 @@ app.get('/school-years/:id', (req, res) => {
 });
 
 // Endpoint to add a new school year
+// Function: Adds a new school year to the database
+// Pages: SchoolYearPage.js
 app.post('/school-years', (req, res) => {
   const { school_year, school_year_start, school_year_end, enrollment_start, enrollment_end, status } = req.body;
   const query = 'INSERT INTO school_year (school_year, school_year_start, school_year_end, enrollment_start, enrollment_end, status) VALUES (?, ?, ?, ?, ?, ?)';
@@ -580,6 +620,8 @@ app.post('/school-years', (req, res) => {
 });
 
 // Endpoint to update school year details by ID
+// Function: Updates the details of a school year based on its ID
+// Pages: SchoolYearPage.js
 app.put('/school-years/:schoolYearId', (req, res) => {
   const { schoolYearId } = req.params;
   const updatedSchoolYear = req.body;
@@ -600,6 +642,8 @@ app.put('/school-years/:schoolYearId', (req, res) => {
 });
 
 // Endpoint to fetch sections without using section_open table (archive_status of unarchive/archive)
+// Function: Retrieves sections with optional filtering by search term, grade, and archive status
+// Pages: SectionPage.js, SectionListPage.js, SectionListSearchFilter.js, SectionSearchFilter.js, SearchFilter.js
 app.get('/sections', (req, res) => {
   const { searchTerm, grade, showArchive } = req.query;
   let query = `
@@ -635,11 +679,9 @@ app.get('/sections', (req, res) => {
   });
 });
 
-
-
-
-
 // Endpoint to fetch section details by ID
+// Function: Retrieves detailed information about a section based on its ID
+// Pages: SectionPage.js, SectionListPage.js
 app.get('/sections/:id', (req, res) => {
   const { id } = req.params;
   const query = `
@@ -662,8 +704,9 @@ app.get('/sections/:id', (req, res) => {
   });
 });
 
-
 // Fetch students by section ID and segregate by gender
+// Function: Retrieves students in a specific section and segregates them by gender
+// Pages: SectionPage.js, SectionListPage.js
 app.get('/sections/:id/students', (req, res) => {
   const { id } = req.params;
   const sql = 'SELECT * FROM student WHERE section_id = ?';
@@ -679,87 +722,9 @@ app.get('/sections/:id/students', (req, res) => {
   });
 });
 
-// New endpoint to fetch active enrolled students for the current school year
-app.get('/enrolled-students', (req, res) => {
-  const { searchTerm, grade } = req.query;
-  console.log('Received params:', { searchTerm, grade });
-
-  let query = `
-    SELECT e.student_id, e.enrollment_id, e.grade_level, e.enrollee_type, e.enrollment_status, s.firstname, s.middlename, s.lastname 
-    FROM enrollment e
-    JOIN student s ON e.student_id = s.student_id
-    JOIN school_year sy ON e.school_year_id = sy.school_year_id
-    WHERE e.enrollment_status = 'active' AND sy.status = 'active'
-  `;
-  
-  const queryParams = [];
-  const conditions = [];
-
-  if (searchTerm) {
-    conditions.push(`(s.firstname LIKE ? OR s.lastname LIKE ?)`);
-    queryParams.push(`%${searchTerm}%`, `%${searchTerm}%`);
-  }
-  if (grade) {
-    conditions.push(`e.grade_level = ?`);
-    queryParams.push(grade);
-  }
-
-  if (conditions.length > 0) {
-    query += ' AND ' + conditions.join(' AND ');
-  }
-
-  query += ' ORDER BY s.firstname';
-
-  console.log('Final query:', query);
-  console.log('With parameters:', queryParams);
-
-  db.query(query, queryParams, (err, results) => {
-    if (err) {
-      console.error('Error fetching students:', err);
-      res.status(500).json({ error: 'Internal server error' });
-      return;
-    }
-    console.log('Query results:', results);
-    res.json(results);
-  });
-});
-
-// Endpoint to update section details by ID
-app.put('/sections/:sectionId', (req, res) => {
-  const { sectionId } = req.params;
-  const updatedSection = req.body;
-
-  console.log(`Updating section with ID: ${sectionId}`, updatedSection);
-
-  const query = 'UPDATE section SET ? WHERE section_id = ?';
-  db.query(query, [updatedSection, sectionId], (err, results) => {
-    if (err) {
-      console.error('Error updating section details:', err);
-      res.status(500).json({ error: 'Internal server error' });
-      return;
-    }
-    if (results.affectedRows > 0) {
-      res.json({ message: 'Section updated successfully' });
-    } else {
-      res.status(404).json({ error: 'Section not found' });
-    }
-  });
-});
-
-// Endpoint to fetch all school years for section
-app.get('/school-years', (req, res) => {
-  const query = 'SELECT school_year_id, school_year FROM school_year ORDER BY school_year DESC';
-  db.query(query, (err, results) => {
-    if (err) {
-      console.error('Error fetching school years:', err);
-      res.status(500).send('Error fetching school years');
-      return;
-    }
-    res.json(results);
-  });
-});
-
 // Endpoint to add a new section
+// Function: Adds a new section to the database
+// Pages: SectionPage.js
 app.post('/sections', (req, res) => {
   const { section_name, grade_level, status, max_capacity, school_year_id, room_number } = req.body;
   
@@ -785,6 +750,8 @@ app.post('/sections', (req, res) => {
 });
 
 // Endpoint to archive a section
+// Function: Archives a section by updating its status to inactive and archive status to archive
+// Pages: SectionPage.js
 app.put('/sections/:sectionId/archive', (req, res) => {
   const { sectionId } = req.params;
   const { status, archive_status } = req.body;
