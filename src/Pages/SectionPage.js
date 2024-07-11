@@ -26,7 +26,8 @@ function SectionPage() {
     status: 'active',
     max_capacity: '',
     school_year_id: '',
-    room_number: ''
+    room_number: '',
+    archive_status: 'unarchive' // Default value
   });
 
   const fetchActiveSchoolYear = useCallback(async () => {
@@ -181,7 +182,8 @@ function SectionPage() {
       status: 'active',
       max_capacity: '',
       school_year_id: schoolYears.length > 0 ? schoolYears[0].school_year_id : '',
-      room_number: ''
+      room_number: '',
+      archive_status: 'unarchive' // Default value
     });
     setShowModal(true);
   };

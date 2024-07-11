@@ -727,16 +727,16 @@ app.get('/sections/:id/students', (req, res) => {
 // Pages: SectionPage.js
 app.post('/sections', (req, res) => {
   const { section_name, grade_level, status, max_capacity, school_year_id, room_number } = req.body;
-  
+
   // Log the request body to see the received data
   console.log('Request body:', req.body);
-  
-  // SQL query to insert a new section
+
+  // SQL query to insert a new section with archive_status defaulted to 'unarchive'
   const query = `
-    INSERT INTO section (section_name, grade_level, status, max_capacity, school_year_id, room_number)
-    VALUES (?, ?, ?, ?, ?, ?)
+    INSERT INTO section (section_name, grade_level, status, max_capacity, school_year_id, room_number, archive_status)
+    VALUES (?, ?, ?, ?, ?, ?, 'unarchive')
   `;
-  
+
   // Execute the query
   db.query(query, [section_name, grade_level, status, max_capacity, school_year_id, room_number], (err, result) => {
     if (err) {
