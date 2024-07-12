@@ -1,36 +1,42 @@
-// ScheduleSearchFilter.js
 import React, { useState, useEffect } from 'react';
 import '../CssFiles/searchfilter.css';
-import axios from 'axios';
 
-function ScheduleSearchFilter({ handleSearch, handleFilter, handleApplyFilters }) {
+function ScheduleSearchFilter({ handleApplyFilters, grades, sections }) {
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedDate, setSelectedDate] = useState('');
-  const [sections, setSections] = useState([]);
+  const [selectedGrade, setSelectedGrade] = useState('');
+  const [filteredSections, setFilteredSections] = useState([]);
+  const [selectedSection, setSelectedSection] = useState('');
 
   useEffect(() => {
-    axios.get('http://localhost:3001/api/sections')
-      .then(response => {
-        setSections(response.data);
-      })
-      .catch(error => {
-        console.error('There was an error fetching the sections!', error);
-      });
-  }, []);
+    if (selectedGrade) {
+      setFilteredSections(sections.filter(section => section.grade_level === selectedGrade));
+    } else {
+      setFilteredSections(sections);
+    }
+  }, [selectedGrade, sections]);
 
   const handleSearchChange = (event) => {
     setSearchTerm(event.target.value);
   };
 
-  const handleDateChange = (event) => {
-    setSelectedDate(event.target.value);
+  const handleGradeChange = (event) => {
+    const grade = event.target.value;
+    setSelectedGrade(grade);
+    setSelectedSection('');
+  };
+
+  const handleSectionChange = (event) => {
+    const section = event.target.value;
+    setSelectedSection(section);
   };
 
   const applyFilters = () => {
     const filters = {
       searchTerm,
-      date: selectedDate,
+      grade: selectedGrade,
+      section: selectedSection
     };
+    console.log('Applying filters:', filters);
     handleApplyFilters(filters);
   };
 
@@ -43,12 +49,18 @@ function ScheduleSearchFilter({ handleSearch, handleFilter, handleApplyFilters }
         onChange={handleSearchChange}
         className="filter-input"
       />
-      <input
-        type="date"
-        value={selectedDate}
-        onChange={handleDateChange}
-        className="filter-input"
-      />
+      <select id="grade" value={selectedGrade} onChange={handleGradeChange} className="filter-select">
+        <option value="">Select Grade</option>
+        {grades.map((grade, index) => (
+          <option key={index} value={grade}>{grade}</option>
+        ))}
+      </select>
+      <select id="section" value={selectedSection} onChange={handleSectionChange} className="filter-select">
+        <option value="">Select Section</option>
+        {filteredSections.map((section, index) => (
+          <option key={index} value={section.section_id}>{section.section_name}</option>
+        ))}
+      </select>
       <button onClick={applyFilters} className="filter-button">Apply Filters</button>
     </div>
   );
