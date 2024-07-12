@@ -73,6 +73,20 @@ function SchedulePage() {
     }
   };
 
+  const handleApproveClick = async (sectionId) => {
+    try {
+      await axios.put(`http://localhost:3001/sections/${sectionId}/approve`);
+      fetchSections(); // Refresh the sections list
+    } catch (error) {
+      console.error('There was an error approving the section!', error);
+    }
+  };
+
+  const handleEditClick = (sectionId) => {
+    // Implement the edit functionality here
+    console.log(`Edit section ${sectionId}`);
+  };
+
   return (
     <div className="schedule-container">
       <h1 className="schedule-title">Schedule</h1>
@@ -94,6 +108,8 @@ function SchedulePage() {
                 <span className="sectionlist-info">Grade: {section.grade_level} - {section.status.charAt(0).toUpperCase() + section.status.slice(1)}</span>
                 <div className="sectionlist-actions">
                   <button className="sectionlist-view-button" onClick={() => handleViewClick(section.section_id)}>View</button>
+                  <button className="sectionlist-edit-button" onClick={() => handleEditClick(section.section_id)}>Edit</button>
+                  <button className="sectionlist-approve-button" onClick={() => handleApproveClick(section.section_id)}>Approve</button>
                 </div>
               </div>
               {selectedSectionId === section.section_id && (
