@@ -96,7 +96,7 @@ function SchedulePage() {
                   <button className="sectionlist-view-button" onClick={() => handleViewClick(section.section_id)}>View</button>
                 </div>
               </div>
-              {selectedSectionId === section.section_id && sectionSchedules.length > 0 && (
+              {selectedSectionId === section.section_id && (
                 <div className="sectionlist-details">
                   <h2 className="schedule-subtitle">Schedules</h2>
                   <table className="schedule-table">
@@ -112,17 +112,23 @@ function SchedulePage() {
                       </tr>
                     </thead>
                     <tbody>
-                      {sectionSchedules.map(schedule => (
-                        <tr key={schedule.schedule_id}>
-                          <td>{schedule.schedule_id}</td>
-                          <td>{schedule.teacher_id}</td>
-                          <td>{schedule.subject_name}</td> {/* Updated column */}
-                          <td>{schedule.time_start}</td>
-                          <td>{schedule.time_end}</td>
-                          <td>{schedule.day}</td>
-                          <td>{schedule.schedule_status}</td>
+                      {sectionSchedules.length > 0 ? (
+                        sectionSchedules.map(schedule => (
+                          <tr key={schedule.schedule_id}>
+                            <td>{schedule.schedule_id}</td>
+                            <td>{schedule.teacher_id}</td>
+                            <td>{schedule.subject_name}</td> {/* Updated column */}
+                            <td>{schedule.time_start}</td>
+                            <td>{schedule.time_end}</td>
+                            <td>{schedule.day}</td>
+                            <td>{schedule.schedule_status}</td>
+                          </tr>
+                        ))
+                      ) : (
+                        <tr>
+                          <td colSpan="7" style={{ textAlign: 'center' }}>No schedules available</td>
                         </tr>
-                      ))}
+                      )}
                     </tbody>
                   </table>
                 </div>
