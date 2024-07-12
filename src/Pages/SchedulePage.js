@@ -7,7 +7,7 @@ function SchedulePage() {
   const [sections, setSections] = useState([]);
   const [filteredSections, setFilteredSections] = useState([]);
   const [selectedSectionId, setSelectedSectionId] = useState(null);
-  const [sectionDetails, setSectionDetails] = useState({});
+  const [sectionSchedules, setSectionSchedules] = useState([]);
   const [filters, setFilters] = useState({
     searchTerm: '',
     grade: '',
@@ -56,19 +56,19 @@ function SchedulePage() {
   const handleViewClick = async (sectionId) => {
     if (selectedSectionId === sectionId) {
       setSelectedSectionId(null);
-      setSectionDetails({});
+      setSectionSchedules([]);
     } else {
       setSelectedSectionId(sectionId);
-      fetchSectionDetails(sectionId);
+      fetchSectionSchedules(sectionId);
     }
   };
 
-  const fetchSectionDetails = async (sectionId) => {
+  const fetchSectionSchedules = async (sectionId) => {
     try {
-      const response = await axios.get(`http://localhost:3001/sections/${sectionId}`);
-      setSectionDetails(response.data);
+      const response = await axios.get(`http://localhost:3001/sections/${sectionId}/schedules`);
+      setSectionSchedules(response.data);
     } catch (error) {
-      console.error('There was an error fetching the section details!', error);
+      console.error('There was an error fetching the section schedules!', error);
     }
   };
 
@@ -95,35 +95,33 @@ function SchedulePage() {
                   <button className="sectionlist-view-button" onClick={() => handleViewClick(section.section_id)}>View</button>
                 </div>
               </div>
-              {selectedSectionId === section.section_id && sectionDetails.section_id && (
+              {selectedSectionId === section.section_id && sectionSchedules.length > 0 && (
                 <div className="sectionlist-details">
-                  <table>
+                  <h2 className="schedule-subtitle">Schedules</h2>
+                  <table className="schedule-table">
+                    <thead>
+                      <tr>
+                        <th>Schedule ID</th>
+                        <th>Teacher ID</th>
+                        <th>Subject ID</th>
+                        <th>Time Start</th>
+                        <th>Time End</th>
+                        <th>Day</th>
+                        <th>Status</th>
+                      </tr>
+                    </thead>
                     <tbody>
-                      <tr>
-                        <th>Section ID:</th>
-                        <td>{sectionDetails.section_id}</td>
-                      </tr>
-                      <tr>
-                        <th>Section Name:</th>
-                        <td>{sectionDetails.section_name}</td>
-                      </tr>
-                      <tr>
-                        <th>Grade Level:</th>
-                        <td>{sectionDetails.grade_level}</td>
-                      </tr>
-                      <tr>
-                        <th>Status:</th>
-                        <td>{sectionDetails.status}</td>
-                      </tr>
-                      <tr>
-                        <th>Max Capacity:</th>
-                        <td>{sectionDetails.max_capacity}</td>
-                      </tr>
-                      <tr>
-                        <th>School Year:</th>
-                        <td>{sectionDetails.school_year}</td>
-                      </tr>
-                      {/* Add other details as needed */}
+                      {sectionSchedules.map(schedule => (
+                        <tr key={schedule.schedule_id}>
+                          <td>{schedule.schedule_id}</td>
+                          <td>{schedule.teacher_id}</td>
+                          <td>{schedule.subject_id}</td>
+                          <td>{schedule.time_start}</td>
+                          <td>{schedule.time_end}</td>
+                          <td>{schedule.day}</td>
+                          <td>{schedule.schedule_status}</td>
+                        </tr>
+                      ))}
                     </tbody>
                   </table>
                 </div>

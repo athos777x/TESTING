@@ -849,6 +849,24 @@ app.get('/schedules', (req, res) => {
   });
 });
 
+// Endpoint to fetch schedules for a specific section
+app.get('/sections/:sectionId/schedules', (req, res) => {
+  const { sectionId } = req.params;
+  const query = `
+    SELECT sc.schedule_id, sc.teacher_id, sc.subject_id, sc.time_start, sc.time_end, sc.day, sc.section_id, sc.schedule_status
+    FROM schedule sc
+    WHERE sc.section_id = ?
+  `;
+  db.query(query, [sectionId], (err, results) => {
+    if (err) {
+      console.error('Error fetching schedules:', err);
+      res.status(500).json({ error: 'Internal server error' });
+      return;
+    }
+    res.json(results);
+  });
+});
+
 app.listen(3001, () => {
   console.log('Server running on port 3001');
 });
