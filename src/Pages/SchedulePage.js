@@ -29,6 +29,7 @@ function SchedulePage() {
   }, [fetchSections]);
 
   const applyFilters = (updatedFilters) => {
+    setFilters(updatedFilters);
     let filtered = sections;
 
     if (updatedFilters.searchTerm) {
@@ -49,7 +50,6 @@ function SchedulePage() {
   };
 
   const handleApplyFilters = (filters) => {
-    setFilters(filters);
     applyFilters(filters);
   };
 
@@ -102,12 +102,11 @@ function SchedulePage() {
                   <table className="schedule-table">
                     <thead>
                       <tr>
-                        <th>Schedule ID</th>
-                        <th>Teacher ID</th>
-                        <th>Subject</th> {/* Updated header */}
+                        <th>Subject</th>
                         <th>Time Start</th>
                         <th>Time End</th>
                         <th>Day</th>
+                        <th>Teacher ID</th>
                         <th>Status</th>
                       </tr>
                     </thead>
@@ -115,18 +114,17 @@ function SchedulePage() {
                       {sectionSchedules.length > 0 ? (
                         sectionSchedules.map(schedule => (
                           <tr key={schedule.schedule_id}>
-                            <td>{schedule.schedule_id}</td>
-                            <td>{schedule.teacher_id}</td>
-                            <td>{schedule.subject_name}</td> {/* Updated column */}
+                            <td>{schedule.subject_name}</td>
                             <td>{schedule.time_start}</td>
                             <td>{schedule.time_end}</td>
                             <td>{schedule.day}</td>
+                            <td>{schedule.teacher_id}</td>
                             <td>{schedule.schedule_status}</td>
                           </tr>
                         ))
                       ) : (
                         <tr>
-                          <td colSpan="7" style={{ textAlign: 'center' }}>No schedules available</td>
+                          <td colSpan="6" style={{ textAlign: 'center' }}>No schedules available</td>
                         </tr>
                       )}
                     </tbody>

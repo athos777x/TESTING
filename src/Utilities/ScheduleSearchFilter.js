@@ -16,28 +16,21 @@ function ScheduleSearchFilter({ handleApplyFilters, grades, sections }) {
   }, [selectedGrade, sections]);
 
   const handleSearchChange = (event) => {
-    setSearchTerm(event.target.value);
+    const value = event.target.value;
+    setSearchTerm(value);
+    handleApplyFilters({ searchTerm: value, grade: selectedGrade, section: selectedSection });
   };
 
   const handleGradeChange = (event) => {
-    const grade = event.target.value;
-    setSelectedGrade(grade);
-    setSelectedSection('');
+    setSelectedGrade(event.target.value);
   };
 
   const handleSectionChange = (event) => {
-    const section = event.target.value;
-    setSelectedSection(section);
+    setSelectedSection(event.target.value);
   };
 
   const applyFilters = () => {
-    const filters = {
-      searchTerm,
-      grade: selectedGrade,
-      section: selectedSection
-    };
-    console.log('Applying filters:', filters);
-    handleApplyFilters(filters);
+    handleApplyFilters({ searchTerm, grade: selectedGrade, section: selectedSection });
   };
 
   return (
