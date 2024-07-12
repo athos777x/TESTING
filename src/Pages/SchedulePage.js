@@ -59,6 +59,7 @@ function SchedulePage() {
       setSectionSchedules([]);
     } else {
       setSelectedSectionId(sectionId);
+      setSectionSchedules([]); // Clear previous schedules
       fetchSectionSchedules(sectionId);
     }
   };
@@ -103,7 +104,7 @@ function SchedulePage() {
                       <tr>
                         <th>Schedule ID</th>
                         <th>Teacher ID</th>
-                        <th>Subject ID</th>
+                        <th>Subject</th> {/* Updated header */}
                         <th>Time Start</th>
                         <th>Time End</th>
                         <th>Day</th>
@@ -115,7 +116,7 @@ function SchedulePage() {
                         <tr key={schedule.schedule_id}>
                           <td>{schedule.schedule_id}</td>
                           <td>{schedule.teacher_id}</td>
-                          <td>{schedule.subject_id}</td>
+                          <td>{schedule.subject_name}</td> {/* Updated column */}
                           <td>{schedule.time_start}</td>
                           <td>{schedule.time_end}</td>
                           <td>{schedule.day}</td>
