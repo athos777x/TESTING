@@ -1,60 +1,75 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import ScheduleSearchFilter from '../Utilities/ScheduleSearchFilter';
 import '../CssPage/SchedulePage.css';
-import '../CssFiles/searchfilter.css';
 
 function SchedulePage() {
-  const [scheduleData, setScheduleData] = useState([]);
-  const [filteredData, setFilteredData] = useState([]);
+  const [sections, setSections] = useState([]);
+  const [filteredSections, setFilteredSections] = useState([]);
+  const [selectedSectionId, setSelectedSectionId] = useState(null);
+  const [sectionDetails, setSectionDetails] = useState({});
   const [filters, setFilters] = useState({
     searchTerm: '',
     grade: '',
     section: ''
   });
 
-  useEffect(() => {
-    fetchScheduleData();
+  const fetchSections = useCallback(async () => {
+    try {
+      const response = await axios.get('http://localhost:3001/sections');
+      setSections(response.data);
+      setFilteredSections(response.data);
+    } catch (error) {
+      console.error('There was an error fetching the sections!', error);
+    }
   }, []);
 
-  const fetchScheduleData = async (appliedFilters = {}) => {
-    try {
-      const response = await axios.get('http://localhost:3001/schedule', {
-        params: appliedFilters
-      });
-      setScheduleData(response.data);
-      setFilteredData(response.data);
-    } catch (error) {
-      console.error('There was an error fetching the schedule data!', error);
-    }
-  };
+  useEffect(() => {
+    fetchSections();
+  }, [fetchSections]);
 
-  const handleFilterChange = (type, value) => {
-    setFilters(prevFilters => ({ ...prevFilters, [type]: value }));
-  };
+  const applyFilters = (updatedFilters) => {
+    let filtered = sections;
 
-  const applyFilters = () => {
-    let filtered = scheduleData;
-
-    if (filters.grade) {
-      filtered = filtered.filter(item => item.grade_level === filters.grade);
-    }
-    if (filters.section) {
-      filtered = filtered.filter(item => item.section_id === parseInt(filters.section));
-    }
-    if (filters.searchTerm) {
-      filtered = filtered.filter(item =>
-        item.subject_name.toLowerCase().includes(filters.searchTerm.toLowerCase()) ||
-        item.teacher_name.toLowerCase().includes(filters.searchTerm.toLowerCase())
+    if (updatedFilters.searchTerm) {
+      filtered = filtered.filter(section =>
+        section.section_name.toLowerCase().includes(updatedFilters.searchTerm.toLowerCase())
       );
     }
 
-    setFilteredData(filtered);
+    if (updatedFilters.grade) {
+      filtered = filtered.filter(section => section.grade_level === updatedFilters.grade);
+    }
+
+    if (updatedFilters.section) {
+      filtered = filtered.filter(section => section.section_id === parseInt(updatedFilters.section));
+    }
+
+    setFilteredSections(filtered);
   };
 
-  const handleApplyFilters = () => {
-    console.log('Applying filters:', filters);
-    applyFilters();
+  const handleApplyFilters = (filters) => {
+    setFilters(filters);
+    applyFilters(filters);
+  };
+
+  const handleViewClick = async (sectionId) => {
+    if (selectedSectionId === sectionId) {
+      setSelectedSectionId(null);
+      setSectionDetails({});
+    } else {
+      setSelectedSectionId(sectionId);
+      fetchSectionDetails(sectionId);
+    }
+  };
+
+  const fetchSectionDetails = async (sectionId) => {
+    try {
+      const response = await axios.get(`http://localhost:3001/sections/${sectionId}`);
+      setSectionDetails(response.data);
+    } catch (error) {
+      console.error('There was an error fetching the section details!', error);
+    }
   };
 
   return (
@@ -64,20 +79,59 @@ function SchedulePage() {
         <ScheduleSearchFilter
           handleApplyFilters={handleApplyFilters}
           grades={['7', '8', '9', '10']}
-          sections={scheduleData}
+          sections={sections}
         />
       </div>
-      <div className="schedule-list">
-        {filteredData.length > 0 ? (
-          filteredData.map((item, index) => (
-            <div key={index} className="schedule-item">
-              <p>{item.subject_name} - {item.teacher_name}</p>
-              <p>Grade: {item.grade_level}, Section: {item.section_name}</p>
-              <p>Time: {item.time}</p>
+      <div className="sectionlist-list">
+        {filteredSections.length > 0 ? (
+          filteredSections.map((section, index) => (
+            <div key={section.section_id} className="sectionlist-item-container">
+              <div className="sectionlist-item">
+                <p className="sectionlist-name">
+                  {index + 1}. Section {section.section_name}
+                </p>
+                <span className="sectionlist-info">Grade: {section.grade_level} - {section.status.charAt(0).toUpperCase() + section.status.slice(1)}</span>
+                <div className="sectionlist-actions">
+                  <button className="sectionlist-view-button" onClick={() => handleViewClick(section.section_id)}>View</button>
+                </div>
+              </div>
+              {selectedSectionId === section.section_id && sectionDetails.section_id && (
+                <div className="sectionlist-details">
+                  <table>
+                    <tbody>
+                      <tr>
+                        <th>Section ID:</th>
+                        <td>{sectionDetails.section_id}</td>
+                      </tr>
+                      <tr>
+                        <th>Section Name:</th>
+                        <td>{sectionDetails.section_name}</td>
+                      </tr>
+                      <tr>
+                        <th>Grade Level:</th>
+                        <td>{sectionDetails.grade_level}</td>
+                      </tr>
+                      <tr>
+                        <th>Status:</th>
+                        <td>{sectionDetails.status}</td>
+                      </tr>
+                      <tr>
+                        <th>Max Capacity:</th>
+                        <td>{sectionDetails.max_capacity}</td>
+                      </tr>
+                      <tr>
+                        <th>School Year:</th>
+                        <td>{sectionDetails.school_year}</td>
+                      </tr>
+                      {/* Add other details as needed */}
+                    </tbody>
+                  </table>
+                </div>
+              )}
             </div>
           ))
         ) : (
-          <p>No schedules available.</p>
+          <p>No sections available.</p>
         )}
       </div>
     </div>
