@@ -184,6 +184,21 @@ function SubjectsPage() {
                         )}
                       </td>
                     </tr>
+                    <tr>
+                      <th>School Year ID:</th>
+                      <td>
+                        {isEditing ? (
+                          <input
+                            type="text"
+                            name="school_year_id"
+                            value={editFormData.school_year_id}
+                            onChange={handleEditChange}
+                          />
+                        ) : (
+                          subject.school_year_id
+                        )}
+                      </td>
+                    </tr>
                   </tbody>
                 </table>
                 {isEditing && (
