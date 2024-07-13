@@ -905,6 +905,17 @@ app.put('/schedules/:scheduleId', (req, res) => {
   });
 });
 
+// Endpoint to get subjects
+app.get('/subjects', (req, res) => {
+  const query = 'SELECT * FROM subject';
+  db.query(query, (error, results) => {
+    if (error) {
+      return res.status(500).send(error);
+    }
+    res.send(results);
+  });
+});
+
 
 app.listen(3001, () => {
   console.log('Server running on port 3001');
