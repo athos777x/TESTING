@@ -154,7 +154,7 @@ function SchedulePage() {
                         <th>Day</th>
                         <th>Teacher ID</th>
                         <th>Status</th>
-                        <th>Actions</th>
+                        <th className="actions-column">Actions</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -206,7 +206,7 @@ function SchedulePage() {
                                     <option value="Pending Approval">Pending Approval</option>
                                   </select>
                                 </td>
-                                <td>
+                                <td className="actions-column">
                                   <button className="save-button" onClick={saveChanges}>Save</button>
                                   <button className="cancel-button" onClick={cancelEditing}>Cancel</button>
                                 </td>
@@ -219,7 +219,7 @@ function SchedulePage() {
                                 <td>{schedule.day}</td>
                                 <td>{schedule.teacher_id}</td>
                                 <td>{schedule.schedule_status}</td>
-                                <td>
+                                <td className="actions-column">
                                   <button className="edit-button" onClick={() => startEditing(schedule)}>Edit</button>
                                   {schedule.schedule_status === 'Pending Approval' && (
                                     <button className="approve-button" onClick={() => handleApproveClick(schedule.schedule_id)}>Approve</button>

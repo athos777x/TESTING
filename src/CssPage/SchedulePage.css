@@ -1,4 +1,3 @@
-/* SchedulePage.css */
 .schedule-container {
   margin: 20px;
   padding: 10px;
@@ -81,30 +80,32 @@
 
 .sectionlist-details {
   margin: 10px 0;
+  text-align: center;
+}
+
+.schedule-subtitle {
+  font-size: 20px;
+  font-weight: bold;
+  margin: 0;
 }
 
 .schedule-table {
   width: 100%;
   border-collapse: collapse;
   margin-top: 10px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .schedule-table th, .schedule-table td {
   border: 1px solid #ddd;
   padding: 8px;
-  text-align: left;
+  text-align: center;
 }
 
 .schedule-table th {
   background-color: #f2f2f2;
   font-weight: bold;
-}
-
-.schedule-subtitle {
-  font-size: 20px;
-  font-weight: bold;
-  margin-top: 20px;
-  text-align: left;
 }
 
 .schedule-table .edit-button,
@@ -157,4 +158,15 @@
   outline: none;
   border-color: #007bff;
   box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+/* New styles for action column */
+.actions-column {
+  width: 150px;
+  text-align: center;
+}
+
+.schedule-table td.actions-column {
+  text-align: center;
+  vertical-align: middle;
 }
