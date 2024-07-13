@@ -15,6 +15,8 @@ function SubjectsPage() {
     school_year: '',
     grade: ''
   });
+  const [grades] = useState(['7', '8', '9', '10']); // Example grades
+  const [schoolYears, setSchoolYears] = useState([]);
 
   const fetchSubjects = useCallback(async () => {
     try {
@@ -28,9 +30,19 @@ function SubjectsPage() {
     }
   }, [filters]);
 
+  const fetchSchoolYears = useCallback(async () => {
+    try {
+      const response = await axios.get('http://localhost:3001/api/school_years');
+      setSchoolYears(response.data.map(sy => sy.school_year));
+    } catch (error) {
+      console.error('Error fetching school years:', error);
+    }
+  }, []);
+
   useEffect(() => {
     fetchSubjects();
-  }, [fetchSubjects]);
+    fetchSchoolYears();
+  }, [fetchSubjects, fetchSchoolYears]);
 
   const handleSearch = (searchTerm) => {
     setFilters(prevFilters => ({ ...prevFilters, searchTerm }));
@@ -127,12 +139,16 @@ function SubjectsPage() {
                       <th>Grade Level:</th>
                       <td>
                         {isEditing ? (
-                          <input
-                            type="text"
+                          <select
                             name="grade_level"
                             value={editFormData.grade_level}
                             onChange={handleEditChange}
-                          />
+                          >
+                            <option value="">Select Grade</option>
+                            {grades.map((grade, index) => (
+                              <option key={index} value={grade}>{grade}</option>
+                            ))}
+                          </select>
                         ) : (
                           subject.grade_level
                         )}
@@ -188,12 +204,16 @@ function SubjectsPage() {
                       <th>School Year ID:</th>
                       <td>
                         {isEditing ? (
-                          <input
-                            type="text"
+                          <select
                             name="school_year_id"
                             value={editFormData.school_year_id}
                             onChange={handleEditChange}
-                          />
+                          >
+                            <option value="">Select School Year</option>
+                            {schoolYears.map((year, index) => (
+                              <option key={index} value={year}>{year}</option>
+                            ))}
+                          </select>
                         ) : (
                           subject.school_year_id
                         )}
