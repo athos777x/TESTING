@@ -201,7 +201,7 @@ function SubjectsPage() {
                       </td>
                     </tr>
                     <tr>
-                      <th>School Year ID:</th>
+                      <th>School Year:</th>
                       <td>
                         {isEditing ? (
                           <select
@@ -215,7 +215,7 @@ function SubjectsPage() {
                             ))}
                           </select>
                         ) : (
-                          subject.school_year_id
+                          subject.school_year
                         )}
                       </td>
                     </tr>

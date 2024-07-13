@@ -905,9 +905,13 @@ app.put('/schedules/:scheduleId', (req, res) => {
   });
 });
 
-// Endpoint to get subjects
+// Endpoint to get subjects and subjects details
 app.get('/subjects', (req, res) => {
-  const query = 'SELECT * FROM subject';
+  const query = `
+    SELECT s.subject_id, s.grade_level, s.subject_name, s.status, s.grading_criteria, s.description, s.archive_status, sy.school_year
+    FROM subject s
+    JOIN school_year sy ON s.school_year_id = sy.school_year_id
+  `;
   db.query(query, (error, results) => {
     if (error) {
       return res.status(500).send(error);
@@ -915,7 +919,6 @@ app.get('/subjects', (req, res) => {
     res.send(results);
   });
 });
-
 
 app.listen(3001, () => {
   console.log('Server running on port 3001');
