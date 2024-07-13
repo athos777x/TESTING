@@ -97,7 +97,7 @@ function SubjectsPage() {
           <div key={subject.subject_id} className="subject-item-container">
             <div className="subject-item">
               <p className="subject-name">{index + 1}. {subject.subject_name}</p>
-              <span className="subject-info">{subject.grade_level} - {subject.status.charAt(0).toUpperCase() + subject.status.slice(1)}</span>
+              <span className="subject-info">Grade {subject.grade_level} - {subject.status.charAt(0).toUpperCase() + subject.status.slice(1)}</span>
               <div className="subject-actions">
                 <button className="subject-view-button" onClick={() => toggleSubjectDetails(subject.subject_id)}>View</button>
                 <button className="subject-edit-button" onClick={() => startEditing(subject.subject_id)}>Edit</button>
