@@ -65,10 +65,8 @@
   display: flex;
 }
 
-.sectionlist-view-button,
-.sectionlist-approve-button,
-.sectionlist-edit-button {
-  margin-left: 5px; /* Added margin to create space between buttons */
+.sectionlist-view-button {
+  margin-left: 5px;
   padding: 5px 10px;
   border: none;
   background-color: #28a745;
@@ -77,9 +75,7 @@
   border-radius: 13px;
 }
 
-.sectionlist-view-button:hover,
-.sectionlist-approve-button:hover,
-.sectionlist-edit-button:hover {
+.sectionlist-view-button:hover {
   background-color: #218838;
 }
 
@@ -109,4 +105,56 @@
   font-weight: bold;
   margin-top: 20px;
   text-align: left;
+}
+
+.schedule-table .edit-button,
+.schedule-table .save-button,
+.schedule-table .approve-button {
+  padding: 5px 10px;
+  border: none;
+  background-color: #28a745;
+  color: white;
+  cursor: pointer;
+  border-radius: 13px;
+  margin-right: 5px;
+}
+
+.schedule-table .cancel-button {
+  padding: 5px 10px;
+  border: none;
+  background-color: #dc3545;
+  color: white;
+  cursor: pointer;
+  border-radius: 13px;
+  margin-right: 5px;
+}
+
+.schedule-table .edit-button:hover,
+.schedule-table .save-button:hover,
+.schedule-table .approve-button:hover {
+  background-color: #218838;
+}
+
+.schedule-table .cancel-button:hover {
+  background-color: #c82333;
+}
+
+.schedule-table input[type="text"],
+.schedule-table input[type="time"],
+.schedule-table input[type="number"],
+.schedule-table select {
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.schedule-table input[type="text"]:focus,
+.schedule-table input[type="time"]:focus,
+.schedule-table input[type="number"]:focus,
+.schedule-table select:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
 }

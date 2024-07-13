@@ -868,6 +868,44 @@ app.get('/sections/:sectionId/schedules', (req, res) => {
   });
 });
 
+// New endpoint to approve a schedule
+app.put('/schedules/:scheduleId/approve', (req, res) => {
+  const { scheduleId } = req.params;
+  const query = 'UPDATE schedule SET schedule_status = "Approved" WHERE schedule_id = ?';
+  db.query(query, [scheduleId], (err, results) => {
+    if (err) {
+      console.error('Error approving schedule:', err);
+      res.status(500).json({ error: 'Internal server error' });
+      return;
+    }
+    if (results.affectedRows > 0) {
+      res.json({ message: 'Schedule approved successfully' });
+    } else {
+      res.status(404).json({ error: 'Schedule not found' });
+    }
+  });
+});
+
+// Endpoint to update schedule details by ID
+app.put('/schedules/:scheduleId', (req, res) => {
+  const { scheduleId } = req.params;
+  const { teacher_id, time_start, time_end, day, schedule_status } = req.body;
+  const query = 'UPDATE schedule SET teacher_id = ?, time_start = ?, time_end = ?, day = ?, schedule_status = ? WHERE schedule_id = ?';
+  db.query(query, [teacher_id, time_start, time_end, day, schedule_status, scheduleId], (err, results) => {
+    if (err) {
+      console.error('Error updating schedule details:', err);
+      res.status(500).json({ error: 'Internal server error' });
+      return;
+    }
+    if (results.affectedRows > 0) {
+      res.json({ message: 'Schedule updated successfully' });
+    } else {
+      res.status(404).json({ error: 'Schedule not found' });
+    }
+  });
+});
+
+
 app.listen(3001, () => {
   console.log('Server running on port 3001');
 });

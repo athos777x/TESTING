@@ -13,6 +13,8 @@ function SchedulePage() {
     grade: '',
     section: ''
   });
+  const [isEditing, setIsEditing] = useState(false);
+  const [editFormData, setEditFormData] = useState({});
 
   const fetchSections = useCallback(async () => {
     try {
@@ -57,9 +59,10 @@ function SchedulePage() {
     if (selectedSectionId === sectionId) {
       setSelectedSectionId(null);
       setSectionSchedules([]);
+      setIsEditing(false);
     } else {
       setSelectedSectionId(sectionId);
-      setSectionSchedules([]); // Clear previous schedules
+      setIsEditing(false);
       fetchSectionSchedules(sectionId);
     }
   };
@@ -73,18 +76,47 @@ function SchedulePage() {
     }
   };
 
-  const handleApproveClick = async (sectionId) => {
+  const startEditing = (schedule) => {
+    setIsEditing(true);
+    setEditFormData(schedule);
+  };
+
+  const handleEditChange = (event) => {
+    const { name, value } = event.target;
+    setEditFormData(prevFormData => ({
+      ...prevFormData,
+      [name]: value
+    }));
+  };
+
+  const saveChanges = async () => {
     try {
-      await axios.put(`http://localhost:3001/sections/${sectionId}/approve`);
-      fetchSections(); // Refresh the sections list
+      const { schedule_id, teacher_id, time_start, time_end, day, schedule_status } = editFormData;
+      await axios.put(`http://localhost:3001/schedules/${schedule_id}`, {
+        teacher_id,
+        time_start,
+        time_end,
+        day,
+        schedule_status
+      });
+      fetchSectionSchedules(selectedSectionId); // Refresh the schedules list
+      setIsEditing(false);
     } catch (error) {
-      console.error('There was an error approving the section!', error);
+      console.error('Error saving schedule details:', error);
     }
   };
 
-  const handleEditClick = (sectionId) => {
-    // Implement the edit functionality here
-    console.log(`Edit section ${sectionId}`);
+  const cancelEditing = () => {
+    setIsEditing(false);
+  };
+
+  const handleApproveClick = async (scheduleId) => {
+    try {
+      await axios.put(`http://localhost:3001/schedules/${scheduleId}/approve`, { schedule_status: 'Approved' });
+      fetchSectionSchedules(selectedSectionId); // Refresh the schedules list
+    } catch (error) {
+      console.error('There was an error approving the schedule!', error);
+    }
   };
 
   return (
@@ -108,8 +140,6 @@ function SchedulePage() {
                 <span className="sectionlist-info">Grade: {section.grade_level} - {section.status.charAt(0).toUpperCase() + section.status.slice(1)}</span>
                 <div className="sectionlist-actions">
                   <button className="sectionlist-view-button" onClick={() => handleViewClick(section.section_id)}>View</button>
-                  <button className="sectionlist-edit-button" onClick={() => handleEditClick(section.section_id)}>Edit</button>
-                  <button className="sectionlist-approve-button" onClick={() => handleApproveClick(section.section_id)}>Approve</button>
                 </div>
               </div>
               {selectedSectionId === section.section_id && (
@@ -124,23 +154,84 @@ function SchedulePage() {
                         <th>Day</th>
                         <th>Teacher ID</th>
                         <th>Status</th>
+                        <th>Actions</th>
                       </tr>
                     </thead>
                     <tbody>
                       {sectionSchedules.length > 0 ? (
                         sectionSchedules.map(schedule => (
                           <tr key={schedule.schedule_id}>
-                            <td>{schedule.subject_name}</td>
-                            <td>{schedule.time_start}</td>
-                            <td>{schedule.time_end}</td>
-                            <td>{schedule.day}</td>
-                            <td>{schedule.teacher_id}</td>
-                            <td>{schedule.schedule_status}</td>
+                            {isEditing && editFormData.schedule_id === schedule.schedule_id ? (
+                              <>
+                                <td>{schedule.subject_name}</td>
+                                <td>
+                                  <input
+                                    type="time"
+                                    name="time_start"
+                                    value={editFormData.time_start}
+                                    onChange={handleEditChange}
+                                  />
+                                </td>
+                                <td>
+                                  <input
+                                    type="time"
+                                    name="time_end"
+                                    value={editFormData.time_end}
+                                    onChange={handleEditChange}
+                                  />
+                                </td>
+                                <td>
+                                  <input
+                                    type="text"
+                                    name="day"
+                                    value={editFormData.day}
+                                    onChange={handleEditChange}
+                                  />
+                                </td>
+                                <td>
+                                  <input
+                                    type="number"
+                                    name="teacher_id"
+                                    value={editFormData.teacher_id}
+                                    onChange={handleEditChange}
+                                  />
+                                </td>
+                                <td>
+                                  <select
+                                    name="schedule_status"
+                                    value={editFormData.schedule_status}
+                                    onChange={handleEditChange}
+                                  >
+                                    <option value="Approved">Approved</option>
+                                    <option value="Pending Approval">Pending Approval</option>
+                                  </select>
+                                </td>
+                                <td>
+                                  <button className="save-button" onClick={saveChanges}>Save</button>
+                                  <button className="cancel-button" onClick={cancelEditing}>Cancel</button>
+                                </td>
+                              </>
+                            ) : (
+                              <>
+                                <td>{schedule.subject_name}</td>
+                                <td>{schedule.time_start}</td>
+                                <td>{schedule.time_end}</td>
+                                <td>{schedule.day}</td>
+                                <td>{schedule.teacher_id}</td>
+                                <td>{schedule.schedule_status}</td>
+                                <td>
+                                  <button className="edit-button" onClick={() => startEditing(schedule)}>Edit</button>
+                                  {schedule.schedule_status === 'Pending Approval' && (
+                                    <button className="approve-button" onClick={() => handleApproveClick(schedule.schedule_id)}>Approve</button>
+                                  )}
+                                </td>
+                              </>
+                            )}
                           </tr>
                         ))
                       ) : (
                         <tr>
-                          <td colSpan="6" style={{ textAlign: 'center' }}>No schedules available</td>
+                          <td colSpan="7" style={{ textAlign: 'center' }}>No schedules available</td>
                         </tr>
                       )}
                     </tbody>
