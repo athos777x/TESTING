@@ -989,6 +989,26 @@ app.put('/subjects/:subjectId/archive', (req, res) => {
   });
 });
 
+// Endpoint to add a new subject
+app.post('/subjects', (req, res) => {
+  const { subject_name, grade_level, status, grading_criteria, description, school_year, archive_status } = req.body;
+  const query = `
+    INSERT INTO subject (subject_name, grade_level, status, grading_criteria, description, school_year_id, archive_status)
+    VALUES (?, ?, ?, ?, ?, (SELECT school_year_id FROM school_year WHERE school_year = ?), ?)
+  `;
+  const queryParams = [subject_name, grade_level, status, grading_criteria, description, school_year, archive_status];
+
+  db.query(query, queryParams, (err, results) => {
+    if (err) {
+      console.error('Error adding subject:', err);
+      res.status(500).json({ error: 'Internal server error' });
+      return;
+    }
+    res.status(201).json({ message: 'Subject added successfully', subjectId: results.insertId });
+  });
+});
+
+
 app.listen(3001, () => {
   console.log('Server running on port 3001');
 });

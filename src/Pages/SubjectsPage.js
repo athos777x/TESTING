@@ -17,6 +17,17 @@ function SubjectsPage() {
   });
   const [grades] = useState(['7', '8', '9', '10']); // Example grades
   const [schoolYears, setSchoolYears] = useState([]);
+  const [isAdding, setIsAdding] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [newSubjectData, setNewSubjectData] = useState({
+    subject_name: '',
+    grade_level: '7',
+    status: 'active',
+    grading_criteria: '',
+    description: '',
+    school_year: '',
+    archive_status: 'unarchive' // Default value
+  });
 
   const fetchSubjects = useCallback(async () => {
     try {
@@ -129,6 +140,44 @@ function SubjectsPage() {
     }
   };
 
+  const startAdding = () => {
+    setIsAdding(true);
+    setNewSubjectData({
+      subject_name: '',
+      grade_level: '7',
+      status: 'active',
+      grading_criteria: '',
+      description: '',
+      school_year: schoolYears.length > 0 ? schoolYears[0].year : '',
+      archive_status: 'unarchive' // Default value
+    });
+    setShowModal(true);
+  };
+
+  const handleAddChange = (event) => {
+    const { name, value } = event.target;
+    setNewSubjectData(prevFormData => ({
+      ...prevFormData,
+      [name]: value
+    }));
+  };
+
+  const saveNewSubject = async () => {
+    try {
+      await axios.post('http://localhost:3001/subjects', newSubjectData);
+      fetchSubjects();
+      setIsAdding(false);
+      setShowModal(false);
+    } catch (error) {
+      console.error('Error adding new subject:', error);
+    }
+  };
+
+  const cancelAdding = () => {
+    setIsAdding(false);
+    setShowModal(false);
+  };
+
   return (
     <div className="subjects-container">
       <h1 className="subjects-title">Subjects</h1>
@@ -137,6 +186,9 @@ function SubjectsPage() {
           handleSearch={handleSearch}
           handleApplyFilters={handleApplyFilters}
         />
+      </div>
+      <div className="subjects-add-subject-button-container">
+        <button className="subjects-add-subject-button" onClick={startAdding}>Add New Subject</button>
       </div>
       <div className="subjects-list">
         {filteredSubjects.map((subject, index) => (
@@ -261,6 +313,82 @@ function SubjectsPage() {
           </div>
         ))}
       </div>
+
+      {showModal && (
+        <div className="subject-modal">
+          <div className="subject-modal-content">
+            <h2>Add New Subject</h2>
+            <label>
+              Subject Name:
+              <input
+                type="text"
+                name="subject_name"
+                value={newSubjectData.subject_name}
+                onChange={handleAddChange}
+              />
+            </label>
+            <label>
+              Grade Level:
+              <select
+                name="grade_level"
+                value={newSubjectData.grade_level}
+                onChange={handleAddChange}
+              >
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10">10</option>
+              </select>
+            </label>
+            <label>
+              Status:
+              <select
+                name="status"
+                value={newSubjectData.status}
+                onChange={handleAddChange}
+              >
+                <option value="active">Active</option>
+                <option value="inactive">Inactive</option>
+              </select>
+            </label>
+            <label>
+              Grading Criteria:
+              <input
+                type="text"
+                name="grading_criteria"
+                value={newSubjectData.grading_criteria}
+                onChange={handleAddChange}
+              />
+            </label>
+            <label>
+              Description:
+              <textarea
+                name="description"
+                value={newSubjectData.description}
+                onChange={handleAddChange}
+              />
+            </label>
+            <label>
+              School Year:
+              <select
+                name="school_year"
+                value={newSubjectData.school_year}
+                onChange={handleAddChange}
+              >
+                {schoolYears.map((year) => (
+                  <option key={year.id} value={year.year}>
+                    {year.year}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <div className="subject-button-group">
+              <button className="subject-save-button" onClick={saveNewSubject}>Save</button>
+              <button className="subject-cancel-button" onClick={cancelAdding}>Cancel</button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
