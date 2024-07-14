@@ -1,6 +1,6 @@
 // PrincipalSideBar.js
 import React, { useState } from 'react';
-import '../CssFiles/principaldashboard.css';
+import '../CssFiles/sidebar.css';
 import {
   FiHome,
   FiUsers,
