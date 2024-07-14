@@ -124,6 +124,7 @@ function SectionPage() {
   const fetchSectionDetails = async (sectionId) => {
     try {
       const response = await axios.get(`http://localhost:3001/sections/${sectionId}`);
+      console.log('Fetched section details:', response.data); // Log fetched details
       setSectionDetails(response.data);
       setEditFormData(response.data);
     } catch (error) {
@@ -135,6 +136,7 @@ function SectionPage() {
     setSelectedSectionId(sectionId);
     setIsEditing(true);
     const section = sections.find(sec => sec.section_id === sectionId);
+    console.log('Section to edit:', section); // Log section details to edit
     setEditFormData(section);
   };
 
@@ -149,6 +151,7 @@ function SectionPage() {
   const saveChanges = async () => {
     try {
       const { school_year_id, ...updateData } = editFormData;
+      console.log('Saving changes:', updateData); // Log changes to save
       await axios.put(`http://localhost:3001/sections/${selectedSectionId}`, updateData);
       fetchSections(activeSchoolYear);
       fetchSectionDetails(selectedSectionId);
@@ -357,13 +360,13 @@ function SectionPage() {
                       </td>
                     </tr>
                     <tr>
-                      <th>Room Number:</th> {/* Add room number field */}
+                      <th>Room Number:</th>
                       <td>
                         {isEditing ? (
                           <input
                             type="text"
                             name="room_number"
-                            value={editFormData.room_number}
+                            value={editFormData.room_number || ''}
                             onChange={handleEditChange}
                           />
                         ) : (
@@ -446,7 +449,7 @@ function SectionPage() {
               </select>
             </label>
             <label>
-              Room Number: {/* Add room number field */}
+              Room Number:
               <input
                 type="text"
                 name="room_number"

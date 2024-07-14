@@ -647,7 +647,7 @@ app.put('/school-years/:schoolYearId', (req, res) => {
 app.get('/sections', (req, res) => {
   const { searchTerm, grade, showArchive } = req.query;
   let query = `
-    SELECT s.section_id, s.section_name, s.grade_level, s.status, s.max_capacity, sy.school_year, s.archive_status
+    SELECT s.section_id, s.section_name, s.grade_level, s.status, s.max_capacity, sy.school_year, s.archive_status, s.room_number
     FROM section s
     JOIN school_year sy ON s.school_year_id = sy.school_year_id
     WHERE sy.status = 'active'
