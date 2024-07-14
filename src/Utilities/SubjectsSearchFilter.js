@@ -75,8 +75,8 @@ function SubjectsSearchFilter({ handleSearch, handleApplyFilters }) {
         ))}
       </select>
       <select id="archive_status" value={selectedArchiveStatus} onChange={handleArchiveStatusChange} className="filter-select">
-        <option value="unarchive">Unarchive</option>
-        <option value="archive">Archive</option>
+        <option value="unarchive">Show Unarchived</option>
+        <option value="archive">Show Archived</option>
       </select>
       <button onClick={applyFilters} className="filter-button">Apply Filters</button>
     </div>
