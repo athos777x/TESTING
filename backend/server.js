@@ -80,6 +80,7 @@ app.get('/users/:userId', (req, res) => {
 // Endpoint to fetch all students
 // Function: Retrieves a list of all students with optional filtering by search term, grade, section, and school year
 // Pages: StudentsPage.js, SectionPage.js, GradesPage.js, AttendancePage.js
+// Filters: SearchFilter.js
 app.get('/students', (req, res) => {
   const { searchTerm, grade, section, school_year } = req.query;
   console.log('Received params:', { searchTerm, grade, section, school_year });
@@ -175,7 +176,8 @@ app.get('/students/:student_id/grades', (req, res) => {
 
 // Endpoint to fetch sections for select section filter
 // Function: Retrieves sections for filtering in various pages
-// Pages: StudentsPage.js, GradesPage.js, AttendancePage.js, SectionListSearchFilter.js, SectionSearchFilter.js, SearchFilter.js
+// Pages: StudentsPage.js, GradesPage.js, AttendancePage.js
+// Filters: SectionListSearchFilter.js, SectionSearchFilter.js, SearchFilter.js
 app.get('/api/sections', (req, res) => {
   const query = 'SELECT section_id, section_name FROM section';
   db.query(query, (err, results) => {
@@ -220,7 +222,8 @@ app.get('/api/departments', (req, res) => {
 
 // Fetch filter options for school year and grades
 // Function: Retrieves filter options for school years, grades, and sections
-// Pages: SchoolYearPage.js, SearchFilter.js, SectionListSearchFilter.js, SectionSearchFilter.js
+// Pages: SchoolYearPage.js, SearchFilter.js
+// Filters: SectionListSearchFilter.js, SectionSearchFilter.js
 app.get('/filters', (req, res) => {
   const filters = {
     schoolYears: [],
@@ -377,6 +380,7 @@ app.get('/students/:id/details', (req, res) => {
 // Endpoint to fetch all employees
 // Function: Retrieves a list of all employees with optional filtering by status, position, department, search term, and archive status
 // Pages: EmployeePage.js
+// Filters: EmployeeSearchFilter.js
 app.get('/employees', (req, res) => {
   const { status, position, department, searchTerm, showArchive } = req.query;
 
@@ -641,9 +645,10 @@ app.put('/school-years/:schoolYearId', (req, res) => {
   });
 });
 
-// Endpoint to fetch sections without using section_open table (archive_status of unarchive/archive)
+// Endpoint to fetch sections
 // Function: Retrieves sections with optional filtering by search term, grade, and archive status
-// Pages: SectionPage.js, SectionListPage.js, SectionListSearchFilter.js, SectionSearchFilter.js, SearchFilter.js
+// Pages: SectionPage.js, SectionListPage.js
+// Filters: SectionListSearchFilter.js, SectionSearchFilter.js, SearchFilter.js
 app.get('/sections', (req, res) => {
   const { searchTerm, grade, showArchive } = req.query;
   let query = `
@@ -906,6 +911,9 @@ app.put('/schedules/:scheduleId', (req, res) => {
 });
 
 // Endpoint to get subjects and subjects details
+// Function: Retrieves subjects with optional filtering by search term, school year, grade, and archive status
+// Pages: SubjectsPage.js
+// Filters: SubjectsSearchFilter.js
 app.get('/subjects', (req, res) => {
   const { searchTerm, school_year, grade, archive_status } = req.query;
   
@@ -941,6 +949,8 @@ app.get('/subjects', (req, res) => {
 });
 
 // Endpoint to update subject details
+// Function: Updates a subject's details based on its subject ID
+// Pages: SubjectsPage.js
 app.put('/subjects/:subjectId', (req, res) => {
   const { subjectId } = req.params;
   const updatedSubject = req.body;
@@ -971,6 +981,8 @@ app.put('/subjects/:subjectId', (req, res) => {
 });
 
 // Endpoint to archive or unarchive a subject
+// Function: Archives or unarchives a subject by updating its status and archive status
+// Pages: SubjectsPage.js
 app.put('/subjects/:subjectId/archive', (req, res) => {
   const { subjectId } = req.params;
   const { status, archive_status } = req.body;
@@ -990,6 +1002,8 @@ app.put('/subjects/:subjectId/archive', (req, res) => {
 });
 
 // Endpoint to add a new subject
+// Function: Adds a new subject to the database
+// Pages: SubjectsPage.js
 app.post('/subjects', (req, res) => {
   const { subject_name, grade_level, status, grading_criteria, description, school_year, archive_status } = req.body;
   const query = `
