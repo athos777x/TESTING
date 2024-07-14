@@ -970,19 +970,19 @@ app.put('/subjects/:subjectId', (req, res) => {
   });
 });
 
-// Endpoint to archive a subject
+// Endpoint to archive or unarchive a subject
 app.put('/subjects/:subjectId/archive', (req, res) => {
   const { subjectId } = req.params;
   const { status, archive_status } = req.body;
   const query = 'UPDATE subject SET status = ?, archive_status = ? WHERE subject_id = ?';
   db.query(query, [status, archive_status, subjectId], (err, results) => {
     if (err) {
-      console.error('Error archiving subject:', err);
+      console.error('Error updating subject:', err);
       res.status(500).json({ error: 'Internal server error' });
       return;
     }
     if (results.affectedRows > 0) {
-      res.json({ message: 'Subject archived successfully' });
+      res.json({ message: 'Subject updated successfully' });
     } else {
       res.status(404).json({ error: 'Subject not found' });
     }
