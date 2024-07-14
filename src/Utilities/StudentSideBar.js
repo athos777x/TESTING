@@ -1,6 +1,6 @@
 // StudentSideBar.js
 import React from 'react';
-import '../CssFiles/studentdashboard.css';
+import '../CssFiles/sidebar.css';
 import {
   FiUser,
   FiBook,
