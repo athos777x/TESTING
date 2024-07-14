@@ -920,6 +920,36 @@ app.get('/subjects', (req, res) => {
   });
 });
 
+// Endpoint to update subject details
+app.put('/subjects/:subjectId', (req, res) => {
+  const { subjectId } = req.params;
+  const updatedSubject = req.body;
+
+  // Ensure that updatedSubject only contains valid columns for the subject table
+  const allowedFields = ['subject_name', 'grade_level', 'status', 'grading_criteria', 'description', 'archive_status', 'school_year_id'];
+  Object.keys(updatedSubject).forEach(key => {
+    if (!allowedFields.includes(key)) {
+      delete updatedSubject[key];
+    }
+  });
+
+  console.log(`Updating subject with ID: ${subjectId}`, updatedSubject);
+
+  const query = 'UPDATE subject SET ? WHERE subject_id = ?';
+  db.query(query, [updatedSubject, subjectId], (err, results) => {
+    if (err) {
+      console.error('Error updating subject details:', err);
+      res.status(500).json({ error: 'Internal server error' });
+      return;
+    }
+    if (results.affectedRows > 0) {
+      res.json({ message: 'Subject updated successfully' });
+    } else {
+      res.status(404).json({ error: 'Subject not found' });
+    }
+  });
+});
+
 app.listen(3001, () => {
   console.log('Server running on port 3001');
 });

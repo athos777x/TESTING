@@ -1,4 +1,3 @@
-// SubjectsPage.js
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import SubjectsSearchFilter from '../Utilities/SubjectsSearchFilter';
@@ -33,7 +32,7 @@ function SubjectsPage() {
   const fetchSchoolYears = useCallback(async () => {
     try {
       const response = await axios.get('http://localhost:3001/api/school_years');
-      setSchoolYears(response.data.map(sy => sy.school_year));
+      setSchoolYears(response.data.map(sy => ({ id: sy.school_year_id, year: sy.school_year })));
     } catch (error) {
       console.error('Error fetching school years:', error);
     }
@@ -73,10 +72,20 @@ function SubjectsPage() {
 
   const handleEditChange = (event) => {
     const { name, value } = event.target;
-    setEditFormData(prevFormData => ({
-      ...prevFormData,
-      [name]: value
-    }));
+
+    // Map school year name to its ID
+    if (name === 'school_year_id') {
+      const selectedSchoolYear = schoolYears.find(sy => sy.year === value);
+      setEditFormData(prevFormData => ({
+        ...prevFormData,
+        [name]: selectedSchoolYear ? selectedSchoolYear.id : value
+      }));
+    } else {
+      setEditFormData(prevFormData => ({
+        ...prevFormData,
+        [name]: value
+      }));
+    }
   };
 
   const saveChanges = async () => {
@@ -209,9 +218,8 @@ function SubjectsPage() {
                             value={editFormData.school_year_id}
                             onChange={handleEditChange}
                           >
-                            <option value="">Select School Year</option>
                             {schoolYears.map((year, index) => (
-                              <option key={index} value={year}>{year}</option>
+                              <option key={index} value={year.id}>{year.year}</option>
                             ))}
                           </select>
                         ) : (
