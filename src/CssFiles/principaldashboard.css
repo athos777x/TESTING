@@ -9,6 +9,7 @@
   position: fixed;
   top: 0;
   left: 0;
+  z-index: 1100; /* Ensure it's above the header */
   box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1); /* Add shadow for depth */
   border-right: 1px solid #ddd; /* Light border on the right */
 }
@@ -63,6 +64,7 @@
 .content {
   transition: margin-left 0.3s ease;
   margin-left: 0;
+  padding-top: 60px; /* Ensure the content is pushed down by the header height */
 }
 
 .content-shift {

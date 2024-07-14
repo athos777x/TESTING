@@ -58,7 +58,7 @@ function PrincipalSideBar({ showSidebar, toggleSidebar, handleLogout }) {
   };
 
   return (
-    <div className={`sidebar ${showSidebar ? 'show' : 'hide'}`}>
+    <div className={`sidebar ${showSidebar ? 'show' : 'hide'}`} style={{ zIndex: 1100 }}>
       <button className="toggle-btn" onClick={toggleSidebar}>
         {showSidebar ? <FiChevronLeft /> : <FiMenu />}
       </button>
@@ -114,7 +114,7 @@ function PrincipalSideBar({ showSidebar, toggleSidebar, handleLogout }) {
               <button onClick={() => handleNavigate('/section')}>
                 <FiBook className="icon" /> Section
               </button>
-              <button onClick={() => handleNavigate('/schedule')}> {/* Add this line */}
+              <button onClick={() => handleNavigate('/schedule')}>
                 <FiCalendar className="icon" /> Schedule
               </button>
             </div>
