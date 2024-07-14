@@ -117,6 +117,18 @@ function SubjectsPage() {
     }
   };
 
+  const unarchiveSubject = async (subjectId) => {
+    try {
+      await axios.put(`http://localhost:3001/subjects/${subjectId}/archive`, {
+        status: 'active',
+        archive_status: 'unarchive'
+      });
+      fetchSubjects();  // Refresh the subjects list after unarchiving
+    } catch (error) {
+      console.error('Error unarchiving subject:', error);
+    }
+  };
+
   return (
     <div className="subjects-container">
       <h1 className="subjects-title">Subjects</h1>
@@ -135,7 +147,11 @@ function SubjectsPage() {
               <div className="subject-actions">
                 <button className="subject-view-button" onClick={() => toggleSubjectDetails(subject.subject_id)}>View</button>
                 <button className="subject-edit-button" onClick={() => startEditing(subject.subject_id)}>Edit</button>
-                <button className="subject-archive-button" onClick={() => archiveSubject(subject.subject_id)}>Archive</button>
+                {subject.archive_status === 'unarchive' ? (
+                  <button className="subject-archive-button" onClick={() => archiveSubject(subject.subject_id)}>Archive</button>
+                ) : (
+                  <button className="subject-archive-button" onClick={() => unarchiveSubject(subject.subject_id)}>Unarchive</button>
+                )}
               </div>
             </div>
             {selectedSubjectId === subject.subject_id && (
