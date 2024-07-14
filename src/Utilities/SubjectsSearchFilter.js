@@ -3,12 +3,13 @@ import React, { useState, useEffect } from 'react';
 import '../CssFiles/searchfilter.css';
 import axios from 'axios';
 
-function SubjectsSearchFilter({ handleSearch, handleFilter, handleApplyFilters }) {
+function SubjectsSearchFilter({ handleSearch, handleApplyFilters }) {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedSchoolYear, setSelectedSchoolYear] = useState('');
   const [selectedGrade, setSelectedGrade] = useState('');
+  const [selectedArchiveStatus, setSelectedArchiveStatus] = useState('unarchive');
   const [schoolYears, setSchoolYears] = useState([]);
-  const [grades, setGrades] = useState(['7', '8', '9', '10']); // Example grades
+  const [grades] = useState(['7', '8', '9', '10']); // Example grades
 
   useEffect(() => {
     // Fetch school years or any necessary data here if needed
@@ -30,20 +31,24 @@ function SubjectsSearchFilter({ handleSearch, handleFilter, handleApplyFilters }
   const handleSchoolYearChange = (event) => {
     const value = event.target.value;
     setSelectedSchoolYear(value);
-    handleFilter('school_year', value);
   };
 
   const handleGradeChange = (event) => {
     const value = event.target.value;
     setSelectedGrade(value);
-    handleFilter('grade', value);
+  };
+
+  const handleArchiveStatusChange = (event) => {
+    const value = event.target.value;
+    setSelectedArchiveStatus(value);
   };
 
   const applyFilters = () => {
     const filters = {
       searchTerm,
       school_year: selectedSchoolYear,
-      grade: selectedGrade
+      grade: selectedGrade,
+      archive_status: selectedArchiveStatus
     };
     handleApplyFilters(filters);
   };
@@ -68,6 +73,10 @@ function SubjectsSearchFilter({ handleSearch, handleFilter, handleApplyFilters }
         {grades.map((grade, index) => (
           <option key={index} value={grade}>{grade}</option>
         ))}
+      </select>
+      <select id="archive_status" value={selectedArchiveStatus} onChange={handleArchiveStatusChange} className="filter-select">
+        <option value="unarchive">Unarchive</option>
+        <option value="archive">Archive</option>
       </select>
       <button onClick={applyFilters} className="filter-button">Apply Filters</button>
     </div>

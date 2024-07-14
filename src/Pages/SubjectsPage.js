@@ -12,7 +12,8 @@ function SubjectsPage() {
   const [filters, setFilters] = useState({
     searchTerm: '',
     school_year: '',
-    grade: ''
+    grade: '',
+    archive_status: 'unarchive'
   });
   const [grades] = useState(['7', '8', '9', '10']); // Example grades
   const [schoolYears, setSchoolYears] = useState([]);
@@ -104,6 +105,18 @@ function SubjectsPage() {
     setEditFormData(subject);
   };
 
+  const archiveSubject = async (subjectId) => {
+    try {
+      await axios.put(`http://localhost:3001/subjects/${subjectId}/archive`, {
+        status: 'inactive',
+        archive_status: 'archive'
+      });
+      fetchSubjects();  // Refresh the subjects list after archiving
+    } catch (error) {
+      console.error('Error archiving subject:', error);
+    }
+  };
+
   return (
     <div className="subjects-container">
       <h1 className="subjects-title">Subjects</h1>
@@ -122,7 +135,7 @@ function SubjectsPage() {
               <div className="subject-actions">
                 <button className="subject-view-button" onClick={() => toggleSubjectDetails(subject.subject_id)}>View</button>
                 <button className="subject-edit-button" onClick={() => startEditing(subject.subject_id)}>Edit</button>
-                <button className="subject-archive-button">Archive</button>
+                <button className="subject-archive-button" onClick={() => archiveSubject(subject.subject_id)}>Archive</button>
               </div>
             </div>
             {selectedSubjectId === subject.subject_id && (
@@ -213,15 +226,7 @@ function SubjectsPage() {
                       <th>School Year:</th>
                       <td>
                         {isEditing ? (
-                          <select
-                            name="school_year_id"
-                            value={editFormData.school_year_id}
-                            onChange={handleEditChange}
-                          >
-                            {schoolYears.map((year, index) => (
-                              <option key={index} value={year.id}>{year.year}</option>
-                            ))}
-                          </select>
+                          <span>{subject.school_year}</span>
                         ) : (
                           subject.school_year
                         )}

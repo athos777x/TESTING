@@ -907,12 +907,32 @@ app.put('/schedules/:scheduleId', (req, res) => {
 
 // Endpoint to get subjects and subjects details
 app.get('/subjects', (req, res) => {
-  const query = `
+  const { searchTerm, school_year, grade, archive_status } = req.query;
+  
+  let query = `
     SELECT s.subject_id, s.grade_level, s.subject_name, s.status, s.grading_criteria, s.description, s.archive_status, sy.school_year
     FROM subject s
     JOIN school_year sy ON s.school_year_id = sy.school_year_id
+    WHERE s.archive_status = ?
   `;
-  db.query(query, (error, results) => {
+  const queryParams = [archive_status];
+
+  if (searchTerm) {
+    query += ' AND s.subject_name LIKE ?';
+    queryParams.push(`%${searchTerm}%`);
+  }
+
+  if (school_year) {
+    query += ' AND sy.school_year = ?';
+    queryParams.push(school_year);
+  }
+
+  if (grade) {
+    query += ' AND s.grade_level = ?';
+    queryParams.push(grade);
+  }
+
+  db.query(query, queryParams, (error, results) => {
     if (error) {
       return res.status(500).send(error);
     }
@@ -944,6 +964,25 @@ app.put('/subjects/:subjectId', (req, res) => {
     }
     if (results.affectedRows > 0) {
       res.json({ message: 'Subject updated successfully' });
+    } else {
+      res.status(404).json({ error: 'Subject not found' });
+    }
+  });
+});
+
+// Endpoint to archive a subject
+app.put('/subjects/:subjectId/archive', (req, res) => {
+  const { subjectId } = req.params;
+  const { status, archive_status } = req.body;
+  const query = 'UPDATE subject SET status = ?, archive_status = ? WHERE subject_id = ?';
+  db.query(query, [status, archive_status, subjectId], (err, results) => {
+    if (err) {
+      console.error('Error archiving subject:', err);
+      res.status(500).json({ error: 'Internal server error' });
+      return;
+    }
+    if (results.affectedRows > 0) {
+      res.json({ message: 'Subject archived successfully' });
     } else {
       res.status(404).json({ error: 'Subject not found' });
     }
