@@ -1022,6 +1022,36 @@ app.post('/subjects', (req, res) => {
   });
 });
 
+// Endpoint to update section details by ID
+app.put('/sections/:sectionId', (req, res) => {
+  const { sectionId } = req.params;
+  const updatedSection = req.body;
+
+  // Remove any fields that don't exist in the 'section' table
+  const allowedFields = ['section_name', 'grade_level', 'status', 'max_capacity', 'school_year_id', 'room_number', 'archive_status'];
+  const sanitizedUpdate = {};
+  for (const key in updatedSection) {
+    if (allowedFields.includes(key)) {
+      sanitizedUpdate[key] = updatedSection[key];
+    }
+  }
+
+  const query = 'UPDATE section SET ? WHERE section_id = ?';
+  db.query(query, [sanitizedUpdate, sectionId], (err, results) => {
+    if (err) {
+      console.error('Error updating section details:', err);
+      res.status(500).json({ error: 'Internal server error' });
+      return;
+    }
+    if (results.affectedRows > 0) {
+      res.json({ message: 'Section updated successfully' });
+    } else {
+      res.status(404).json({ error: 'Section not found' });
+    }
+  });
+});
+
+
 
 app.listen(3001, () => {
   console.log('Server running on port 3001');
