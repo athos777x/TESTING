@@ -1023,6 +1023,8 @@ app.post('/subjects', (req, res) => {
 });
 
 // Endpoint to update section details by ID
+// Function: Updates section details
+// Pages: SectionPage.js
 app.put('/sections/:sectionId', (req, res) => {
   const { sectionId } = req.params;
   const updatedSection = req.body;
