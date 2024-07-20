@@ -1,9 +1,14 @@
-// Layout.js
 import React, { useState } from 'react';
 import { Outlet, Navigate } from 'react-router-dom';
 import HeaderBar from './HeadBar';
 import StudentSideBar from './StudentSideBar';
 import PrincipalSideBar from './PrincipalSideBar';
+import RegistrarSideBar from './RegistrarSideBar';
+import SubjectTeacherSideBar from './SubjectTeacherSideBar';
+import ClassAdviserSideBar from './ClassAdviserSideBar';
+import AcademicCoordinatorSideBar from './AcademicCoordinatorSideBar';
+import GradeLevelCoordinatorSideBar from './GradeLevelCoordinatorSideBar';
+import SubjectCoordinatorSideBar from './SubjectCoordinatorSideBar';
 
 function Layout({ role, handleLogout }) {
   const [showSidebar, setShowSidebar] = useState(true);
@@ -30,6 +35,24 @@ function Layout({ role, handleLogout }) {
       )}
       {role === 'principal' && (
         <PrincipalSideBar showSidebar={showSidebar} toggleSidebar={toggleSidebar} handleLogout={handleLogout} />
+      )}
+      {role === 'registrar' && (
+        <RegistrarSideBar showSidebar={showSidebar} toggleSidebar={toggleSidebar} handleLogout={handleLogout} />
+      )}
+      {role === 'subject_teacher' && (
+        <SubjectTeacherSideBar showSidebar={showSidebar} toggleSidebar={toggleSidebar} handleLogout={handleLogout} />
+      )}
+      {role === 'class_adviser' && (
+        <ClassAdviserSideBar showSidebar={showSidebar} toggleSidebar={toggleSidebar} handleLogout={handleLogout} />
+      )}
+      {role === 'academic_coordinator' && (
+        <AcademicCoordinatorSideBar showSidebar={showSidebar} toggleSidebar={toggleSidebar} handleLogout={handleLogout} />
+      )}
+      {role === 'grade_level_coordinator' && (
+        <GradeLevelCoordinatorSideBar showSidebar={showSidebar} toggleSidebar={toggleSidebar} handleLogout={handleLogout} />
+      )}
+      {role === 'subject_coordinator' && (
+        <SubjectCoordinatorSideBar showSidebar={showSidebar} toggleSidebar={toggleSidebar} handleLogout={handleLogout} />
       )}
       <div className={`content ${showSidebar ? 'content-shift' : ''}`}>
         <Outlet />

@@ -21,7 +21,13 @@ db.connect(err => {
 
 const roleMap = {
   1: 'principal',
-  2: 'student'
+  2: 'student',
+  3: 'subject_teacher',
+  4: 'class_adviser',
+  5: 'grade_level_coordinator',
+  6: 'registrar',
+  7: 'academic_coordinator',
+  8: 'subject_coordinator'
 };
 
 // Login endpoint
@@ -49,6 +55,7 @@ app.post('/login', (req, res) => {
   });
 });
 
+
 // Endpoint to fetch user details by ID
 // Function: Fetches detailed information about a user based on their user ID
 // Pages: Layout.js
@@ -56,10 +63,9 @@ app.get('/users/:userId', (req, res) => {
   const userId = req.params.userId;
   console.log(`Fetching user details for userId: ${userId}`);
   const query = `
-    SELECT e.firstname, e.lastname, e.middlename, u.username, u.role_id
-    FROM users u 
-    JOIN employee e ON u.user_id = e.user_id 
-    WHERE u.user_id = ?
+    SELECT username, role_id 
+    FROM users
+    WHERE user_id = ?
   `;
   db.query(query, [userId], (err, results) => {
     if (err) {

@@ -12,14 +12,12 @@ function LoginForm({ onLogin }) {
 
   const handleLogin = async (event) => {
     event.preventDefault();
-    console.log('Attempting to log in with username:', username);
     try {
       const response = await axios.post('http://localhost:3001/login', { username, password });
-      console.log('Login response:', response.data);
       if (response.data.authenticated) {
+        console.log(`Login successful. User ID: ${response.data.userId}`);
         const userResponse = await axios.get(`http://localhost:3001/users/${response.data.userId}`);
-        console.log('User details response:', userResponse.data);
-        const fullName = `${userResponse.data.firstname} ${userResponse.data.middlename[0]}. ${userResponse.data.lastname}`;
+        const fullName = userResponse.data.username; // Adjust this based on your actual data
 
         localStorage.setItem('fullName', fullName);
         localStorage.setItem('username', username);
