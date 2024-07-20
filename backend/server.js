@@ -62,26 +62,57 @@ app.post('/login', (req, res) => {
 app.get('/users/:userId', (req, res) => {
   const userId = req.params.userId;
   console.log(`Fetching user details for userId: ${userId}`);
-  const query = `
-    SELECT username, role_id 
-    FROM users
-    WHERE user_id = ?
-  `;
-  db.query(query, [userId], (err, results) => {
+  
+  const queryUser = 'SELECT username, role_id FROM users WHERE user_id = ?';
+  db.query(queryUser, [userId], (err, userResults) => {
     if (err) {
       console.error('Database query error:', err);
       res.status(500).json({ error: 'Database error' });
       return;
     }
-    if (results.length > 0) {
-      console.log('User details found:', results[0]);
-      res.json(results[0]);
+    if (userResults.length > 0) {
+      const user = userResults[0];
+      const roleId = user.role_id;
+      let queryDetails;
+      
+      if (roleId === 2) { // Student
+        queryDetails = `
+          SELECT u.username, u.role_id, s.firstname, s.lastname, s.middlename
+          FROM users u
+          JOIN student s ON u.user_id = s.user_id
+          WHERE u.user_id = ?
+        `;
+      } else { // Employee roles
+        queryDetails = `
+          SELECT u.username, u.role_id, e.firstname, e.lastname, e.middlename
+          FROM users u
+          JOIN employee e ON u.user_id = e.user_id
+          WHERE u.user_id = ?
+        `;
+      }
+
+      db.query(queryDetails, [userId], (err, detailsResults) => {
+        if (err) {
+          console.error('Database query error:', err);
+          res.status(500).json({ error: 'Database error' });
+          return;
+        }
+        if (detailsResults.length > 0) {
+          const details = detailsResults[0];
+          const fullName = `${details.firstname} ${details.middlename ? details.middlename + ' ' : ''}${details.lastname}`;
+          res.json({ username: details.username, role_id: details.role_id, fullName });
+        } else {
+          console.log('User details not found for userId:', userId);
+          res.status(404).json({ error: 'User details not found' });
+        }
+      });
     } else {
       console.log('User not found for userId:', userId);
       res.status(404).json({ error: 'User not found' });
     }
   });
 });
+
 
 // Endpoint to fetch all students
 // Function: Retrieves a list of all students with optional filtering by search term, grade, section, and school year

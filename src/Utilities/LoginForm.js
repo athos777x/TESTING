@@ -17,7 +17,7 @@ function LoginForm({ onLogin }) {
       if (response.data.authenticated) {
         console.log(`Login successful. User ID: ${response.data.userId}`);
         const userResponse = await axios.get(`http://localhost:3001/users/${response.data.userId}`);
-        const fullName = userResponse.data.username; // Adjust this based on your actual data
+        const fullName = userResponse.data.fullName;
 
         localStorage.setItem('fullName', fullName);
         localStorage.setItem('username', username);
