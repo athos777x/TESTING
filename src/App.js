@@ -1,28 +1,28 @@
 import React, { useState, useEffect } from 'react';
 import { Navigate, Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import './App.css';
-import './CssPage/LoginForm.css'; // Import the new CSS file
+import './CssPage/LoginForm.css'; 
 import LoginForm from './Utilities/LoginForm';
 import Layout from './Utilities/Layout';
 import ProfilePage from './Pages/ProfilePage';
 import AcademicRecordPage from './Pages/AcademicRecordPage';
 import EnrollmentPage from './Pages/EnrollmentPage';
-import SectionListPage from './Pages/SectionListPage';
-import SectionPage from './Pages/SectionPage';
+import SectionListPage from './PrincipalPages/SectionListPage';
+import SectionPage from './PrincipalPages/SectionPage';
 import HomePage from './Pages/HomePage';
-import StudentsPage from './Pages/StudentsPage';
-import GradesPage from './Pages/GradesPage';
-import AttendancePage from './Pages/AttendancePage';
-import EmployeePage from './Pages/EmployeePage';
-import SchoolYearPage from './Pages/SchoolYearPage';
-import EnrolledStudentsPage from './Pages/EnrolledStudentsPage';
-import SubjectsPage from './Pages/SubjectsPage';
+import StudentsPage from './PrincipalPages/StudentsPage';
+import GradesPage from './PrincipalPages/GradesPage';
+import AttendancePage from './PrincipalPages/AttendancePage';
+import EmployeePage from './PrincipalPages/EmployeePage';
+import SchoolYearPage from './PrincipalPages/SchoolYearPage';
+import EnrolledStudentsPage from './PrincipalPages/EnrolledStudentsPage';
+import SubjectsPage from './PrincipalPages/SubjectsPage';
 import GenerateReportsPage from './Pages/GenerateReportsPage';
 import ListofStudentEnrolleesPage from './Pages/ListofStudentEnrolleesPage';
 import SummaryReportonPromotionPage from './Pages/SummaryReportonPromotionPage';
 import EarlyEnrollmentReportPage from './Pages/EarlyEnrollmentReportPage';
-import StudentDetailPage from './Pages/StudentDetailPage';
-import SchedulePage from './Pages/SchedulePage'; // Import the SchedulePage
+import StudentDetailPage from './PrincipalPages/StudentDetailPage';
+import SchedulePage from './PrincipalPages/SchedulePage'; 
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(
