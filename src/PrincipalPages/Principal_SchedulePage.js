@@ -3,7 +3,7 @@ import axios from 'axios';
 import ScheduleSearchFilter from '../RoleSearchFilters/ScheduleSearchFilter';
 import '../CssPage/Principal_SchedulePage.css';
 
-function SchedulePage() {
+function Principal_SchedulePage() {
   const [sections, setSections] = useState([]);
   const [filteredSections, setFilteredSections] = useState([]);
   const [selectedSectionId, setSelectedSectionId] = useState(null);
@@ -248,4 +248,4 @@ function SchedulePage() {
   );
 }
 
-export default SchedulePage;
+export default Principal_SchedulePage;

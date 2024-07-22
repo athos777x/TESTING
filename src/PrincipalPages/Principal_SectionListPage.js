@@ -3,7 +3,7 @@ import axios from 'axios';
 import SectionSearchFilter from '../RoleSearchFilters/SectionListSearchFilter';
 import '../CssPage/Principal_SectionListPage.css';
 
-function SectionListPage() {
+function Principal_SectionListPage() {
   const [sections, setSections] = useState([]);
   const [filteredSections, setFilteredSections] = useState([]);
   const [selectedSectionId, setSelectedSectionId] = useState(null);
@@ -207,4 +207,4 @@ function SectionListPage() {
   );
 }
 
-export default SectionListPage;
+export default Principal_SectionListPage;

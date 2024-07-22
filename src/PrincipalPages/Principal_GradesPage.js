@@ -3,7 +3,7 @@ import SearchFilter from '../RoleSearchFilters/SearchFilter';
 import axios from 'axios';
 import '../CssPage/Principal_GradesPage.css';
 
-function GradesPage() {
+function Principal_GradesPage() {
   const [students, setStudents] = useState([]);
   const [filteredStudents, setFilteredStudents] = useState([]);
   const [selectedStudentId, setSelectedStudentId] = useState(null);
@@ -164,4 +164,4 @@ function GradesPage() {
   );
 }
 
-export default GradesPage;
+export default Principal_GradesPage;

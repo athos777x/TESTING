@@ -4,7 +4,7 @@ import SearchFilter from '../RoleSearchFilters/SearchFilter';
 import axios from 'axios';
 import '../CssPage/Principal_StudentsPage.css';
 
-function StudentsPage() {
+function Principal_StudentsPage() {
   const [students, setStudents] = useState([]);
   const [filteredStudents, setFilteredStudents] = useState([]);
   const [selectedStudentId, setSelectedStudentId] = useState(null);
@@ -226,4 +226,4 @@ function StudentsPage() {
   );
 }
 
-export default StudentsPage;
+export default Principal_StudentsPage;

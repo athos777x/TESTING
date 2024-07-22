@@ -3,7 +3,7 @@ import axios from 'axios';
 import SubjectsSearchFilter from '../RoleSearchFilters/SubjectsSearchFilter';
 import '../CssPage/Principal_SubjectsPage.css';
 
-function SubjectsPage() {
+function Principal_SubjectsPage() {
   const [subjects, setSubjects] = useState([]);
   const [filteredSubjects, setFilteredSubjects] = useState([]);
   const [selectedSubjectId, setSelectedSubjectId] = useState(null);
@@ -393,4 +393,4 @@ function SubjectsPage() {
   );
 }
 
-export default SubjectsPage;
+export default Principal_SubjectsPage;

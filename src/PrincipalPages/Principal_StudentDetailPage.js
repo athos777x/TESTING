@@ -6,7 +6,7 @@ import jsPDF from 'jspdf';
 import { FiX } from 'react-icons/fi';
 import '../CssPage/Principal_StudentDetailPage.css';
 
-const StudentDetailPage = () => {
+const Principal_StudentDetailPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [studentDetails, setStudentDetails] = useState(null);
@@ -246,4 +246,4 @@ const StudentDetailPage = () => {
   );
 };
 
-export default StudentDetailPage;
+export default Principal_StudentDetailPage;

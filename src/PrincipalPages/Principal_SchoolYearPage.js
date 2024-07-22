@@ -3,7 +3,7 @@ import axios from 'axios';
 import SchoolYearSearchFilter from '../RoleSearchFilters/SchoolYearSearchFilter';
 import '../CssPage/Principal_SchoolYearPage.css';
 
-function SchoolYearPage() {
+function Principal_SchoolYearPage() {
   const [schoolYears, setSchoolYears] = useState([]);
   const [filteredSchoolYears, setFilteredSchoolYears] = useState([]);
   const [selectedSchoolYearId, setSelectedSchoolYearId] = useState(null);
@@ -379,4 +379,4 @@ function SchoolYearPage() {
   );
 }
 
-export default SchoolYearPage;
+export default Principal_SchoolYearPage;
