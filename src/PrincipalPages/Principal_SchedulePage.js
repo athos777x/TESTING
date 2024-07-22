@@ -129,21 +129,21 @@ function SchedulePage() {
           sections={sections}
         />
       </div>
-      <div className="sectionlist-list">
+      <div className="schedule-sectionlist-list">
         {filteredSections.length > 0 ? (
           filteredSections.map((section, index) => (
-            <div key={section.section_id} className="sectionlist-item-container">
-              <div className="sectionlist-item">
-                <p className="sectionlist-name">
+            <div key={section.section_id} className="schedule-sectionlist-item-container">
+              <div className="schedule-sectionlist-item">
+                <p className="schedule-sectionlist-name">
                   {index + 1}. Section {section.section_name}
                 </p>
-                <span className="sectionlist-info">Grade: {section.grade_level} - {section.status.charAt(0).toUpperCase() + section.status.slice(1)}</span>
-                <div className="sectionlist-actions">
-                  <button className="sectionlist-view-button" onClick={() => handleViewClick(section.section_id)}>View</button>
+                <span className="schedule-sectionlist-info">Grade: {section.grade_level} - {section.status.charAt(0).toUpperCase() + section.status.slice(1)}</span>
+                <div className="schedule-sectionlist-actions">
+                  <button className="schedule-sectionlist-view-button" onClick={() => handleViewClick(section.section_id)}>View</button>
                 </div>
               </div>
               {selectedSectionId === section.section_id && (
-                <div className="sectionlist-details">
+                <div className="schedule-sectionlist-details">
                   <h2 className="schedule-subtitle">Schedules</h2>
                   <table className="schedule-table">
                     <thead>

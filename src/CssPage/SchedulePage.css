@@ -17,12 +17,12 @@
   margin-bottom: 20px;
 }
 
-.sectionlist-list {
+.schedule-sectionlist-list {
   list-style-type: none;
   padding: 0;
 }
 
-.sectionlist-item-container {
+.schedule-sectionlist-item-container {
   display: flex;
   flex-direction: column;
   margin: 5px 0;
@@ -33,7 +33,7 @@
   cursor: pointer;
 }
 
-.sectionlist-item {
+.schedule-sectionlist-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -49,22 +49,22 @@
   user-select: none;
 }
 
-.sectionlist-name {
+.schedule-sectionlist-name {
   margin: 5px 0;
 }
 
-.sectionlist-info {
+.schedule-sectionlist-info {
   margin-left: auto;
   text-align: center;
   flex: 1;
   margin: 0;
 }
 
-.sectionlist-actions {
+.schedule-sectionlist-actions {
   display: flex;
 }
 
-.sectionlist-view-button {
+.schedule-sectionlist-view-button {
   margin-left: 5px;
   padding: 5px 10px;
   border: none;
@@ -74,11 +74,11 @@
   border-radius: 13px;
 }
 
-.sectionlist-view-button:hover {
+.schedule-sectionlist-view-button:hover {
   background-color: #218838;
 }
 
-.sectionlist-details {
+.schedule-sectionlist-details {
   margin: 10px 0;
   text-align: center;
 }
