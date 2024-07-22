@@ -7,22 +7,22 @@ import Layout from './Utilities/Layout';
 import ProfilePage from './Pages/ProfilePage';
 import AcademicRecordPage from './Pages/AcademicRecordPage';
 import EnrollmentPage from './Pages/EnrollmentPage';
-import SectionListPage from './PrincipalPages/SectionListPage';
-import SectionPage from './PrincipalPages/SectionPage';
+import SectionListPage from './PrincipalPages/Principal_SectionListPage';
+import SectionPage from './PrincipalPages/Principal_SectionPage';
 import HomePage from './Pages/HomePage';
-import StudentsPage from './PrincipalPages/StudentsPage';
-import GradesPage from './PrincipalPages/GradesPage';
-import AttendancePage from './PrincipalPages/AttendancePage';
-import EmployeePage from './PrincipalPages/EmployeePage';
-import SchoolYearPage from './PrincipalPages/SchoolYearPage';
-import EnrolledStudentsPage from './PrincipalPages/EnrolledStudentsPage';
-import SubjectsPage from './PrincipalPages/SubjectsPage';
+import StudentsPage from './PrincipalPages/Principal_StudentsPage';
+import GradesPage from './PrincipalPages/Principal_GradesPage';
+import AttendancePage from './PrincipalPages/Principal_AttendancePage';
+import EmployeePage from './PrincipalPages/Principal_EmployeePage';
+import SchoolYearPage from './PrincipalPages/Principal_SchoolYearPage';
+import EnrolledStudentsPage from './PrincipalPages/Principal_EnrolledStudentsPage';
+import SubjectsPage from './PrincipalPages/Principal_SubjectsPage';
 import GenerateReportsPage from './Pages/GenerateReportsPage';
 import ListofStudentEnrolleesPage from './Pages/ListofStudentEnrolleesPage';
 import SummaryReportonPromotionPage from './Pages/SummaryReportonPromotionPage';
 import EarlyEnrollmentReportPage from './Pages/EarlyEnrollmentReportPage';
-import StudentDetailPage from './PrincipalPages/StudentDetailPage';
-import SchedulePage from './PrincipalPages/SchedulePage'; 
+import StudentDetailPage from './PrincipalPages/Principal_StudentDetailPage';
+import SchedulePage from './PrincipalPages/Principal_SchedulePage'; 
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(
