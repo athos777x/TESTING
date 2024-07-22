@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
-import SectionSearchFilter from '../Utilities/SectionSearchFilter'; // Ensure correct path
+import SectionSearchFilter from '../RoleSearchFilters/SectionSearchFilter'; 
 import '../CssPage/SectionPage.css';
 
 function SectionPage() {

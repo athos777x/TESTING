@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import SearchFilter from '../Utilities/SearchFilter';
+import SearchFilter from '../RoleSearchFilters/SearchFilter';
 import axios from 'axios';
 import '../CssPage/GradesPage.css';
 

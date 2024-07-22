@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
-import EmployeeSearchFilter from '../Utilities/EmployeeSearchFilter';
+import EmployeeSearchFilter from '../RoleSearchFilters/EmployeeSearchFilter';
 import '../CssPage/EmployeePage.css';
 
 function EmployeePage() {

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
-import SchoolYearSearchFilter from '../Utilities/SchoolYearSearchFilter';
+import SchoolYearSearchFilter from '../RoleSearchFilters/SchoolYearSearchFilter';
 import '../CssPage/SchoolYearPage.css';
 
 function SchoolYearPage() {

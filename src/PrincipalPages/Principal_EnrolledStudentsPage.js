@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import EnrolledStudentsSearchFilter from '../Utilities/EnrolledStudentsSearchFilter';
+import EnrolledStudentsSearchFilter from '../RoleSearchFilters/EnrolledStudentsSearchFilter';
 import '../CssPage/EnrolledStudentsPage.css';
 
 function EnrolledStudentsPage() {

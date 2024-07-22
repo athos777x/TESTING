@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
-import ScheduleSearchFilter from '../Utilities/ScheduleSearchFilter';
+import ScheduleSearchFilter from '../RoleSearchFilters/ScheduleSearchFilter';
 import '../CssPage/SchedulePage.css';
 
 function SchedulePage() {

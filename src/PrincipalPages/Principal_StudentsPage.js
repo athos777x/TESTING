@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import SearchFilter from '../Utilities/SearchFilter';
+import SearchFilter from '../RoleSearchFilters/SearchFilter';
 import axios from 'axios';
 import '../CssPage/StudentsPage.css';
 

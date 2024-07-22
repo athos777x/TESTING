@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
-import SubjectsSearchFilter from '../Utilities/SubjectsSearchFilter';
+import SubjectsSearchFilter from '../RoleSearchFilters/SubjectsSearchFilter';
 import '../CssPage/SubjectsPage.css';
 
 function SubjectsPage() {
