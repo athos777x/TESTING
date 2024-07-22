@@ -74,7 +74,7 @@ const StudentDetailPage = () => {
       doc.addImage(imgData, 'PNG', margin, margin + 40, pageWidth - margin * 2, imgHeight);
     };
 
-    const detailsCanvas = await html2canvas(document.getElementById('student-details'), { scale: 2 });
+    const detailsCanvas = await html2canvas(document.getElementById('student-detail-details'), { scale: 2 });
     const detailsImgData = detailsCanvas.toDataURL('image/png');
     const detailsImgProps = doc.getImageProperties(detailsImgData);
     const detailsImgHeight = (detailsImgProps.height * (pageWidth - margin * 2)) / detailsImgProps.width;
@@ -83,8 +83,8 @@ const StudentDetailPage = () => {
     doc.text(`${studentDetails.firstname} ${studentDetails.lastname}`, margin, margin);
     doc.addImage(detailsImgData, 'PNG', margin, margin + 20, pageWidth - margin * 2, detailsImgHeight);
 
-    await addSectionToPDF('student-grades', '');
-    await addSectionToPDF('student-attendance', '');
+    await addSectionToPDF('student-detail-grades', '');
+    await addSectionToPDF('student-detail-attendance', '');
 
     doc.save(`${studentDetails.firstname}_${studentDetails.lastname}_Details.pdf`);
   };
@@ -145,11 +145,11 @@ const StudentDetailPage = () => {
   }
 
   return (
-    <div className="student-detail-container">
-      <h1 className="student-detail-title">Student Details</h1>
-      <p className="student-name-header">{`${studentDetails.firstname} ${studentDetails.lastname}`}</p>
-      <div id="student-details">
-        <table className="student-detail-table">
+    <div className="studentdetail-container">
+      <h1 className="studentdetail-title">Student Details</h1>
+      <p className="studentdetail-name-header">{`${studentDetails.firstname} ${studentDetails.lastname}`}</p>
+      <div id="student-detail-details">
+        <table className="studentdetail-table">
           <tbody>
             {Object.entries(studentDetails).map(([key, value]) => (
               <tr key={key}>
@@ -160,10 +160,10 @@ const StudentDetailPage = () => {
           </tbody>
         </table>
       </div>
-      <div id="student-grades" className="grades-section">
+      <div id="student-detail-grades" className="studentdetail-grades-section">
         <h2>Grades</h2>
         {grades.length > 0 ? (
-          <table className="grades-table">
+          <table className="studentdetail-grades-table">
             <thead>
               <tr>
                 <th colSpan="6" style={{ textAlign: 'left' }}>
@@ -199,10 +199,10 @@ const StudentDetailPage = () => {
           <p>No grades available.</p>
         )}
       </div>
-      <div id="student-attendance" className="attendance-section">
+      <div id="student-detail-attendance" className="studentdetail-attendance-section">
         <h2>Attendance</h2>
         {attendanceData && Object.keys(attendanceData).length > 0 ? (
-          <table className="attendance-table">
+          <table className="studentdetail-attendance-table">
             <thead>
               <tr>
                 <th colSpan="2" style={{ textAlign: 'left' }}>
@@ -240,8 +240,8 @@ const StudentDetailPage = () => {
           <p>No attendance records available.</p>
         )}
       </div>
-      <button className="download-button" onClick={handleDownload}>Download PDF</button>
-      <button className="close-button" onClick={handleClose}><FiX /></button>
+      <button className="studentdetail-download-button" onClick={handleDownload}>Download PDF</button>
+      <button className="studentdetail-close-button" onClick={handleClose}><FiX /></button>
     </div>
   );
 };
