@@ -4,7 +4,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 import { FiX } from 'react-icons/fi';
-import '../CssPage/StudentDetailPage.css';
+import '../CssPage/Principal_StudentDetailPage.css';
 
 const StudentDetailPage = () => {
   const { id } = useParams();

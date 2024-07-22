@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import SubjectsSearchFilter from '../RoleSearchFilters/SubjectsSearchFilter';
-import '../CssPage/SubjectsPage.css';
+import '../CssPage/Principal_SubjectsPage.css';
 
 function SubjectsPage() {
   const [subjects, setSubjects] = useState([]);

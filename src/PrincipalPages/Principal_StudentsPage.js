@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import SearchFilter from '../RoleSearchFilters/SearchFilter';
 import axios from 'axios';
-import '../CssPage/StudentsPage.css';
+import '../CssPage/Principal_StudentsPage.css';
 
 function StudentsPage() {
   const [students, setStudents] = useState([]);

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import ScheduleSearchFilter from '../RoleSearchFilters/ScheduleSearchFilter';
-import '../CssPage/SchedulePage.css';
+import '../CssPage/Principal_SchedulePage.css';
 
 function SchedulePage() {
   const [sections, setSections] = useState([]);

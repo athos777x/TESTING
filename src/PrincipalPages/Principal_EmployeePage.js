@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import EmployeeSearchFilter from '../RoleSearchFilters/EmployeeSearchFilter';
-import '../CssPage/EmployeePage.css';
+import '../CssPage/Principal_EmployeePage.css';
 
 function EmployeePage() {
   const [employees, setEmployees] = useState([]);

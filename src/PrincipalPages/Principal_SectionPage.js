@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import SectionSearchFilter from '../RoleSearchFilters/SectionSearchFilter'; 
-import '../CssPage/SectionPage.css';
+import '../CssPage/Principal_SectionPage.css';
 
 function SectionPage() {
   const [sections, setSections] = useState([]);

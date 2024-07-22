@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import SchoolYearSearchFilter from '../RoleSearchFilters/SchoolYearSearchFilter';
-import '../CssPage/SchoolYearPage.css';
+import '../CssPage/Principal_SchoolYearPage.css';
 
 function SchoolYearPage() {
   const [schoolYears, setSchoolYears] = useState([]);

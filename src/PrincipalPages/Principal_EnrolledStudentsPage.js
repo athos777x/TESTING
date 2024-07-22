@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import EnrolledStudentsSearchFilter from '../RoleSearchFilters/EnrolledStudentsSearchFilter';
-import '../CssPage/EnrolledStudentsPage.css';
+import '../CssPage/Principal_EnrolledStudentsPage.css';
 
 function EnrolledStudentsPage() {
   const [students, setStudents] = useState([]);

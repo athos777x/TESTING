@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import SearchFilter from '../RoleSearchFilters/SearchFilter';
 import axios from 'axios';
-import '../CssPage/GradesPage.css';
+import '../CssPage/Principal_GradesPage.css';
 
 function GradesPage() {
   const [students, setStudents] = useState([]);
