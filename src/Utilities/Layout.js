@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import { Outlet, Navigate } from 'react-router-dom';
 import HeaderBar from './HeadBar';
-import StudentSideBar from './StudentSideBar';
-import PrincipalSideBar from './PrincipalSideBar';
-import RegistrarSideBar from './RegistrarSideBar';
-import SubjectTeacherSideBar from './SubjectTeacherSideBar';
-import ClassAdviserSideBar from './ClassAdviserSideBar';
-import AcademicCoordinatorSideBar from './AcademicCoordinatorSideBar';
-import GradeLevelCoordinatorSideBar from './GradeLevelCoordinatorSideBar';
-import SubjectCoordinatorSideBar from './SubjectCoordinatorSideBar';
+import StudentSideBar from '../RoleSidebars/StudentSideBar';
+import PrincipalSideBar from '../RoleSidebars/PrincipalSideBar';
+import RegistrarSideBar from '../RoleSidebars/RegistrarSideBar';
+import SubjectTeacherSideBar from '../RoleSidebars/SubjectTeacherSideBar';
+import ClassAdviserSideBar from '../RoleSidebars/ClassAdviserSideBar';
+import AcademicCoordinatorSideBar from '../RoleSidebars/AcademicCoordinatorSideBar';
+import GradeLevelCoordinatorSideBar from '../RoleSidebars/GradeLevelCoordinatorSideBar';
+import SubjectCoordinatorSideBar from '../RoleSidebars/SubjectCoordinatorSideBar';
 
 function Layout({ role, handleLogout }) {
   const [showSidebar, setShowSidebar] = useState(true);
