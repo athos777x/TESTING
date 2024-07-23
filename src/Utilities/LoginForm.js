@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { FiEye, FiEyeOff } from 'react-icons/fi';
-import '../CssPage/LoginForm.css'; // Import the CSS file
+import '../CssFiles/LoginForm.css';
 
 function LoginForm({ onLogin }) {
   const [username, setUsername] = useState('');
