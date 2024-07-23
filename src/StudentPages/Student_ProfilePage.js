@@ -19,23 +19,69 @@ function Student_ProfilePage() {
     fetchStudentData();
   }, [userId]);
 
+  const formatDate = (dateString) => {
+    const options = { year: 'numeric', month: 'long', day: 'numeric' };
+    return new Date(dateString).toLocaleDateString(undefined, options);
+  };
+
   if (!studentData) {
     return <div>Loading...</div>;
   }
 
   return (
-    <div>
-      <h1>My Profile</h1>
-      <p><strong>Full Name:</strong> {`${studentData.firstname} ${studentData.middlename} ${studentData.lastname}`}</p>
-      <p><strong>Username:</strong> {studentData.username}</p>
-      <p><strong>Gender:</strong> {studentData.gender}</p>
-      <p><strong>Birthdate:</strong> {studentData.birthdate}</p>
-      <p><strong>Address:</strong> {`${studentData.home_address}, ${studentData.barangay}, ${studentData.city_municipality}, ${studentData.province}`}</p>
-      <p><strong>Contact Number:</strong> {studentData.contact_number}</p>
-      <p><strong>Email Address:</strong> {studentData.email_address}</p>
-      <p><strong>Mother's Name:</strong> {studentData.mother_name}</p>
-      <p><strong>Father's Name:</strong> {studentData.father_name}</p>
-      {/* Add more fields as needed */}
+    <div className="student-profile-container">
+      <div className="student-profile-header">
+        <img src="/path/to/profile-picture.jpg" alt="Profile" className="student-profile-picture" />
+        <div className="student-profile-info">
+          <h1>{`${studentData.firstname} ${studentData.lastname}`}</h1>
+          <p>{studentData.email_address}</p>
+          <p>Grade {studentData.current_yr_lvl}</p>
+        </div>
+      </div>
+      <div className="student-profile-details">
+        <h2>Additional Student Details</h2>
+        <div className="student-details-row">
+          <div className="student-details-column">
+            <p><strong>Birthday:</strong> {formatDate(studentData.birthdate)}</p>
+            <p><strong>Gender:</strong> {studentData.gender}</p>
+          </div>
+          <div className="student-details-column">
+            <p><strong>Current Grade Level:</strong> Grade {studentData.current_yr_lvl}</p>
+            <p><strong>Age:</strong> {studentData.age}</p>
+          </div>
+        </div>
+        <h2>Standard Information</h2>
+        <div className="student-details-row">
+          <div className="student-details-column">
+            <p><strong>First Name:</strong> {studentData.firstname}</p>
+            <p><strong>Middle Name:</strong> {studentData.middlename}</p>
+          </div>
+          <div className="student-details-column">
+            <p><strong>Last Name:</strong> {studentData.lastname}</p>
+            <p><strong>Email Address:</strong> {studentData.email_address}</p>
+          </div>
+        </div>
+        <div className="student-details-row">
+          <div className="student-details-column">
+            <p><strong>Home Address:</strong> {studentData.home_address}</p>
+            <p><strong>Barangay:</strong> {studentData.barangay}</p>
+          </div>
+          <div className="student-details-column">
+            <p><strong>City/Municipality:</strong> {studentData.city_municipality}</p>
+            <p><strong>Province:</strong> {studentData.province}</p>
+          </div>
+        </div>
+        <div className="student-details-row">
+          <div className="student-details-column">
+            <p><strong>Contact Number:</strong> {studentData.contact_number}</p>
+            <p><strong>Email Address:</strong> {studentData.email_address}</p>
+          </div>
+          <div className="student-details-column">
+            <p><strong>Mother's Name:</strong> {studentData.mother_name}</p>
+            <p><strong>Father's Name:</strong> {studentData.father_name}</p>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

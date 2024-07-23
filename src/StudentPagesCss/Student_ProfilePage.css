@@ -1,0 +1,56 @@
+.student-profile-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.student-profile-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.student-profile-picture {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  margin-right: 20px;
+  border: solid 1px;
+}
+
+.student-profile-info h1 {
+  margin: 0;
+  font-size: 24px;
+}
+
+.student-profile-info p {
+  margin: 5px 0;
+  font-size: 16px;
+}
+
+.student-profile-details h2 {
+  margin-top: 20px;
+  font-size: 20px;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 5px;
+}
+
+.student-details-row {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.student-details-column {
+  flex: 1;
+  padding: 0 10px;
+}
+
+.student-details-column p {
+  margin: 5px 0;
+}
+
+.student-details-column p strong {
+  display: block;
+  font-weight: bold;
+}
