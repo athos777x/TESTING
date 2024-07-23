@@ -1,7 +1,7 @@
 // ProfilePage.js
 import React from 'react';
 
-function ProfilePage() {
+function Student_ProfilePage() {
   return (
     <div>
       <h1>My Profile</h1>
@@ -10,4 +10,4 @@ function ProfilePage() {
   );
 }
 
-export default ProfilePage;
+export default Student_ProfilePage;

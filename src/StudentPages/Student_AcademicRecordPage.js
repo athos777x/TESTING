@@ -1,7 +1,7 @@
 // AcademicRecordPage.js
 import React from 'react';
 
-function AcademicRecordPage() {
+function Student_AcademicRecordPage() {
   return (
     <div>
       <h1>Student Academic Record</h1>
@@ -10,4 +10,4 @@ function AcademicRecordPage() {
   );
 }
 
-export default AcademicRecordPage;
+export default Student_AcademicRecordPage;

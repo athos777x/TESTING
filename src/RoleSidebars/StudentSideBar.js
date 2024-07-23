@@ -37,7 +37,7 @@ function StudentSideBar({ showSidebar, toggleSidebar, handleLogout }) {
         <button onClick={() => handleNavigate('/enrollment')}>
           <FiClipboard className="icon" /> Enrollment
         </button>
-        <button onClick={() => handleNavigate('/schedule')}>
+        <button onClick={() => handleNavigate('/student-schedule')}>
           <FiCalendar className="icon" /> Schedule
         </button>
         <button onClick={() => handleLogout()}>

@@ -1,7 +1,7 @@
 // EnrollmentPage.js
 import React from 'react';
 
-function EnrollmentPage() {
+function Student_EnrollmentPage() {
   return (
     <div>
       <h1>Enrollment</h1>
@@ -10,4 +10,4 @@ function EnrollmentPage() {
   );
 }
 
-export default EnrollmentPage;
+export default Student_EnrollmentPage;

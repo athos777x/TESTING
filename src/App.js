@@ -4,9 +4,9 @@ import './App.css';
 import './CssPage/LoginForm.css'; 
 import LoginForm from './Utilities/LoginForm';
 import Layout from './Utilities/Layout';
-import ProfilePage from './Pages/ProfilePage';
-import AcademicRecordPage from './Pages/AcademicRecordPage';
-import EnrollmentPage from './Pages/EnrollmentPage';
+import Student_ProfilePage from './StudentPages/Student_ProfilePage';
+import Student_AcademicRecordPage from './StudentPages/Student_AcademicRecordPage';
+import Student_EnrollmentPage from './StudentPages/Student_EnrollmentPage';
 import Principal_SectionListPage from './PrincipalPages/Principal_SectionListPage';
 import Principal_SectionPage from './PrincipalPages/Principal_SectionPage';
 import HomePage from './Pages/HomePage';
@@ -17,12 +17,12 @@ import Principal_EmployeePage from './PrincipalPages/Principal_EmployeePage';
 import Principal_SchoolYearPage from './PrincipalPages/Principal_SchoolYearPage';
 import Principal_EnrolledStudentsPage from './PrincipalPages/Principal_EnrolledStudentsPage';
 import Principal_SubjectsPage from './PrincipalPages/Principal_SubjectsPage';
-import GenerateReportsPage from './Pages/GenerateReportsPage';
-import ListofStudentEnrolleesPage from './Pages/ListofStudentEnrolleesPage';
-import SummaryReportonPromotionPage from './Pages/SummaryReportonPromotionPage';
-import EarlyEnrollmentReportPage from './Pages/EarlyEnrollmentReportPage';
+import Principal_ListofStudentEnrolleesPage from './PrincipalPages/Principal_ListofStudentEnrolleesPage';
+import Principal_SummaryReportonPromotionPage from './PrincipalPages/Principal_SummaryReportonPromotionPage';
+import Principal_EarlyEnrollmentReportPage from './PrincipalPages/Principal_EarlyEnrollmentReportPage';
 import Principal_StudentDetailPage from './PrincipalPages/Principal_StudentDetailPage';
 import Principal_SchedulePage from './PrincipalPages/Principal_SchedulePage'; 
+import Student_SchedulePage from './StudentPages/Student_SchedulePage'; 
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(
@@ -57,9 +57,9 @@ function App() {
         {isAuthenticated && (
           <Route element={<Layout role={role} handleLogout={handleLogout} />}>
             <Route path="/home" element={<HomePage />} />
-            <Route path="/profile" element={<ProfilePage />} />
-            <Route path="/academic-record" element={<AcademicRecordPage />} />
-            <Route path="/enrollment" element={<EnrollmentPage />} />
+            <Route path="/profile" element={<Student_ProfilePage />} />
+            <Route path="/academic-record" element={<Student_AcademicRecordPage />} />
+            <Route path="/enrollment" element={<Student_EnrollmentPage />} />
             <Route path="/section-list" element={<Principal_SectionListPage />} />
             <Route path="/section" element={<Principal_SectionPage />} />
             <Route path="/students" element={<Principal_StudentsPage />} />
@@ -70,11 +70,11 @@ function App() {
             <Route path="/school-year" element={<Principal_SchoolYearPage />} />
             <Route path="/enrolled-students" element={<Principal_EnrolledStudentsPage />} />
             <Route path="/subjects" element={<Principal_SubjectsPage />} />
-            <Route path="/generate-reports" element={<GenerateReportsPage />} />
-            <Route path="/list-of-student-enrollees" element={<ListofStudentEnrolleesPage />} />
-            <Route path="/summary-report-promotion" element={<SummaryReportonPromotionPage />} />
-            <Route path="/early-enrollment-report" element={<EarlyEnrollmentReportPage />} />
+            <Route path="/list-of-student-enrollees" element={<Principal_ListofStudentEnrolleesPage />} />
+            <Route path="/summary-report-promotion" element={<Principal_SummaryReportonPromotionPage />} />
+            <Route path="/early-enrollment-report" element={<Principal_EarlyEnrollmentReportPage />} />
             <Route path="/schedule" element={<Principal_SchedulePage />} />
+            <Route path="/student-schedule" element={<Student_SchedulePage />} />
           </Route>
         )}
         <Route path="*" element={<Navigate to={isAuthenticated ? '/home' : '/'} />} />

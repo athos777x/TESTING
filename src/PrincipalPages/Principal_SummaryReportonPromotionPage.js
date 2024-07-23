@@ -1,7 +1,7 @@
 // SummaryReportonPromotionPage.js
 import React from 'react';
 
-function SummaryReportonPromotionPage() {
+function Principal_SummaryReportonPromotionPage() {
   return (
     <div>
       <h1>Summary Report Promotion Page</h1>
@@ -10,4 +10,4 @@ function SummaryReportonPromotionPage() {
   );
 }
 
-export default SummaryReportonPromotionPage;
+export default Principal_SummaryReportonPromotionPage;
