@@ -16,11 +16,7 @@ function LoginForm({ onLogin }) {
       const response = await axios.post('http://localhost:3001/login', { username, password });
       if (response.data.authenticated) {
         console.log(`Login successful. User ID: ${response.data.userId}`);
-        const userResponse = await axios.get(`http://localhost:3001/users/${response.data.userId}`);
-        const fullName = userResponse.data.fullName;
-
-        localStorage.setItem('fullName', fullName);
-        localStorage.setItem('username', username);
+        localStorage.setItem('userId', response.data.userId); // Store userId in localStorage
         localStorage.setItem('role', response.data.role);
         onLogin(username, password, navigate, response.data.role);
       } else {

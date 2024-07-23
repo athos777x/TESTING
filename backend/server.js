@@ -1090,6 +1090,39 @@ app.put('/sections/:sectionId', (req, res) => {
   });
 });
 
+// Endpoint to fetch student profile details by user ID
+app.get('/student/profile/:userId', (req, res) => {
+  const userId = req.params.userId;
+  console.log(`Fetching student profile details for userId: ${userId}`);
+
+  const query = `
+    SELECT s.student_id, s.lastname, s.firstname, s.middlename, s.current_yr_lvl, s.birthdate, s.gender,
+           s.age, s.home_address, s.barangay, s.city_municipality, s.province, s.contact_number, s.email_address,
+           s.mother_name, s.father_name, s.parent_address, s.father_occupation, s.mother_occupation,
+           s.annual_hshld_income, s.number_of_siblings, s.father_educ_lvl, s.mother_educ_lvl,
+           s.father_contact_number, s.mother_contact_number, s.id_picture, s.birth_certificate, 
+           s.form_138, s.goodmoral_cert, s.rcv_test, s.section_id, s.user_id, u.username
+    FROM student s
+    JOIN users u ON s.user_id = u.user_id
+    WHERE s.user_id = ?
+  `;
+
+  db.query(query, [userId], (err, results) => {
+    if (err) {
+      console.error('Database query error:', err);
+      res.status(500).json({ error: 'Database error' });
+      return;
+    }
+    if (results.length > 0) {
+      res.json(results[0]);
+    } else {
+      console.log('Student profile details not found for userId:', userId);
+      res.status(404).json({ error: 'Student profile details not found' });
+    }
+  });
+});
+
+
 
 app.listen(3001, () => {
   console.log('Server running on port 3001');
