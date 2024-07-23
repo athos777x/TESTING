@@ -1,5 +1,6 @@
 // ProfilePage.js
 import React from 'react';
+import '../StudentPagesCss/Student_ProfilePage.css';
 
 function Student_ProfilePage() {
   return (
