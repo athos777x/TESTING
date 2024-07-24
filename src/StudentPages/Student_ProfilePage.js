@@ -4,7 +4,7 @@ import '../StudentPagesCss/Student_ProfilePage.css';
 
 function Student_ProfilePage() {
   const [studentData, setStudentData] = useState(null);
-  const userId = localStorage.getItem('userId'); // Retrieve user ID from localStorage
+  const userId = localStorage.getItem('userId'); 
 
   useEffect(() => {
     const fetchStudentData = async () => {
@@ -33,7 +33,7 @@ function Student_ProfilePage() {
       <div className="student-profile-header">
         <img src="/path/to/profile-picture.jpg" alt="" className="student-profile-picture" />
         <div className="student-profile-info">
-          <h1>{`${studentData.firstname} ${studentData.lastname}`}</h1>
+          <h1>{`${studentData.firstname} ${studentData.middlename} ${studentData.lastname}`}</h1>
           <p>{studentData.username}</p>
           <p>Grade {studentData.current_yr_lvl}</p>
         </div>
