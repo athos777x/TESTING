@@ -39,7 +39,7 @@ function Student_ProfilePage() {
         </div>
       </div>
       <div className="student-profile-details">
-        <h2>Additional Student Details</h2>
+        <h2>Student Details</h2>
         <div className="student-details-row">
           <div className="student-details-column">
             <p><strong>Birthday:</strong> {formatDate(studentData.birthdate)}</p>
