@@ -31,10 +31,10 @@ function Student_ProfilePage() {
   return (
     <div className="student-profile-container">
       <div className="student-profile-header">
-        <img src="/path/to/profile-picture.jpg" alt="Profile" className="student-profile-picture" />
+        <img src="/path/to/profile-picture.jpg" alt="" className="student-profile-picture" />
         <div className="student-profile-info">
           <h1>{`${studentData.firstname} ${studentData.lastname}`}</h1>
-          <p>{studentData.email_address}</p>
+          <p>{studentData.username}</p>
           <p>Grade {studentData.current_yr_lvl}</p>
         </div>
       </div>
