@@ -192,10 +192,10 @@ app.get('/students', (req, res) => {
 
 // Endpoint to fetch grades for a specific student
 // Function: Retrieves the grades of a student based on their student ID
-// Pages: AcademicRecordPage.js
+// Pages: Principal_GradesPage.js
 app.get('/students/:student_id/grades', (req, res) => {
   const { student_id } = req.params;
-  const query = `SELECT g.first_quarter AS q1_grade, g.second_quarter AS q2_grade, g.third_quarter AS q3_grade, g.fourth_quarter AS q4_grade, s.subject_name
+  const query = `SELECT g.first_quarter AS q1_grade, g.second_quarter AS q2_grade, g.third_quarter AS q3_grade, g.fourth_quarter AS q4_grade, g.final_grade, g.remarks, s.subject_name, g.grade_level
                  FROM grades g
                  JOIN schedule sc ON g.schedule_id = sc.schedule_id
                  JOIN subject s ON sc.subject_id = s.subject_id

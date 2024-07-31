@@ -101,6 +101,18 @@ function Principal_GradesPage() {
     return (total / grades.length).toFixed(2);
   };
 
+  // Group grades by grade level
+  const groupedGrades = grades.reduce((acc, grade) => {
+    if (!acc[grade.grade_level]) {
+      acc[grade.grade_level] = [];
+    }
+    acc[grade.grade_level].push(grade);
+    return acc;
+  }, {});
+
+  // Sort grade levels in descending order
+  const sortedGradeLevels = Object.keys(groupedGrades).sort((a, b) => b - a);
+
   return (
     <div className="grades-container">
       <h1 className="grades-title">Grades</h1>
@@ -121,40 +133,35 @@ function Principal_GradesPage() {
             </div>
             {selectedStudentId === student.student_id && (
               <div className="grades-student-details">
-                {grades.length > 0 && (
-                  <table>
-                    <thead>
-                      <tr>
-                        <th colSpan="6" style={{ textAlign: 'left' }}>
-                          <div style={{ display: 'flex', justifyContent: 'space-between', paddingRight: '40px' }}>
-                            <span>Grade Level: {grades[0].grade_level}</span>
-                            <span>School Year: {grades[0].school_year}</span>
-                          </div>
-                        </th>
-                      </tr>
-                      <tr>
-                        <th>Subject</th>
-                        <th>Q1</th>
-                        <th>Q2</th>
-                        <th>Q3</th>
-                        <th>Q4</th>
-                        <th>Final Grade</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {grades.map((grade, index) => (
-                        <tr key={index}>
-                          <td>{grade.subject_name}</td>
-                          <td>{grade.q1_grade}</td>
-                          <td>{grade.q2_grade}</td>
-                          <td>{grade.q3_grade}</td>
-                          <td>{grade.q4_grade}</td>
-                          <td>{calculateFinalGrade([grade.q1_grade, grade.q2_grade, grade.q3_grade, grade.q4_grade])}</td>
+                {sortedGradeLevels.map((gradeLevel) => (
+                  <div key={gradeLevel}>
+                    <h2 className="grades-subtitle">Grade Level: {gradeLevel}</h2>
+                    <table>
+                      <thead>
+                        <tr>
+                          <th>Subject</th>
+                          <th>Q1</th>
+                          <th>Q2</th>
+                          <th>Q3</th>
+                          <th>Q4</th>
+                          <th>Final Grade</th>
                         </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                )}
+                      </thead>
+                      <tbody>
+                        {groupedGrades[gradeLevel].map((grade, index) => (
+                          <tr key={index}>
+                            <td>{grade.subject_name}</td>
+                            <td>{grade.q1_grade}</td>
+                            <td>{grade.q2_grade}</td>
+                            <td>{grade.q3_grade}</td>
+                            <td>{grade.q4_grade}</td>
+                            <td>{calculateFinalGrade([grade.q1_grade, grade.q2_grade, grade.q3_grade, grade.q4_grade])}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                ))}
               </div>
             )}
           </li>

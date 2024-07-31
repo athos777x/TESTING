@@ -94,6 +94,15 @@
   font-weight: bold;
 }
 
+.grades-subtitle {
+  font-size: 20px;
+  font-weight: bold;
+  margin-top: 20px;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+
 .grades-student-item-container::after,
 .grades-student-item-container::before,
 .grades-student-item::after,
