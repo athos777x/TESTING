@@ -1149,31 +1149,32 @@ app.get('/user/:userId/grades', (req, res) => {
   });
 });
 
-// Endpoint to fetch schedule for the currently logged-in student using userId
+// Endpoint to fetch schedule for the currently logged-in student
 app.get('/user/:userId/schedule', (req, res) => {
   const userId = req.params.userId;
   const query = `
-    SELECT s.subject_name, sc.day, sc.time_start, sc.time_end
+    SELECT s.subject_name, sc.day, 
+           TIME_FORMAT(sc.time_start, '%H:%i:%s') as time_start, 
+           TIME_FORMAT(sc.time_end, '%h:%i %p') as time_end
     FROM schedule sc
     JOIN subject s ON sc.subject_id = s.subject_id
     JOIN section sec ON sc.section_id = sec.section_id
     JOIN enrollment e ON e.section_id = sec.section_id
-    JOIN student st ON e.student_id = st.student_id
+    JOIN student st ON st.student_id = e.student_id
     WHERE st.user_id = ? AND e.enrollment_status = 'active' AND sc.schedule_status = 'Approved'
-    ORDER BY sc.time_start;
+    ORDER BY FIELD(sc.day, 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'), sc.time_start;
   `;
-  console.log(`Fetching schedule for userId: ${userId}`); // Debug log
-
   db.query(query, [userId], (err, results) => {
     if (err) {
       console.error('Error fetching schedule:', err);
       res.status(500).send('Error fetching schedule');
     } else {
-      console.log('Schedule fetched from DB:', results); // Debug log
       res.json(results);
     }
   });
 });
+
+
 
 
 
