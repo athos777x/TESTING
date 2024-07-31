@@ -895,10 +895,14 @@ app.get('/schedules', (req, res) => {
 app.get('/sections/:sectionId/schedules', (req, res) => {
   const { sectionId } = req.params;
   const query = `
-    SELECT sc.schedule_id, sc.teacher_id, sb.subject_name, sc.time_start, sc.time_end, sc.day, sc.section_id, sc.schedule_status
+    SELECT sc.schedule_id, sc.teacher_id, sb.subject_name, 
+           TIME_FORMAT(sc.time_start, '%h:%i %p') as time_start, 
+           TIME_FORMAT(sc.time_end, '%h:%i %p') as time_end, 
+           sc.day, sc.section_id, sc.schedule_status
     FROM schedule sc
     JOIN subject sb ON sc.subject_id = sb.subject_id
     WHERE sc.section_id = ?
+    ORDER BY sc.time_start
   `;
   db.query(query, [sectionId], (err, results) => {
     if (err) {
