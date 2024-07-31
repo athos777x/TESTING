@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import '../StudentPagesCss/Student_GradesPage.css'; // Import the CSS file
 
 function Student_GradesPage() {
   const [grades, setGrades] = useState([]);
@@ -32,21 +33,21 @@ function Student_GradesPage() {
   }, [userId]);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <div className="student-grades-loading-message">Loading...</div>;
   }
 
   if (error) {
-    return <div>{error}</div>;
+    return <div className="student-grades-error-message">{error}</div>;
   }
 
   if (grades.length === 0) {
-    return <div>No grades available.</div>;
+    return <div className="student-grades-no-grades-message">No grades available.</div>;
   }
 
   return (
-    <div>
-      <h1>Student Grades</h1>
-      <table>
+    <div className="student-grades-container">
+      <h1 className="student-grades-title">Student Grades</h1>
+      <table className="student-grades-table">
         <thead>
           <tr>
             <th>Subject</th>
