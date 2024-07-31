@@ -44,35 +44,49 @@ function Student_GradesPage() {
     return <div className="student-grades-no-grades-message">No grades available.</div>;
   }
 
+  // Group grades by grade level
+  const groupedGrades = grades.reduce((acc, grade) => {
+    if (!acc[grade.grade_level]) {
+      acc[grade.grade_level] = [];
+    }
+    acc[grade.grade_level].push(grade);
+    return acc;
+  }, {});
+
   return (
     <div className="student-grades-container">
       <h1 className="student-grades-title">Student Grades</h1>
-      <table className="student-grades-table">
-        <thead>
-          <tr>
-            <th>Subject</th>
-            <th>Q1</th>
-            <th>Q2</th>
-            <th>Q3</th>
-            <th>Q4</th>
-            <th>Final Grade</th>
-            <th>Remarks</th>
-          </tr>
-        </thead>
-        <tbody>
-          {grades.map((grade, index) => (
-            <tr key={index}>
-              <td>{grade.subject_name}</td>
-              <td>{grade.first_quarter}</td>
-              <td>{grade.second_quarter}</td>
-              <td>{grade.third_quarter}</td>
-              <td>{grade.fourth_quarter}</td>
-              <td>{grade.final_grade}</td>
-              <td>{grade.remarks}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      {Object.keys(groupedGrades).map((gradeLevel) => (
+        <div key={gradeLevel}>
+          <h2 className="student-grades-subtitle">Grade Level: {gradeLevel}</h2>
+          <table className="student-grades-table">
+            <thead>
+              <tr>
+                <th>Subject</th>
+                <th>Q1</th>
+                <th>Q2</th>
+                <th>Q3</th>
+                <th>Q4</th>
+                <th>Final Grade</th>
+                <th>Remarks</th>
+              </tr>
+            </thead>
+            <tbody>
+              {groupedGrades[gradeLevel].map((grade, index) => (
+                <tr key={index}>
+                  <td>{grade.subject_name}</td>
+                  <td>{grade.first_quarter}</td>
+                  <td>{grade.second_quarter}</td>
+                  <td>{grade.third_quarter}</td>
+                  <td>{grade.fourth_quarter}</td>
+                  <td>{grade.final_grade}</td>
+                  <td>{grade.remarks}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      ))}
     </div>
   );
 }

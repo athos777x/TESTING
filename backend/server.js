@@ -1126,7 +1126,7 @@ app.get('/student/profile/:userId', (req, res) => {
 app.get('/user/:userId/grades', (req, res) => {
   const userId = req.params.userId;
   const query = `
-    SELECT g.first_quarter, g.second_quarter, g.third_quarter, g.fourth_quarter, g.final_grade, g.remarks, s.subject_name
+    SELECT g.first_quarter, g.second_quarter, g.third_quarter, g.fourth_quarter, g.final_grade, g.remarks, s.subject_name, g.grade_level
     FROM grades g
     JOIN schedule sc ON g.schedule_id = sc.schedule_id
     JOIN subject s ON sc.subject_id = s.subject_id
@@ -1144,6 +1144,7 @@ app.get('/user/:userId/grades', (req, res) => {
     }
   });
 });
+
 
 
 

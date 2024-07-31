@@ -15,8 +15,12 @@
   text-align: center;
 }
 
-.student-grades-search-filter-container {
-  margin-bottom: 20px;
+.student-grades-subtitle {
+  font-size: 20px;
+  font-weight: bold;
+  margin-top: 20px;
+  margin-bottom: 10px;
+  text-align: center;
 }
 
 .student-grades-table {
