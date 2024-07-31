@@ -1,6 +1,9 @@
+/* Student_ProfilePage.css */
+
 .student-profile-container {
-  max-width: 800px;
-  margin: 20px auto;
+  display: flex;
+  flex-direction: column;
+  margin: 20px;
   padding: 20px;
   border: 1px solid #ccc;
   border-radius: 5px;
@@ -10,6 +13,7 @@
 .student-profile-header {
   display: flex;
   align-items: center;
+  margin-bottom: 20px;
 }
 
 .student-profile-picture {
@@ -44,11 +48,13 @@
   display: flex;
   justify-content: space-between;
   margin-top: 10px;
+  flex-wrap: wrap;
 }
 
 .student-details-column {
-  flex: 1;
+  flex: 1 1 45%; /* Allows columns to wrap and occupy full width if needed */
   padding: 0 10px;
+  box-sizing: border-box;
 }
 
 .student-details-column p {

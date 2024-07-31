@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import '../StudentPagesCss/Student_ProfilePage.css';
+import '../StudentPagesCss/Student_ProfilePage.css'; // Import the CSS file
 
 function Student_ProfilePage() {
   const [studentData, setStudentData] = useState(null);
