@@ -70,7 +70,7 @@
 }
 
 .react-calendar__tile--active {
-  background: rgb(0, 162, 255);
+  background: rgb(45, 165, 45);
   border-radius: 6px;
 }
 
