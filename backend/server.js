@@ -1122,6 +1122,29 @@ app.get('/student/profile/:userId', (req, res) => {
   });
 });
 
+// Endpoint to fetch grades for the currently logged in student using userId
+app.get('/user/:userId/grades', (req, res) => {
+  const userId = req.params.userId;
+  const query = `
+    SELECT g.first_quarter, g.second_quarter, g.third_quarter, g.fourth_quarter, g.final_grade, g.remarks, s.subject_name
+    FROM grades g
+    JOIN schedule sc ON g.schedule_id = sc.schedule_id
+    JOIN subject s ON sc.subject_id = s.subject_id
+    WHERE g.user_id = ?
+  `;
+  console.log(`Fetching grades for userId: ${userId}`); // Debug log
+
+  db.query(query, [userId], (err, results) => {
+    if (err) {
+      console.error('Error fetching grades:', err);
+      res.status(500).send('Error fetching grades');
+    } else {
+      console.log('Grades fetched from DB:', results); // Debug log
+      res.json(results);
+    }
+  });
+});
+
 
 
 app.listen(3001, () => {
