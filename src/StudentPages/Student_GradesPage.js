@@ -53,10 +53,13 @@ function Student_GradesPage() {
     return acc;
   }, {});
 
+  // Sort grade levels in descending order
+  const sortedGradeLevels = Object.keys(groupedGrades).sort((a, b) => b - a);
+
   return (
     <div className="student-grades-container">
       <h1 className="student-grades-title">Student Grades</h1>
-      {Object.keys(groupedGrades).map((gradeLevel) => (
+      {sortedGradeLevels.map((gradeLevel) => (
         <div key={gradeLevel}>
           <h2 className="student-grades-subtitle">Grade Level: {gradeLevel}</h2>
           <table className="student-grades-table">
