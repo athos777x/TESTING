@@ -23,6 +23,7 @@
 .schedule-table td {
   border: 1px solid #ddd;
   padding: 8px;
+  width: 14.28%; /* Approximately 1/7 of the table width to keep columns consistent */
 }
 
 .schedule-table th {
