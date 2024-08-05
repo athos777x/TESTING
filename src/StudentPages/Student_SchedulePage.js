@@ -86,11 +86,9 @@ function Student_SchedulePage() {
 
   return (
     <div className="student-schedule-container">
-      <div className="student-schedule-box">
-        <h1 className="student-schedule-title">Schedule</h1>
-        <div className="student-schedule-table-container">
-          {renderSchedule()}
-        </div>
+      <h1 className="student-schedule-title">Schedule</h1>
+      <div className="student-schedule-table-container">
+        {renderSchedule()}
       </div>
     </div>
   );

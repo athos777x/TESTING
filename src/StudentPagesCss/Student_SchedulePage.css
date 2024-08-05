@@ -20,19 +20,9 @@
   text-align: center;
 }
 
-.student-schedule-box {
-  width: 100%;
-  max-width: 1200px;
-  padding: 20px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  background-color: #ffffff;
-  display: flex;
-  flex-direction: column;
-}
-
 .student-schedule-table-container {
   width: 100%;
+  max-width: 1200px;
   overflow: auto;
 }
 

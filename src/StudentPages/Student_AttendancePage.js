@@ -31,11 +31,19 @@ function Student_AttendancePage() {
 
   const renderTileContent = ({ date, view }) => {
     if (view === 'month') {
-      const attendance = attendanceData.find(
+      const attendance = attendanceData.filter(
         (entry) => new Date(entry.date).toDateString() === date.toDateString()
       );
-      if (attendance) {
-        return <p>{attendance.status}</p>;
+      if (attendance.length > 0) {
+        return (
+          <ul>
+            {attendance.map((entry, index) => (
+              <li key={index} className={`status-${entry.status.toLowerCase()}`}>
+                {entry.subject_name}: {entry.status}
+              </li>
+            ))}
+          </ul>
+        );
       }
     }
   };
@@ -54,7 +62,7 @@ function Student_AttendancePage() {
           .filter((entry) => new Date(entry.date).toDateString() === selectedDate.toDateString())
           .map((entry, index) => (
             <div key={index}>
-              <p>Status: {entry.status}</p>
+              <p><strong>{entry.subject_name}</strong>: {entry.status}</p>
               <p>Remarks: {entry.remarks}</p>
             </div>
           ))}

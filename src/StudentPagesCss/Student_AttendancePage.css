@@ -8,7 +8,7 @@
   background-color: #f9f9f9;
   display: flex;
   flex-direction: column;
-  align-items: center; /* Center the content horizontally */
+  align-items: center;
 }
 
 .student-attendance-title {
@@ -20,42 +20,22 @@
 
 .react-calendar {
   width: 100%;
-  max-width: 600px; /* Adjust this value to make the calendar size appropriate */
-  height: auto; /* Ensure the calendar respects the width */
+  max-width: 600px;
+  height: auto;
   background-color: white;
   border-radius: 10px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   border: none;
   font-family: Arial, Helvetica, sans-serif;
-  overflow: hidden; /* Ensure children elements respect the border radius */
 }
 
 .react-calendar__navigation button {
   min-width: 44px;
   background: none;
   border: none;
-  color: black; /* Change the font color to black */
+  color: black;
   padding: 8px 16px;
   cursor: pointer;
-}
-
-.react-calendar__navigation button:hover,
-.react-calendar__navigation button:focus {
-  background-color: #f0f0f0;
-}
-
-.react-calendar__navigation button:disabled {
-  background-color: #f0f0f0;
-}
-
-.react-calendar__navigation button:first-child {
-  border-top-left-radius: 10px; /* Apply border radius to the top left corner */
-  border-bottom-left-radius: 10px; /* Apply border radius to the bottom left corner */
-}
-
-.react-calendar__navigation button:last-child {
-  border-top-right-radius: 10px; /* Apply border radius to the top right corner */
-  border-bottom-right-radius: 10px; /* Apply border radius to the bottom right corner */
 }
 
 .react-calendar__tile {
@@ -63,15 +43,16 @@
   padding: 10px;
 }
 
-.react-calendar__tile--now {
-  background: rgb(45, 165, 45); /* Green background */
-  color: white; /* White text color */
-  border-radius: 6px;
+.status-p {
+  color: green;
 }
 
-.react-calendar__tile--active {
-  background: rgb(45, 165, 45);
-  border-radius: 6px;
+.status-a {
+  color: red;
+}
+
+.status-l {
+  color: orange;
 }
 
 .attendance-details {
