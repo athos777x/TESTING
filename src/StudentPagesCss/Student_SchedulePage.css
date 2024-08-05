@@ -1,36 +1,41 @@
+/* Student_SchedulePage.css */
+
 .student-schedule-container {
+  margin: 20px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Center the content horizontally */
+}
+
+.student-schedule-box {
+  width: 100%;
+  max-width: 1200px; /* Adjust as necessary */
   padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #f9f9f9;
 }
 
 .student-schedule-title {
-  text-align: center;
+  font-size: 24px;
+  font-weight: bold;
   margin-bottom: 20px;
-}
-
-.student-schedule-table-container {
-  display: flex;
-  justify-content: center;
+  text-align: center;
 }
 
 .schedule-table {
   width: 100%;
-  max-width: 1200px;
   border-collapse: collapse;
-  text-align: center;
 }
 
-.schedule-table th,
-.schedule-table td {
+.schedule-table th, .schedule-table td {
   border: 1px solid #ddd;
   padding: 8px;
-  width: 14.28%; /* Approximately 1/7 of the table width to keep columns consistent */
+  text-align: center;
 }
 
 .schedule-table th {
   background-color: #f2f2f2;
   font-weight: bold;
-}
-
-.schedule-item {
-  margin-bottom: 10px;
 }
