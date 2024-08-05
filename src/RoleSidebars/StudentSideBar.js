@@ -10,7 +10,8 @@ import {
   FiMenu,
   FiChevronLeft,
   FiFileText,
-  FiCheckSquare
+  FiCheckSquare,
+  FiSettings
 } from 'react-icons/fi';
 import { useNavigate } from 'react-router-dom';
 
@@ -58,6 +59,9 @@ function StudentSideBar({ showSidebar, toggleSidebar, handleLogout }) {
         </button>
         <button onClick={() => handleNavigate('/student-schedule')}>
           <FiCalendar className="icon" /> Schedule
+        </button>
+        <button onClick={() => handleNavigate('/account')}>
+          <FiSettings className="icon" /> Account
         </button>
         <button onClick={() => handleLogout()}>
           <FiLogOut className="icon" /> Logout

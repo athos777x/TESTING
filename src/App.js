@@ -24,6 +24,8 @@ import Student_EnrollmentPage from './StudentPages/Student_EnrollmentPage';
 import Student_SchedulePage from './StudentPages/Student_SchedulePage'; 
 import Student_GradesPage from './StudentPages/Student_GradesPage';
 import Student_AttendancePage from './StudentPages/Student_AttendancePage';
+import Student_AccountPage from './StudentPages/Student_AccountPage';
+
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(
@@ -79,6 +81,7 @@ function App() {
             <Route path="/student-grades" element={<Student_GradesPage />} />
             <Route path="/student-attendance" element={<Student_AttendancePage />} />
             <Route path="/enrollment" element={<Student_EnrollmentPage />} />
+            <Route path="/account" element={<Student_AccountPage />} />
           </Route>
         )}
         <Route path="*" element={<Navigate to={isAuthenticated ? '/home' : '/'} />} />

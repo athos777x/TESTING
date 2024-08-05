@@ -2,6 +2,7 @@ const express = require('express');
 const mysql = require('mysql');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const bcrypt = require('bcrypt');
 
 const app = express();
 app.use(bodyParser.json());
@@ -1174,6 +1175,38 @@ app.get('/user/:userId/schedule', (req, res) => {
   });
 });
 
+// New endpoint to change the user's password
+app.put('/user/:userId/change-password', (req, res) => {
+  const { userId } = req.params;
+  const { currentPassword, newPassword } = req.body;
+
+  const userQuery = 'SELECT * FROM users WHERE user_id = ?';
+  db.query(userQuery, [userId], (err, userResults) => {
+    if (err) {
+      console.error('Database query error:', err);
+      res.status(500).json({ error: 'Database error' });
+      return;
+    }
+    if (userResults.length === 0) {
+      return res.status(404).json({ success: false, message: 'User not found' });
+    }
+
+    const user = userResults[0];
+    if (currentPassword !== user.password) {
+      return res.status(400).json({ success: false, message: 'Current password is incorrect' });
+    }
+
+    const updateQuery = 'UPDATE users SET password = ? WHERE user_id = ?';
+    db.query(updateQuery, [newPassword, userId], (err, updateResults) => {
+      if (err) {
+        console.error('Error updating password:', err);
+        res.status(500).json({ error: 'Database error' });
+        return;
+      }
+      res.json({ success: true, message: 'Password changed successfully' });
+    });
+  });
+});
 
 
 
