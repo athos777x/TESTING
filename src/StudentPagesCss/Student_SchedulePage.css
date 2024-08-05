@@ -2,19 +2,15 @@
 
 .student-schedule-container {
   margin: 20px;
-  padding: 10px;
-  display: flex;
-  flex-direction: column;
-  align-items: center; /* Center the content horizontally */
-}
-
-.student-schedule-box {
-  width: 100%;
-  max-width: 1200px; /* Adjust as necessary */
   padding: 20px;
   border: 1px solid #ccc;
   border-radius: 5px;
   background-color: #f9f9f9;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: calc(100% - 40px);
+  box-sizing: border-box;
 }
 
 .student-schedule-title {
@@ -24,12 +20,29 @@
   text-align: center;
 }
 
+.student-schedule-box {
+  width: 100%;
+  max-width: 1200px;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #ffffff;
+  display: flex;
+  flex-direction: column;
+}
+
+.student-schedule-table-container {
+  width: 100%;
+  overflow: auto;
+}
+
 .schedule-table {
   width: 100%;
   border-collapse: collapse;
 }
 
-.schedule-table th, .schedule-table td {
+.schedule-table th,
+.schedule-table td {
   border: 1px solid #ddd;
   padding: 8px;
   text-align: center;
