@@ -25,6 +25,7 @@ import Student_SchedulePage from './StudentPages/Student_SchedulePage';
 import Student_GradesPage from './StudentPages/Student_GradesPage';
 import Student_AttendancePage from './StudentPages/Student_AttendancePage';
 import Student_AccountPage from './StudentPages/Student_AccountPage';
+import Registrar_StudentsPage from './RegistrarPages/Registrar_StudentsPage';
 
 
 function App() {
@@ -82,6 +83,8 @@ function App() {
             <Route path="/student-attendance" element={<Student_AttendancePage />} />
             <Route path="/enrollment" element={<Student_EnrollmentPage />} />
             <Route path="/account" element={<Student_AccountPage />} />
+
+            <Route path="/registrar-students" element={<Registrar_StudentsPage />} />
           </Route>
         )}
         <Route path="*" element={<Navigate to={isAuthenticated ? '/home' : '/'} />} />
